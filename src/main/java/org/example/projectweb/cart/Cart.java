@@ -15,6 +15,14 @@ public class Cart implements Serializable {
         data = new HashMap<>();
     }
 
+    public CartItem getItemByPid(int pid) {
+        return data.get(pid);
+    }
+
+    public List<CartItem> getList() {
+        return new ArrayList<>(data.values());
+    }
+
     public void addProduct(Product p, ProductVariant pv, String mainImg, int quantity) {
         if (data.containsKey(p.getPid()))
             data.get(p.getPid()).upQuantity(quantity);
@@ -32,10 +40,6 @@ public class Cart implements Serializable {
         Collection<CartItem> values = data.values();
         data.clear();
         return new ArrayList<>(values);
-    }
-
-    public List<CartItem> getList() {
-        return new ArrayList<>(data.values());
     }
 
     public int getTotalQuantity() {
@@ -59,7 +63,9 @@ public class Cart implements Serializable {
 
     public boolean updateVariant(int pid, ProductVariant pv) {
         if (data.containsKey(pid)) {
-            data.get(pid).setProductVariant(pv);
+            CartItem item = getItemByPid(pid);
+            item.setProductVariant(pv);
+            item.setPrice(pv.getPrice());
             return true;
         }
         return false;

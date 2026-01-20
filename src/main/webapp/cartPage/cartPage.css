@@ -100,10 +100,12 @@ main .product-item .product-item-title .product-item-info .product-item-variant 
 
 /* ====================== COLOR ======================*/
 main .product-item .product-item-title .product-item-info .product-item-variant .variant-color {
+    display: inline-block;
     width: 15px;
     height: 15px;
     border: 1px solid lightgrey;
     border-radius: 50%;
+    vertical-align: middle;
 }
 
 /* colors for buttons */
@@ -127,6 +129,7 @@ main .product-item .product-item-title .product-item-info .product-item-variant 
     background: pink;
 }
 
+/* SIZE */
 main .product-item .product-item-title .product-item-info .product-item-variant .variant-size {
     font-weight: bold;
 }
@@ -384,4 +387,106 @@ main #form-input-info .confirm-btn {
     padding: 15px;
     border: none;
     border-radius: 8px;
+}
+
+
+.popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.popup.hidden {
+    display: none;
+}
+
+.popup .popup-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+}
+
+.popup .popup-content .container-options .option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.popup .popup-content .container-options .option label {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.popup .popup-content .container-options .color-options,
+.popup .popup-content .container-options .size-options {
+    display: flex;
+    gap: 10px;
+}
+
+.popup .popup-content .container-options .color-options .color-btn {
+    width: 25px;
+    height: 25px;
+    border: 1px solid lightgrey;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.1s;
+}
+
+/* colors */
+.popup .popup-content .color-btn.black {
+    background: black;
+}
+
+.popup .popup-content .color-btn.grey {
+    background: grey;
+}
+
+.popup-content .color-btn.red {
+    background: red;
+}
+
+.popup .popup-content .color-btn.blue {
+    background: blue;
+}
+
+.popup .popup-content .color-btn.pink {
+    background: pink;
+}
+
+/* active */
+.popup .popup-content .container-options .color-options .color-btn.active {
+    border: 3px solid #F2B035;
+}
+
+.popup .popup-content .container-options .size-options .size-btn {
+    padding: 8px 14px;
+    border: 1px solid lightgrey;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* hover */
+.popup .popup-content .container-options .size-options .size-btn:hover {
+    border-color: #F2B035;
+}
+
+/* disabled */
+.popup .popup-content .container-options .size-options .size-btn.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* active */
+.popup .popup-content .container-options .size-options .size-btn.active {
+    background: #F2B035;
+    border-color: #F2B035;
 }

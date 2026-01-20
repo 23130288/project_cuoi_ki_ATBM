@@ -53,16 +53,16 @@
                 <div class="option">
                     <label>Chọn màu: </label>
                     <div class="color-options">
-                        <c:forEach var="v" items="${pvs}">
-                            <button class="color-btn ${v.color}" data-color="${v.color}"></button>
+                        <c:forEach var="color" items="${colors}">
+                            <button class="color-btn ${color}" data-color="${color}"></button>
                         </c:forEach>
                     </div>
                 </div>
                 <div class="option">
                     <label>Chọn kích cỡ: </label>
                     <div class="size-options">
-                        <c:forEach var="v" items="${pvs}">
-                            <button class="size-btn disabled" data-size="${v.size}">${v.size}</button>
+                        <c:forEach var="size" items="${sizes}">
+                            <button class="size-btn disabled" data-size="${size}">${size}</button>
                         </c:forEach>
                     </div>
                 </div>
@@ -98,12 +98,9 @@
                     </div>
                     <label>Họ tên:<input type="text" id="name" placeholder="Nhập họ tên..."
                                          value="${user.name}" required disabled></label>
-                    <label>Số điện thoại:<input type="text" id="phone"
-                                                placeholder="Nhập số điện thoại..." value="${user.phone}" required
-                                                disabled></label>
-                    <label>Địa chỉ giao hàng:<input id="address"
-                                                    placeholder="Nhập địa chỉ..."
-                                                    value="${user.address}"
+                    <label>Số điện thoại:<input type="text" id="phone" placeholder="Nhập số điện thoại..."
+                                                value="${user.phone}" required disabled></label>
+                    <label>Địa chỉ giao hàng:<input id="address" placeholder="Nhập địa chỉ..." value="${user.address}"
                                                     required disabled></label>
 
                     <div class="payment-container">
@@ -204,7 +201,8 @@
                                 <!-- Comment -->
                                 <div class="comment-form">
                                     <label>
-                                        <textarea rows="4" placeholder="Viết bình luận của bạn về sản phẩm" name="comment" required></textarea>
+                                        <textarea rows="4" placeholder="Viết bình luận của bạn về sản phẩm"
+                                                  name="comment" required></textarea>
                                     </label>
                                     <button type="submit">Đăng đánh giá</button>
                                 </div>
@@ -238,7 +236,8 @@
                                 <!-- Comment -->
                                 <div class="comment-form">
                                     <label>
-                                        <textarea rows="4" placeholder="Viết bình luận của bạn về sản phẩm" name="comment" required>${userReview.comment}</textarea>
+                                        <textarea rows="4" placeholder="Viết bình luận của bạn về sản phẩm"
+                                                  name="comment" required>${userReview.comment}</textarea>
                                     </label>
                                     <button type="submit">Chỉnh sửa đánh giá</button>
                                 </div>
@@ -288,7 +287,8 @@
             color: "${v.color}",
             size: "${v.size}",
             price: "${v.price}"
-        }<c:if test="${!s.last}">,</c:if>
+        }
+        <c:if test="${!s.last}">, </c:if>
         </c:forEach>
     ];
 </script>

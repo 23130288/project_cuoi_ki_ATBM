@@ -12,14 +12,15 @@ public class ShowCart extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Cart cart = (Cart) session.getAttribute("cart");
+        Cart c = (Cart) session.getAttribute("cart");
 
-        if (cart == null) {
-            cart = new Cart();
+        if (c == null) {
+            c = new Cart();
         }
+        session.setAttribute("cart", c);
 
-        request.setAttribute("cart", cart);
-        request.setAttribute("cartItems", cart.getList());
+        request.setAttribute("cart", c);
+        request.setAttribute("cartItems", c.getList());
 
         request.getRequestDispatcher("cartPage/cartPage.jsp").forward(request, response);
     }

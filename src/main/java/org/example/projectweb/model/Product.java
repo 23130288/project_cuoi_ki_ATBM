@@ -20,6 +20,7 @@ public class Product implements Serializable {
     public Product() {
 
     }
+
     public Product(int pid, String name, String producer, String type, String material, String style, String description, String status) {
         this.pid = pid;
         this.name = name;
@@ -66,7 +67,7 @@ public class Product implements Serializable {
         return style;
     }
 
-    public  String getStatus() {
+    public String getStatus() {
         return status;
     }
 
@@ -78,6 +79,10 @@ public class Product implements Serializable {
         return images;
     }
 
+    /**
+     * Setters
+     * @param
+     */
     public void setPid(int pid) {
         this.pid = pid;
     }
@@ -110,10 +115,6 @@ public class Product implements Serializable {
         this.status = status;
     }
 
-    /**
-     * Setters
-     * @param variants
-     */
     public void setVariants(List<ProductVariant> variants) {
         this.variants = variants;
     }
