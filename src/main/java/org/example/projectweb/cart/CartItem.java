@@ -4,6 +4,8 @@ import org.example.projectweb.model.Product;
 import org.example.projectweb.model.ProductVariant;
 
 import java.io.Serializable;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class CartItem implements Serializable {
     private Product product;
@@ -12,13 +14,25 @@ public class CartItem implements Serializable {
     private String mainImg;
     private int quantity;
 
-    public CartItem() {}
+    private Set<String> variantColors;
+    private Set<String> variantSizes;
+
+    public CartItem() {
+    }
+
     public CartItem(Product product, ProductVariant productVariant, double price, String mainImg, int quantity) {
         this.product = product;
         this.productVariant = productVariant;
         this.price = price;
         this.mainImg = mainImg;
         this.quantity = quantity;
+
+        this.variantColors = new TreeSet<>();
+        this.variantSizes = new TreeSet<>();
+        for (ProductVariant pv : product.getVariants()) {
+            this.variantColors.add(pv.getColor());
+            this.variantSizes.add(pv.getSize());
+        }
     }
 
     /**
@@ -49,9 +63,22 @@ public class CartItem implements Serializable {
         return quantity;
     }
 
+    public Set<String> getVariantColors() {
+        return variantColors;
+    }
+
+    public Set<String> getVariantSizes() {
+        return variantSizes;
+    }
+
+
     /**
      * Setters
      */
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     public void setProductVariant(ProductVariant productVariant) {
         this.productVariant = productVariant;
     }

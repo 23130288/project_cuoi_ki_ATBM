@@ -37,8 +37,7 @@ sizeButtons.forEach(btn => {
 
         if (btn.classList.contains('disabled')) return;
 
-        document.querySelectorAll('.size-btn')
-            .forEach(b => b.classList.remove('active'));
+        sizeButtons.forEach(b => b.classList.remove('active'));
 
         btn.classList.add('active');
         selectedSize = btn.dataset.size;

@@ -35,12 +35,16 @@
                             <div class="product-item-info">
                                 <label>${item.product.name}</label>
                                 <p>${item.product.description}</p>
-                                <div class="product-item-variant">
-                                    <p>Màu sắc:
-                                        <button type="button"
-                                                class="variant-color ${item.productVariant.color}"></button>
+                                <div class="product-item-variant"
+                                     data-pid="${item.product.pid}"
+                                     data-pvid="${item.productVariant.pvid}">
+                                    <p>Màu: <span class="variant-color ${item.productVariant.color}"></span>
+                                        | Size: <span class="variant-size">${item.productVariant.size}</span>
                                     </p>
-                                    <p>Kích cỡ: <span class="variant-size">${item.productVariant.size}</span></p>
+
+                                    <button type="button" class="btn-edit-variant" data-pid="${item.product.pid}">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -62,12 +66,51 @@
                             <a class="action-delete-product" href="remove-cart?pid=${item.product.pid}"><i
                                     class="fa-solid fa-x"></i></a>
                         </div>
+                        <div class="popup hidden"
+                             data-variants='[
+                                <c:forEach var="v" items="${item.product.variants}" varStatus="s">
+                                {
+                                    "color": "${v.color}",
+                                    "size": "${v.size}",
+                                    "price": ${v.price},
+                                    "pvid": ${v.pvid}
+                                }<c:if test="${!s.last}">,</c:if>
+                                </c:forEach>
+                            ]'>
+                            <div class="popup-content">
+                                <h3>Chọn phân loại sản phẩm</h3>
+
+                                <div class="container-options">
+                                    <div class="option">
+                                        <label>Chọn màu: </label>
+                                        <div class="color-options">
+                                            <c:forEach var="color" items="${item.variantColors}">
+                                                <button class="color-btn ${color}" data-color="${color}"></button>
+                                            </c:forEach>
+                                        </div>
+                                    </div>
+                                    <div class="option">
+                                        <label>Chọn kích cỡ: </label>
+                                        <div class="size-options">
+                                            <c:forEach var="size" items="${item.variantSizes}">
+                                                <button class="size-btn disabled" data-size="${size}">${size}</button>
+                                            </c:forEach>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="popup-actions">
+                                    <button class="confirmVariant">Xác nhận</button>
+                                    <button class="closePopup">Hủy</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </c:forEach>
             </div>
         </div>
 
-        <%-- ====================================== Price ====================================== --%>
+        <%-- ====================================== PRICE ====================================== --%>
         <div class="container-product-price">
             <div class="container-price voucher-box" id="container-voucher">
                 <div class="voucher-header" id="voucher-toggle">
@@ -167,26 +210,9 @@
 </main>
 <script>
 </script>
-<script src="cartPage/cartPageJS/editInfo.js"></script>
+<script src="cartPage/cartPageJS/variant.js"></script>
 <script src="cartPage/cartPageJS/quantity.js"></script>
-<script>
-    const voucherBox = document.querySelector('.voucher-box');
-    const toggle = document.getElementById('voucher-toggle');
-    const selectedText = document.getElementById('voucher-selected');
-
-    toggle.addEventListener('click', () => {
-        voucherBox.classList.toggle('open');
-    });
-
-    // khi chọn voucher
-    document.querySelectorAll('input[name="voucher"]').forEach(radio => {
-        radio.addEventListener('change', () => {
-            const label = radio.closest('label').querySelector('.voucher-name').textContent;
-
-            selectedText.textContent = label;
-            voucherBox.classList.remove('open');
-        });
-    });
-</script>
+<script src="cartPage/cartPageJS/voucher.js"></script>
+<script src="cartPage/cartPageJS/voucher.js"></script>
 </body>
 </html>

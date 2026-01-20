@@ -23,13 +23,13 @@ public class AddCart extends HttpServlet {
         int q = Integer.parseInt(request.getParameter("q"));
 
         ProductService ps = new ProductService();
-
         Product product = ps.getProductById(pid);
-        product.setVariants(ps.getVariantsByPid(product.getPid()));
+        product.setVariants(ps.getVariantsByPid(product.getPid())); // set cac list variants
         ProductVariant productVariant = ps.getVariantByPvid(pvid);
         if (product == null) {
             return;
         }
+
         HttpSession session = request.getSession();
         Cart c = (Cart) session.getAttribute("cart");
         if (c==null)
