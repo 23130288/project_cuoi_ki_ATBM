@@ -1,7 +1,6 @@
 package org.example.projectweb.service;
 
 import jakarta.servlet.http.Part;
-import org.eclipse.tags.shaded.org.apache.xpath.objects.XString;
 import org.example.projectweb.dao.ImageProductDao;
 import org.example.projectweb.dao.ProductDao;
 import org.example.projectweb.dao.ProductVariantDao;
@@ -14,8 +13,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class ProductService {
     private ProductDao pDao = new ProductDao();
@@ -72,7 +69,7 @@ public class ProductService {
     }
 
     private String getUploadDir(int pid) {
-        String BASE_UPLOAD_DIR ="D:/mio/projectWeb/src/main/webapp/images/product";
+        String BASE_UPLOAD_DIR = "D:/mio/projectWeb/src/main/webapp/images/product";
         String productDir = BASE_UPLOAD_DIR + File.separator + pid;
 
         File dir = new File(productDir);
@@ -203,6 +200,22 @@ public class ProductService {
             }
 
             pDao.addProduct(p.getName(), p.getType(), p.getStyle(), p.getMaterial(), p.getProducer(), p.getStatus(), p.getDescription());
+        }
+    }
+
+    public void addProductVariant(List<ProductVariant> productVariants) {
+        for (ProductVariant pv : productVariants) {
+            // check đã có sản phẩm trước khi thêm biến thể
+            if (pDao.getProductById(pv.getPid()) == null) {
+                System.out.println("Bỏ qua dòng biến thể của sp_" + pv.getPid() + " size: " + pv.getSize() + " color:" + pv.getColor() + " do sản phẩm ko tồn tại.");
+                continue;
+            }
+            // check tồn tại
+            if (pvDao.findVariant(pv.getPid(), pv.getSize(), pv.getColor()) != null) {
+                System.out.println("Bỏ qua dòng biến thể của sp_" + pv.getPid() + " size: " + pv.getSize() + " color:" + pv.getColor() + " do đã tồn tại.");
+                continue;
+            }
+            pvDao.addProductVariant(pv.getPid(), pv.getSize(), pv.getColor(), pv.getPrice(), pv.getQuantity());
         }
     }
 }

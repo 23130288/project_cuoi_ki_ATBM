@@ -29,10 +29,6 @@ public class ProductVariant implements Serializable {
         return this.pid;
     }
 
-    public String getProductName() {
-        return productName;
-    }
-
     public String getColor() {
         return color;
     }
@@ -59,10 +55,6 @@ public class ProductVariant implements Serializable {
 
     public void setSize(String size) {
         this.size = size;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
     }
 
     public void setColor(String color) {
