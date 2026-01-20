@@ -24,7 +24,7 @@
         "Quản lý biến thể sản phẩm": `
             <h2>Quản lý biến thể sản phẩm</h2>
             <div class="Menu-bar">
-<!--                <button class="bt_menu" id="btn_them_pt_sp">+ Thêm biến thể</button>-->
+                <button class="bt_menu" id="btn_them_pt_sp">+ Thêm biến thể</button>
                 
                 <div class="search-bar">
                      <input type="text" name="query" id="searchProductVariantInput" placeholder="Tên sản phẩm..."/>
@@ -503,7 +503,12 @@ Vali cao cấp x1 - 1.200.000₫</textarea>
             }
 
             if (text === "Quản lý biến thể sản phẩm") {
-                handleProductVariantSearch()
+                handleProductVariantSearch();
+
+                const btnThem = document.getElementById("btn_them_pt_sp");
+                if (btnThem) btnThem.addEventListener("click", () => {
+                    addProductVariantExcel()
+                });
             }
 
             if (text === "Quản lý người dùng") {
@@ -884,7 +889,7 @@ function addProduct() {
                         </p>
                         
                         <!-- Khu vực preview -->
-                        <div class="excel-preview" id="excel-preview-list">
+                        <div class="excel-preview" id="excel_preview_list">
                             <!-- file excel sẽ hiện ở đây -->
                         </div>
                     </div>
@@ -1003,7 +1008,7 @@ function addProduct() {
     }, 0);
     setTimeout(() => {
         const excelInput = document.getElementById("excel_file");
-        const previewBox = document.getElementById("excel-preview-list");
+        const previewBox = document.getElementById("excel_preview_list");
 
         if (!excelInput || !previewBox) return;
 
@@ -1044,6 +1049,83 @@ function addProduct() {
             `;
 
                 previewImgBox.appendChild(div);
+            });
+        });
+    }, 0);
+}
+
+function addProductVariantExcel() {
+    openAdminPopup(
+        "Thêm danh sách biến thể mới",
+        `
+            <div class="popup_item">
+                <label>Nhập nhập từ Excel:</label>
+                <div class="img-upload-box" id="excel-drop-zone">
+                    <span>+</span>
+                    <p>Kéo hoặc click để tải file Excel (.xlsx)</p>
+                    <input type="file" id="pv_excel_file" accept=".xlsx,.xls" multiple>
+                </div>
+                <p style="font-size:13px; color:#666;">
+                File Excel phải có các cột: pid, size, color, price, quantity
+                </p>
+                                
+                 <!-- Khu vực preview -->
+                <div class="excel-preview" id="pv_excel_preview_list">
+                    <!-- file excel sẽ hiện ở đây -->
+                </div>
+            </div>
+
+            `, function () {
+            // ===== MODE EXCEL =====
+            const fileInput = document.getElementById("pv_excel_file");
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert("Vui lòng chọn file Excel");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("excelFile", file);
+
+            fetch("/projectWeb_war/admin/product_Variant_excel_add", {
+                method: "POST",
+                body: formData
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Nhập sản phẩm từ Excel thành công");
+                        handleProductVariantSearch();
+                    } else {
+                        alert(data.message || "Nhập Excel thất bại");
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Không kết nối được server");
+                });
+
+        });
+    setTimeout(() => {
+        const excelInput = document.getElementById("pv_excel_file");
+        const previewBox = document.getElementById("pv_excel_preview_list");
+
+        if (!excelInput || !previewBox) return;
+
+        excelInput.addEventListener("change", () => {
+            previewBox.innerHTML = "";
+
+            Array.from(excelInput.files).forEach(file => {
+                const div = document.createElement("div");
+                div.className = "preview-item excel-preview";
+
+                div.innerHTML = `
+                <span style="font-weight:600;">XLS</span>
+                <span class="file-name">${file.name}</span>
+            `;
+
+                previewBox.appendChild(div);
             });
         });
     }, 0);
@@ -1231,7 +1313,7 @@ function printProductTable(products) {
             <td>${p.producer}</td>
             <td>${p.status}</td>
             <td>
-                <button onclick="addProductVariant(${p.pid}, '${p.name}', '${p.type}')">Thêm_pt</button>
+                <button onclick="addProductVariant(${p.pid}, '${p.name}', '${p.type}')">+</button>
                 <button>Sửa</button>
                 <button onclick="toggleProductStatus(${p.pid})">${p.status}</button>
             </td>

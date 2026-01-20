@@ -437,7 +437,7 @@ body {
 }
 
 /* danh sách preview file Excel */
-#excel-preview-list {
+.excel-preview {
     display: flex;
     flex-direction: column;
     gap: 10px;

@@ -95,14 +95,6 @@ public class ProductDao extends BaseDao {
         );
     }
 
-    //để kiếm biến thể
-    public List<Integer> getAllPidNameLike(String name) {
-        return get().withHandle(h -> h.createQuery(" select pid from product WHERE LOWER(name) LIKE LOWER(:name)")
-                .bind("name", "%" + name + "%")
-                .mapTo(Integer.class).list()
-        );
-    }
-
     public List<Product> getAllProducts() {
         return get().withHandle(h -> h.createQuery(" select pid, name, producer, type, material, style, description, status from product ")
                 .mapToBean(Product.class)
