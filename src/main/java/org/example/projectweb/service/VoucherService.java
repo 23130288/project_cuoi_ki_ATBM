@@ -10,4 +10,8 @@ public class VoucherService {
     public List<Voucher> getAllVouchers() {
         return vDao.getListVoucher();
     }
+
+    public List<Voucher> getVouchersByUid(int uid) {
+        return vDao.getVouchersByUid(uid);
+    }
 }
