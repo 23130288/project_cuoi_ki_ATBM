@@ -19,18 +19,22 @@ public class searchController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        String producer= request.getParameter("producer");
-        String category= request.getParameter("category");
-        String color   = request.getParameter("color");
-        String size    = request.getParameter("size");
-        String minPrice= request.getParameter("minPrice");
-        String maxPrice= request.getParameter("maxPrice");
-        String sort    = request.getParameter("sort");
+        request.getRequestDispatcher("trang_tim_kiem/trang_tim_kiem.jsp")
+                .forward(request, response);
+    }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String producer = request.getParameter("producer");
+        String category = request.getParameter("category");
+        String color    = request.getParameter("color");
+        String size     = request.getParameter("size");
+        String minPrice = request.getParameter("minPrice");
+        String maxPrice = request.getParameter("maxPrice");
+        String sort     = request.getParameter("sort");
 
         List<Product> products = productService.searchInFilter(producer, category, color, size, minPrice, maxPrice, sort);
 
-        request.setAttribute("searchResults", products);
         request.setAttribute("producer", producer);
         request.setAttribute("category", category);
         request.setAttribute("color", color);

@@ -59,7 +59,6 @@ document.querySelectorAll(".slider-container").forEach(container => {
 
 /* */
 
-
 const filterToggle = document.getElementById("filterToggle");
 const filterPanel = document.getElementById("filterPanel");
 const tags = document.querySelectorAll(".tag");
@@ -81,4 +80,13 @@ tags.forEach(tag => {
         tag.classList.toggle("selected");
     });
 });
+
+
+
+
+
+
+
+
+
 

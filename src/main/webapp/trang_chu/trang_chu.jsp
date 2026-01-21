@@ -23,7 +23,7 @@
     <div class="voucher_section">
         <div class="voucher-container">
             <div class="voucher-avata">
-                <img src="image/voucer_percent.png" alt="">
+                <img src="trang_chu/image/voucer_percent.png" alt="">
             </div>
             <div class="voucher-conten">
                <h3>Giảm giá 5%</h3>
@@ -34,7 +34,7 @@
 
         <div class="voucher-container">
             <div class="voucher-avata">
-                <img src="image/vpucher_free_ship.png" alt="">
+                <img src="trang_chu/image/vpucher_free_ship.png" alt="">
             </div>
             <div class="voucher-conten">
                 <h3>Miễn phí vận chuyển</h3>
@@ -45,7 +45,7 @@
 
         <div class="voucher-container">
             <div class="voucher-avata">
-                <img src="image/voucher_50k.png" alt="">
+                <img src="trang_chu/image/voucher_50k.png" alt="">
             </div>
             <div class="voucher-conten">
                 <h3>Giảm 50k</h3>
@@ -190,7 +190,7 @@
     </div>
 
 </section>
-<script src="trang_chu.js"></script>
+<script src="trang_chu/trang_chu.js"></script>
 <footer>
     <div id="footer-placeholder"></div>
     <script src="../shareStuff/footer/footerGetter.js"></script>
