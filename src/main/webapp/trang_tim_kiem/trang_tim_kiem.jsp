@@ -22,98 +22,83 @@
         <button class="btn-search"><i class="fa-solid fa-magnifying-glass"></i></button>
     </div>
 
-    <div class="filter-container">
+    <form method="post" action="search">
 
-        <button class="filter-toggle" id="filterToggle">
-            <label>Bộ lọc</label>
-            <i class="fa-solid fa-plus"></i>
-        </button>
-        <!-- FILTER DROPDOWN -->
-        <div class="filter-group">
-            <label>Hãng sản xuất:</label>
-            <input type="text" name="producer"
-                   placeholder="Nhập hãng..."
-                   value="${producer}">
-        </div>
+        <div class="filter-container">
 
-        <div class="filter-panel" id="filterPanel">
-            <div class="filter-group">
-                <label>Loại:</label>
-                <select name="category">
-                    <option value="">-- Tất cả --</option>
-                    <option value="balo" ${param.category == 'balo' ? 'selected' : ''}>Balo</option>
-                    <option value="vali" ${param.category == 'vali' ? 'selected' : ''}>Vali</option>
-                </select>
-            </div>
+            <button type="button" class="filter-toggle" id="filterToggle">
+                <label>Bộ lọc</label>
+                <i class="fa-solid fa-plus"></i>
+            </button>
 
-            <div class="filter-group">
-                <label>Màu sắc:</label>
-                <select name="color">
-                    <option value="">-- Tất cả --</option>
-                    <option value="do" ${param.color == 'do' ? 'selected' : ''}>Đỏ</option>
-                    <option value="cam" ${param.color == 'cam' ? 'selected' : ''}>Cam</option>
-                    <option value="vang" ${param.color == 'vang' ? 'selected' : ''}>Vàng</option>
-                    <option value="luc" ${param.color == 'luc' ? 'selected' : ''}>Lục</option>
-                    <option value="xanh" ${param.color == 'xanh' ? 'selected' : ''}>Xanh</option>
-                    <option value="tim" ${param.color == 'tim' ? 'selected' : ''}>Tím</option>
-                    <option value="hong" ${param.color == 'hong' ? 'selected' : ''}>Hồng</option>
-                    <option value="xam" ${param.color == 'xam' ? 'selected' : ''}>Xám</option>
-                    <option value="den" ${param.color == 'den' ? 'selected' : ''}>Đen</option>
-                </select>
-            </div>
+            <div class="filter-panel" id="filterPanel">
 
-            <div class="filter-group">
-                <label>Size:</label>
-                <select name="size">
-                    <option value="">-- Tất cả --</option>
-                    <option value="S" ${param.size == 'S' ? 'selected' : ''}>S</option>
-                    <option value="M" ${param.size == 'M' ? 'selected' : ''}>M</option>
-                    <option value="L" ${param.size == 'L' ? 'selected' : ''}>L</option>
-                    <option value="XL" ${param.size == 'XL' ? 'selected' : ''}>XL</option>
-                </select>
-            </div>
-
-            <div class="filter-group">
-                <label>Giá:</label>
-                <div class="price-range">
-                    <input type="number" name="minPrice"
-                           placeholder="Từ"
-                           value="${param.minPrice}">
-                    <span> - </span>
-                    <input type="number" name="maxPrice"
-                           placeholder="Đến"
-                           value="${param.maxPrice}">
+                <!-- PRODUCER -->
+                <div class="filter-group">
+                    <label>Hãng sản xuất:</label>
+                    <input type="text" name="producer" placeholder="Nhập hãng...">
                 </div>
-            </div>
 
-            <div class="filter-group">
-                <label>Sắp xếp:</label>
-                <select name="sort">
-                    <option value="price_asc" ${param.sort == 'price_asc' ? 'selected' : ''}>
-                        Giá thấp → cao
-                    </option>
-                    <option value="price_desc" ${param.sort == 'price_desc' ? 'selected' : ''}>
-                        Giá cao → thấp
-                    </option>
-                    <option value="name_asc" ${param.sort == 'name_asc' ? 'selected' : ''}>
-                        Tên A → Z
-                    </option>
-                    <option value="name_desc" ${param.sort == 'name_desc' ? 'selected' : ''}>
-                        Tên Z → A
-                    </option>
-                    <option value="best_seller" ${param.sort == 'best_seller' ? 'selected' : ''}>
-                        Bán chạy
-                    </option>
-                    <option value="rating" ${param.sort == 'rating' ? 'selected' : ''}>
-                        Đánh giá cao
-                    </option>
-                    <option value="hot" ${param.sort == 'hot' ? 'selected' : ''}>
-                        Sản phẩm hot
-                    </option>
-                </select>
+                <!-- CATEGORY -->
+                <div class="filter-group">
+                    <label>Loại:</label>
+                    <select name="category">
+                        <option value="">Tất cả</option>
+                        <option value="balo">Balo</option>
+                        <option value="vali">Vali</option>
+                    </select>
+                </div>
+
+                <!-- COLOR -->
+                <div class="filter-group">
+                    <label>Màu sắc:</label>
+                    <select name="color">
+                        <option value="">Tất cả</option>
+                        <option value="do">Đỏ</option>
+                        <option value="den">Đen</option>
+                        <option value="xam">Xám</option>
+                    </select>
+                </div>
+
+                <!-- SIZE -->
+                <div class="filter-group">
+                    <label>Size:</label>
+                    <select name="size">
+                        <option value="">Tất cả</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                    </select>
+                </div>
+
+                <!-- PRICE -->
+                <div class="filter-group">
+                    <label>Giá:</label>
+                    <input type="number" name="minPrice" placeholder="Từ">
+                    <input type="number" name="maxPrice" placeholder="Đến">
+                </div>
+
+                <!-- SORT -->
+                <div class="filter-group">
+                    <label>Sắp xếp:</label>
+                    <select name="sort">
+                        <option value="price_asc">Giá thấp → cao</option>
+                        <option value="price_desc">Giá cao → thấp</option>
+                        <option value="name_asc">Tên A → Z</option>
+                        <option value="name_desc">Tên Z → A</option>
+                    </select>
+                </div>
+
+                <!-- SUBMIT -->
+                <button type="submit" class="btn-search">Áp dụng</button>
+
             </div>
         </div>
-    </div>
+
+    </form>
+
+
 </div>
 
 <section class="results">
@@ -160,7 +145,7 @@
     <div id="footer-placeholder"></div>
     <script src="../shareStuff/footer/footerGetter.js"></script>
 </footer>
-<script src="trang_tim_kiem.js"></script>
+<script src="trang_tim_kiem/trang_tim_kiem.js"></script>
 </body>
 
 
