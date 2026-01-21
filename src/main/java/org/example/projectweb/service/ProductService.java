@@ -191,6 +191,31 @@ public class ProductService {
         return products;
     }
 
+    public List<Product> getHotProducts() {
+        List<Product> list = pDao.getHotProducts();
+        loadExtraData(list);
+        return list;
+    }
+
+    public List<Product> getValiProducts() {
+        List<Product> list = pDao.getValiProducts();
+        loadExtraData(list);
+        return list;
+    }
+
+    public List<Product> getBaloProducts() {
+        List<Product> list = pDao.getBaloProducts();
+        loadExtraData(list);
+        return list;
+    }
+
+    private void loadExtraData(List<Product> products) {
+        for (Product p : products) {
+            p.setImages(ipDao.getImagesByProductId(p.getPid()));
+            p.setVariants(pvDao.getVariantsByProductId(p.getPid()));
+        }
+    }
+
     public void insertBatch(List<Product> products) {
         for (Product p : products) {
             // check tồn tại
