@@ -79,20 +79,13 @@
             <h2>Quản lý voucher</h2>
             <div class="Menu-bar">
                 <button class="bt_menu" id="btn-them-tb">+ Thêm voucher</button>
-                
-                <div class="search-bar">
-                    <input type="text" name="query" placeholder="Tên voucher..."/>
-                    <button class="btn-search"><i class="fa-solid fa-magnifying-glass"></i></button>
-                </div>
             </div>
-               
-            <div class="table-wrapper"> 
-                <table class="table_data">
-                    <tr><th>Mã voucher</th><th>Đối tượng nhận</th><th>Loại voucher</th><th>Nội dung</th><th>Có hiệu lực đến</th></tr>
-                    <tr><td>v001</td><td>all</td><td>giảm giá</td><td>giảm 100k cho đơn hàng trên 500k</td><td>15/11/2025</td>
-                    <tr><td>v002</td><td>0001</td><td>giảm giá</td><td>giảm 5% cho đơn hàng trên 500k</td><td>15/11/2025</td>
+            
+             <div class="table-wrapper">
+                <table class="table_data" id="voucherTable">
+<!--                  load nội dung bằng hàm riêng-->
                 </table>
-            </div>
+            </div>   
         `,
 
         "Quản lý dịch vụ, chính sách": `
@@ -516,44 +509,7 @@ Vali cao cấp x1 - 1.200.000₫</textarea>
             }
 
             if (text === "Quản lý voucher") {
-                const btnThemTB = document.getElementById("btn-them-tb");
-                if (btnThemTB) btnThemTB.addEventListener("click", () => {
-                    openAdminPopup(
-                        "Tạo voucher mới",
-                        `
-                <label>Đối tượng nhận voucher:</label>
-                <select id="tb-target-type">
-                    <option value="all">Tất cả</option>
-                    <option value="specific">Cụ thể</option>
-                </select>
-                
-                <!-- Ô nhập UID chỉ hiện khi chọn "specific" -->
-                <div id="uid-box" style="display:none; margin-top: 5px;">
-                    <label>Nhập UID (hoặc danh sách UID, cách nhau bằng dấu phẩy):</label>
-                    <input type="text" id="tb-uid" placeholder="VD: 0001, 0002, 0003">
-                </div>
-
-                <label>Loại voucher:</label>
-                <select id="tb-type">
-                    <option value="giam_gia">Giảm giá (VNĐ)</option>
-                    <option value="phan_tram">Giảm theo %</option>
-                    <option value="mien_phi_van_chuyen">Miễn phí vận chuyển</option>
-                </select>
-                
-                <label>Nội dung:</label>
-                <div id="content-area">
-                    <!-- Nội dung sẽ tự thay đổi bằng JS -->
-                </div>
-                
-                <label>Ngày hết hạn:</label>
-                <input type="date" id="tb-expired">
-
-            `,
-                        () => {
-                            alert(`✔ Đã tạo voucher.`);
-                        }
-                    );
-                });
+                loadVoucherList();
             }
 
             if (text === "Quản lý thông báo") {
@@ -1376,3 +1332,78 @@ function toggleProductStatus(pid) {
             alert("Có lỗi xảy ra");
         });
 }
+function loadVoucherList() {
+    fetch('/projectWeb_war/admin/Voucher/voucher_load')
+        .then(res => res.json())
+        .then(vouchers => {
+            const table = document.getElementById("voucherTable");
+
+            // XÓA DỮ LIỆU CŨ
+            table.innerHTML = `
+            <tr>
+                <th>ID</th>
+                <th>Tên</th>
+                <th>Giảm</th>
+                <th>Điều kiện</th>
+                <th>hiệu lực đến</th>
+                <th>Trạng thái</th>
+                <th>Thao tác</th>
+            </tr>
+            `;
+            vouchers.forEach(v => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${v.vid}</td>
+                    <td>${v.name}</td>
+                    <td>${v.discount}</td>
+                    <td>${v.condition}</td>
+                    <td>${v.expiredDate}</td>
+                    <td>${v.status ? "Đang áp dụng" : "Ngừng áp dụng"}</td>
+                    <td>
+                        <button onclick="">
+                            ${v.status ? "Khóa" : "Mở"}
+                        </button>
+                    </td>
+                `;
+                table.appendChild(row);
+            });
+        });
+}
+// const btnThemTB = document.getElementById("btn-them-tb");
+// if (btnThemTB) btnThemTB.addEventListener("click", () => {
+//     openAdminPopup(
+//         "Tạo voucher mới",
+//         `
+//                 <label>Đối tượng nhận voucher:</label>
+//                 <select id="tb-target-type">
+//                     <option value="all">Tất cả</option>
+//                     <option value="specific">Cụ thể</option>
+//                 </select>
+//
+//                 <!-- Ô nhập UID chỉ hiện khi chọn "specific" -->
+//                 <div id="uid-box" style="display:none; margin-top: 5px;">
+//                     <label>Nhập UID (hoặc danh sách UID, cách nhau bằng dấu phẩy):</label>
+//                     <input type="text" id="tb-uid" placeholder="VD: 0001, 0002, 0003">
+//                 </div>
+//
+//                 <label>Loại voucher:</label>
+//                 <select id="tb-type">
+//                     <option value="giam_gia">Giảm giá (VNĐ)</option>
+//                     <option value="phan_tram">Giảm theo %</option>
+//                     <option value="mien_phi_van_chuyen">Miễn phí vận chuyển</option>
+//                 </select>
+//
+//                 <label>Nội dung:</label>
+//                 <div id="content-area">
+//                     <!-- Nội dung sẽ tự thay đổi bằng JS -->
+//                 </div>
+//
+//                 <label>Ngày hết hạn:</label>
+//                 <input type="date" id="tb-expired">
+//
+//             `,
+//         () => {
+//             alert(`✔ Đã tạo voucher.`);
+//         }
+//     );
+// });

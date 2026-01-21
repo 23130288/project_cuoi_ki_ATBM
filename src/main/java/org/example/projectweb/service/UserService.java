@@ -6,7 +6,7 @@ import org.example.projectweb.model.User;
 import java.util.List;
 
 public class UserService {
-    private userDao userDao = new userDao();
+    final userDao userDao = new userDao();
 
     public List<User> getAllUsers() {
         return userDao.getListUser();
