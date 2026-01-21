@@ -213,6 +213,28 @@ public class ProductDao extends BaseDao {
                 return getAllProducts();
         }
     }
+    public List<Product> getHotProducts() {
+        return get().withHandle(h ->
+                h.createQuery("SELECT * FROM product WHERE status = 'Hot'")
+                        .mapToBean(Product.class)
+                        .list()
+        );
+    }
+    public List<Product> getValiProducts() {
+        return get().withHandle(h ->
+                h.createQuery("SELECT * FROM product WHERE type = 'Vali'")
+                        .mapToBean(Product.class)
+                        .list()
+        );
+    }
+    public List<Product> getBaloProducts() {
+        return get().withHandle(h ->
+                h.createQuery("SELECT * FROM product WHERE type = 'Balo'")
+                        .mapToBean(Product.class)
+                        .list()
+        );
+    }
+
 
     public void updateStatus(int pid, String sta) {
         get().useHandle(h -> h.createUpdate("UPDATE product SET status = :sta WHERE pid = :pid")
