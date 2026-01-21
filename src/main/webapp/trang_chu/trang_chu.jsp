@@ -55,9 +55,8 @@
         </div>
     </div>
 
-    <c:if test="${not empty hotProducts}">
-        <h2>SẢN PHẨM HOT</h2>
-        <div class="slider-container">
+    <h2>SẢN PHẨM HOT</h2>
+    <div class="slider-container">
 
             <div class="arrow left"><i class="fa fa-angle-left"></i></div>
 
@@ -99,7 +98,6 @@
 
             <div class="arrow right"><i class="fa fa-angle-right"></i></div>
         </div>
-    </c:if>
 
     <h2>VALI DU LỊCH</h2>
     <div class="slider-container">
