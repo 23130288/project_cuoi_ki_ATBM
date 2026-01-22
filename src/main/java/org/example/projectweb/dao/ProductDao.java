@@ -215,21 +215,21 @@ public class ProductDao extends BaseDao {
     }
     public List<Product> getHotProducts() {
         return get().withHandle(h ->
-                h.createQuery("SELECT * FROM product WHERE status = 'Hot'")
+                h.createQuery("SELECT pid, name, producer, type, material, style, description, status FROM product WHERE LOWER(status) = 'hot'")
                         .mapToBean(Product.class)
                         .list()
         );
     }
     public List<Product> getValiProducts() {
         return get().withHandle(h ->
-                h.createQuery("SELECT * FROM product WHERE type = 'Vali'")
+                h.createQuery("SELECT pid, name, producer, type, material, style, description, status FROM product WHERE LOWER(type) = 'vali'")
                         .mapToBean(Product.class)
                         .list()
         );
     }
     public List<Product> getBaloProducts() {
         return get().withHandle(h ->
-                h.createQuery("SELECT * FROM product WHERE type = 'Balo'")
+                h.createQuery("SELECT pid, name, producer, type, material, style, description, status FROM product WHERE LOWER(type) = 'balo'")
                         .mapToBean(Product.class)
                         .list()
         );
