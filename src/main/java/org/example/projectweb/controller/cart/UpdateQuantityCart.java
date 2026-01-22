@@ -32,7 +32,8 @@ public class UpdateQuantityCart extends HttpServlet {
                 "\"success\":true," +
                 "\"quantity\":" + quantity + "," +
                 "\"itemTotalPrice\":" + c.getItemTotalPrice(pid) + "," +
-                "\"cartTotalPrice\":" + c.getTotalPrice() +
+                "\"cartTotalPrice\":" + c.getTotalPrice() + "," +
+                "\"cartFinalPrice\":" + c.getFinalPrice() +
                 "}");
     }
 }

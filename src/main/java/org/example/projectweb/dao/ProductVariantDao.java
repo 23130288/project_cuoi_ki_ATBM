@@ -39,7 +39,7 @@ public class ProductVariantDao extends BaseDao {
     }
 
     public ProductVariant getVariantByPvid(int pvid) {
-        return get().withHandle(h -> h.createQuery("select size, color, price, quantity from product_variant where pvid = :pvid")
+        return get().withHandle(h -> h.createQuery("select pvid, size, color, price, quantity from product_variant where pvid = :pvid")
                 .bind("pvid", pvid)
                 .mapToBean(ProductVariant.class).first());
     }

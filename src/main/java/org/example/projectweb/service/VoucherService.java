@@ -8,6 +8,8 @@ import java.util.List;
 public class VoucherService {
     final VoucherDao vDao = new VoucherDao();
 
+    public Voucher getVoucherByVidAndUid(int vid, int uid) {
+        return null;
     public boolean addVoucher(String type, double discount, double condition, String expiredDate) {
         if ("phan_tram".equals(type)) {
             discount = discount / 100.0; // 44 → 0.44
@@ -52,5 +54,9 @@ public class VoucherService {
 
     public List<Voucher> getVouchersByUid(int uid) {
         return vDao.getVouchersByUid(uid);
+    }
+
+    public Voucher getVoucherByUvid(int uvid) {
+        return vDao.getVoucherByUvid(uvid);
     }
 }

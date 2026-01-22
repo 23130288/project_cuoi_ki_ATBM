@@ -1,4 +1,4 @@
-function updateVariant(pid, oldPvid, newVariant, popup) {
+function updateVariant(pid, newVariant, popup) {
     fetch("update-variant-cart", {
         method: "POST",
         headers: {
@@ -26,12 +26,10 @@ function updateVariant(pid, oldPvid, newVariant, popup) {
             document.getElementById("cart-total-price").textContent = data.cartTotalPrice + " đ";
             document.getElementById("cart-final-price").textContent = data.cartTotalPrice + " đ";
 
-            variantBox.dataset.oldPvid = newVariant.pvid;
+            variantBox.dataset.pvid = newVariant.pvid;
             popup.classList.add("hidden");
         });
 }
-
-
 
 
 let selectedColor = null;
@@ -104,9 +102,8 @@ document.querySelectorAll(".popup").forEach(popup => {
         const variantBox = productItem.querySelector(".product-item-variant");
 
         const pid = variantBox.dataset.pid;
-        const oldPvid = variantBox.dataset.pvid;
 
-        updateVariant(pid, oldPvid, variant, popup);
+        updateVariant(pid, variant, popup);
     });
 
     // ================= CLOSE =================

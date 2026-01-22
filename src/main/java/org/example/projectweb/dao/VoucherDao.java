@@ -27,13 +27,37 @@ public class VoucherDao extends BaseDao {
 
     public List<Voucher> getVouchersByUid(int uid) {
         return get().withHandle(h -> h.createQuery("""
-                select v.name, v.discount, `condition`, v.image
+                select min(vu.uvid) as uvid, v.vid, v.name, v.discount, `condition`
                 from voucher v join voucher_user vu on v.vid = vu.vid
                 where vu.uid = :uid and v.status = 1
-                group by v.vid
+                group by v.vid, v.name, v.discount, v.condition
                 """).bind("uid", uid).mapToBean(Voucher.class).list());
     }
 
+    public Voucher getVoucherByUvid(int uvid) {
+        return get().withHandle(h -> h.createQuery("""
+                select vu.uvid, v.vid, v.name, v.discount, `condition`
+                from voucher v join voucher_user vu on v.vid = vu.vid
+                where vu.uvid = :uvid and v.status = 1
+                """).bind("uvid", uvid).mapToBean(Voucher.class).one());
+    }
+
+    public void deleteUserVoucher(int uvid) {
+        get().useHandle(h -> h.createUpdate("""
+                delete from voucher_user
+                where uvid = :uvid
+                """).bind("uvid", uvid).execute());
+    }
+
+//    public void updateStatus(int uid) {
+//        get().useHandle(h ->
+//                h.createUpdate(
+//                                "UPDATE user SET status = IF(status = 1, 0, 1) WHERE uid = :uid"
+//                        )
+//                        .bind("uid", uid)
+//                        .execute()
+//        );
+//    }
     public void updateStatus(int vid) {
         get().useHandle(h ->
                 h.createUpdate("UPDATE voucher SET status = IF(status = 1, 0, 1) WHERE vid = :vid")

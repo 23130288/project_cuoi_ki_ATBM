@@ -113,48 +113,42 @@
         <%-- ====================================== PRICE ====================================== --%>
         <div class="container-product-price">
             <div class="container-price voucher-box" id="container-voucher">
-                <div class="voucher-header" id="voucher-toggle">
-                    <label>Voucher</label>
-                    <span class="voucher-selected" id="voucher-selected">Chưa chọn</span>
-                    <span class="arrow">▼</span>
-                </div>
+                <label for="voucherSelect">Voucher:</label>
                 <c:choose>
                     <c:when test="${empty vouchers}">
                         <p class="no-voucher">Bạn chưa có voucher nào ¯\_(ツ)_/¯</p>
                     </c:when>
                     <c:otherwise>
                         <div class="vouchers" id="voucher-list">
-                            <c:forEach var="v" items="${vouchers}">
-                                <label>
-                                    <input type="radio" name="voucher"
-                                           value="${v.discount}"
-                                           data-name="${v.name}"
-                                           data-condition="${v.condition}">
-                                    <span class="voucher-name">${v.name}</span>
-                                    <span class="voucher-condition">Áp dụng cho đơn từ ${v.condition}</span>
-                                </label>
-                            </c:forEach>
+                            <select id="voucherSelect">
+                                <option value="">-- Chưa chọn voucher --</option>
+                                <c:forEach var="v" items="${vouchers}">
+                                    <option value="${v.uvid}">
+                                            ${v.name}: -${v.discount} ~ Áp dụng cho đơn từ ${v.condition}
+                                    </option>
+                                </c:forEach>
+                            </select>
                         </div>
                     </c:otherwise>
                 </c:choose>
             </div>
             <div class="container-price">
                 <label>Tổng tiền:</label>
-                <p id="cart-total-price">${cart.totalPrice} đ</p>
+                <p id="cart-total-price" data-value="${cart.totalPrice}">${cart.totalPrice} đ</p>
             </div>
             <div class="container-price">
                 <label>Giảm giá:</label>
-                <p>0 đ</p>
+                <p id="discount-ammount">${cart.discountStr}</p>
             </div>
             <div class="container-price" id="final-price">
                 <label class="title">Tổng thanh toán:</label>
-                <p class="price" id="cart-final-price">${cart.totalPrice} đ</p>
+                <p class="price" id="cart-final-price">${cart.finalPrice} đ</p>
             </div>
         </div>
 
         <%-- ====================================== user info ====================================== --%>
         <div class="user-info">
-            <form id="form-input-info" action="../ct_Order/ct_Order.html">
+            <form id="form-input-info" action="checkout" method="post">
                 <div class="container-user-title">
                     <h2>Thông tin người dùng</h2>
                     <a href="tai_khoan" class="edit-btn" id="editBtn">Chỉnh sửa <i class="fa-solid fa-pen"></i></a>
@@ -182,7 +176,7 @@
                                 </div>
                                 <div class="optional-information">
                                     <label for="note">Thông tin thêm:</label>
-                                    <textarea id="note" rows="3" placeholder="Optional"></textarea>
+                                    <textarea id="note" name="note" rows="3" placeholder="Optional"></textarea>
                                 </div>
                             </div>
 

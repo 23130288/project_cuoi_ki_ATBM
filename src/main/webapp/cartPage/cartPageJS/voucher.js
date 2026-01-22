@@ -1,17 +1,28 @@
-const voucherBox = document.querySelector('.voucher-box');
-const toggle = document.getElementById('voucher-toggle');
-const selectedText = document.getElementById('voucher-selected');
+const voucherSelect = document.getElementById("voucherSelect");
 
-toggle.addEventListener('click', () => {
-    voucherBox.classList.toggle('open');
+voucherSelect.addEventListener("change", () => {
+    const uvid = voucherSelect.value;
+    applyVoucher(uvid);
 });
 
-// khi chọn voucher
-document.querySelectorAll('input[name="voucher"]').forEach(radio => {
-    radio.addEventListener('change', () => {
-        const label = radio.closest('label').querySelector('.voucher-name').textContent;
-
-        selectedText.textContent = label;
-        voucherBox.classList.remove('open');
-    });
-});
+function applyVoucher(uvid) {
+    fetch("apply-voucher-cart", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+        },
+        body: "uvid=" + uvid
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById("discount-ammount").textContent = data.discount + " đ";
+                document.getElementById("cart-final-price").textContent = data.cartFinalPrice + " đ";
+            } else {
+                alert(data.message);
+                voucherSelect.value = "";
+                document.getElementById("discount-ammount").textContent = "0 đ";
+                document.getElementById("cart-final-price").textContent = data.cartTotalPrice + " đ";
+            }
+        });
+}
