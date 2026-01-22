@@ -226,35 +226,15 @@ main .product-item .action-delete-product:hover {
 /* container */
 .container-product-price #container-voucher {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
     gap: 10px;
     border-bottom: lightgrey solid 1px;
     padding: 10px;
 }
 
-/* header */
-.container-product-price #container-voucher .voucher-header {
-    display: flex;
-    gap: 2px;
-    justify-content: space-between;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.container-product-price #container-voucher .voucher-header .voucher-selected {
-    color: #888;
-}
-
-.container-product-price #container-voucher .voucher-header .arrow {
-    transition: transform 0.3s;
-}
-
 /* voucher list */
 .container-product-price #container-voucher .vouchers {
-    display: none;
-    flex-direction: column;
-    margin-top: 10px;
+    width: 100%;
 }
 
 .container-product-price #container-voucher .vouchers label {
@@ -262,13 +242,30 @@ main .product-item .action-delete-product:hover {
     cursor: pointer;
 }
 
-/* when open */
-.container-product-price #container-voucher.voucher-box.open .vouchers {
-    display: flex;
+/* combobox */
+.container-product-price #container-voucher select {
+    width: 50%;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid lightgrey;
+    background: white;
+    cursor: pointer;
 }
 
-.container-product-price #container-voucher.voucher-box.open .arrow {
-    transform: rotate(180deg);
+/* hover */
+.container-product-price #container-voucher select:hover {
+    border-color: grey;
+}
+
+/*!* focus *!*/
+/*.container-product-price #container-voucher select:focus {*/
+/*    outline: none;*/
+/*    border-color: #666;*/
+/*}*/
+
+/* empty voucher text */
+.container-product-price #container-voucher .no-voucher {
+    font-size: 15px;
 }
 
 /* =============================== form =============================== */

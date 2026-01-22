@@ -10,8 +10,8 @@ function updateQuantity(pid, delta, qtyEl) {
             "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
         },
         body:
-            "pid=" + encodeURIComponent(pid) +
-            "&delta=" + encodeURIComponent(delta)
+            "pid=" + pid +
+            "&delta=" + delta
     })
         .then(res => res.json())
         .then(data => {
@@ -24,8 +24,11 @@ function updateQuantity(pid, delta, qtyEl) {
                 item.querySelector(".total").textContent = data.itemTotalPrice + " đ";
 
                 // total price of the cart
-                document.getElementById("cart-total-price").textContent = data.cartTotalPrice + " đ";
-                document.getElementById("cart-final-price").textContent = data.cartTotalPrice + " đ";
+                const totalPrice = document.getElementById("cart-total-price")
+                const finalPrice = document.getElementById("cart-final-price");
+                totalPrice.textContent = data.cartTotalPrice + " đ";
+                totalPrice.dataset.value = data.cartTotalPrice;
+                finalPrice.textContent = data.cartFinalPrice + " đ";
             }
         });
 }

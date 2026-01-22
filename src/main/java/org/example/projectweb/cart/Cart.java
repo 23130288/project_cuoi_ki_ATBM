@@ -2,6 +2,7 @@ package org.example.projectweb.cart;
 
 import org.example.projectweb.model.Product;
 import org.example.projectweb.model.ProductVariant;
+import org.example.projectweb.model.Voucher;
 
 import java.io.Serializable;
 import java.util.*;
@@ -9,10 +10,24 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class Cart implements Serializable {
-    Map<Integer, CartItem> data;
+    private Map<Integer, CartItem> data;
+    private Voucher voucher;
 
     public Cart() {
         data = new HashMap<>();
+        voucher = null;
+    }
+
+    public Voucher getVoucher() {
+        return voucher;
+    }
+
+    public String getDiscountStr() {
+        if (voucher == null) return 0 + " đ";
+        double discount = voucher.getDiscount();
+        if (discount < 1 && discount > 0)
+            return discount * 100 + " %";
+        return discount * 100 + " đ";
     }
 
     public CartItem getItemByPid(int pid) {
@@ -61,6 +76,18 @@ public class Cart implements Serializable {
         return total.get();
     }
 
+    public double getFinalPrice() {
+        double total = getTotalPrice();
+        if (voucher == null)
+            return total;
+
+        double discount = voucher.getDiscount();
+        double condition = voucher.getCondition();
+        if (discount < 1 && discount > 0)
+            return total * (1 - discount);
+        return total - discount;
+    }
+
     public boolean updateVariant(int pid, ProductVariant pv) {
         if (data.containsKey(pid)) {
             CartItem item = getItemByPid(pid);
@@ -75,5 +102,13 @@ public class Cart implements Serializable {
         CartItem item = data.get(pid);
         if (item == null) return 0;
         return item.updateQuantity(delta);
+    }
+
+    public void setVoucher(Voucher voucher) {
+        this.voucher = voucher;
+    }
+
+    public boolean isEmpty() {
+        return data.isEmpty();
     }
 }
