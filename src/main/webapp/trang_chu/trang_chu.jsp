@@ -55,9 +55,8 @@
         </div>
     </div>
 
-    <c:if test="${not empty hotProducts}">
-        <h2>SẢN PHẨM HOT</h2>
-        <div class="slider-container">
+    <h2>SẢN PHẨM HOT</h2>
+    <div class="slider-container">
 
             <div class="arrow left"><i class="fa fa-angle-left"></i></div>
 
@@ -66,14 +65,14 @@
                     <a href="productDetail?pid=${p.pid}" class="product-link">
                         <div class="product-card">
 
-                            <c:choose>
-                                <c:when test="${not empty p.mainImage}">
-                                    <img src="${p.mainImage.image}" alt="${p.name}">
-                                </c:when>
-                                <c:otherwise>
-                                    <img src="image/no-image.png" alt="No image">
-                                </c:otherwise>
-                            </c:choose>
+<%--                            <c:choose>--%>
+<%--                                <c:when test="${not empty p.mainImage}">--%>
+<%--                                    <img src="${p.mainImage.image}" alt="${p.name}">--%>
+<%--                                </c:when>--%>
+<%--                                <c:otherwise>--%>
+<%--                                    <img src="image/no-image.png" alt="No image">--%>
+<%--                                </c:otherwise>--%>
+<%--                            </c:choose>--%>
 
                             <h3>${p.name}</h3>
 
@@ -99,7 +98,7 @@
 
             <div class="arrow right"><i class="fa fa-angle-right"></i></div>
         </div>
-    </c:if>
+
 
     <h2>VALI DU LỊCH</h2>
     <div class="slider-container">
@@ -111,14 +110,14 @@
                 <a href="productDetail?pid=${p.pid}" class="product-link">
                     <div class="product-card">
 
-                        <c:choose>
-                            <c:when test="${not empty p.mainImage}">
-                                <img src="${p.mainImage.image}" alt="${p.name}">
-                            </c:when>
-                            <c:otherwise>
-                                <img src="image/no-image.png" alt="No image">
-                            </c:otherwise>
-                        </c:choose>
+<%--                        <c:choose>--%>
+<%--                            <c:when test="${not empty p.mainImage}">--%>
+<%--                                <img src="${p.mainImage.image}" alt="${p.name}">--%>
+<%--                            </c:when>--%>
+<%--                            <c:otherwise>--%>
+<%--                                <img src="image/no-image.png" alt="No image">--%>
+<%--                            </c:otherwise>--%>
+<%--                        </c:choose>--%>
 
                         <h3>${p.name}</h3>
 
@@ -155,14 +154,14 @@
                 <a href="productDetail?pid=${p.pid}" class="product-link">
                     <div class="product-card">
 
-                        <c:choose>
-                            <c:when test="${not empty p.mainImage}">
-                                <img src="${p.mainImage.image}" alt="${p.name}">
-                            </c:when>
-                            <c:otherwise>
-                                <img src="image/no-image.png" alt="No image">
-                            </c:otherwise>
-                        </c:choose>
+<%--                        <c:choose>--%>
+<%--                            <c:when test="${not empty p.mainImage}">--%>
+<%--                                <img src="${p.mainImage.image}" alt="${p.name}">--%>
+<%--                            </c:when>--%>
+<%--                            <c:otherwise>--%>
+<%--                                <img src="image/no-image.png" alt="No image">--%>
+<%--                            </c:otherwise>--%>
+<%--                        </c:choose>--%>
 
                         <h3>${p.name}</h3>
 

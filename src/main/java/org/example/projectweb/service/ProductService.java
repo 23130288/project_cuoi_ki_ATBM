@@ -193,28 +193,46 @@ public class ProductService {
 
     public List<Product> getHotProducts() {
         List<Product> list = pDao.getHotProducts();
-        loadExtraData(list);
-        return list;
+
+        for (Product p : list) {
+            p.setVariants(
+                pvDao.getVariantsByProductId(p.getPid())
+        );
+//            p.setImages(
+//                ipDao.getImagesByProductId(p.getPid())
+//        );
     }
+
+    return list;
+}
 
     public List<Product> getValiProducts() {
         List<Product> list = pDao.getValiProducts();
-        loadExtraData(list);
+
+        for (Product p : list) {
+            p.setVariants(
+                    pvDao.getVariantsByProductId(p.getPid())
+            );
+//            p.setImages(
+//                    ipDao.getImagesByProductId(p.getPid())
+//            );
+        }
         return list;
     }
 
     public List<Product> getBaloProducts() {
         List<Product> list = pDao.getBaloProducts();
-        loadExtraData(list);
-        return list;
-    }
 
-    private void loadExtraData(List<Product> products) {
-        for (Product p : products) {
-            p.setImages(ipDao.getImagesByProductId(p.getPid()));
-            p.setVariants(pvDao.getVariantsByProductId(p.getPid()));
-        }
+        for (Product p : list) {
+            p.setVariants(
+                pvDao.getVariantsByProductId(p.getPid())
+        );
+//            p.setImages(
+//                ipDao.getImagesByProductId(p.getPid())
+//        );
     }
+        return list;
+}
 
     public void insertBatch(List<Product> products) {
         for (Product p : products) {
