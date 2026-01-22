@@ -21,9 +21,7 @@ public class GetListVoucher extends HttpServlet {
             throws IOException {
 
         response.setContentType("application/json;charset=UTF-8");
-        System.out.println("1111111111");
         List<Voucher> Vouchers = vs.getAllVouchers();
-        System.out.println("aaaaaaaa");
 
         String json = new Gson().toJson(Vouchers);
         response.getWriter().write(json);

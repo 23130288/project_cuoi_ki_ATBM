@@ -6,8 +6,8 @@ public class Voucher implements Serializable {
 
     private int vid;
     private String name;
-    private String discount;
-    private String condition;
+    private double discount;
+    private double condition;
     private String expiredDate;
     private String image;
     private boolean status;
@@ -15,7 +15,7 @@ public class Voucher implements Serializable {
     public Voucher() {
     }
 
-    public Voucher(int vid, String name, String discount, String condition, String expiredDate, String image, boolean status) {
+    public Voucher(int vid, String name, double discount, double condition, String expiredDate, String image, boolean status) {
         this.vid = vid;
         this.name = name;
         this.discount = discount;
@@ -43,19 +43,19 @@ public class Voucher implements Serializable {
         this.name = name;
     }
 
-    public String getDiscount() {
+    public double getDiscount() {
         return discount;
     }
 
-    public void setDiscount(String discount) {
+    public void setDiscount(double discount) {
         this.discount = discount;
     }
 
-    public String getCondition() {
+    public double getCondition() {
         return condition;
     }
 
-    public void setCondition(String condition) {
+    public void setCondition(double condition) {
         this.condition = condition;
     }
 

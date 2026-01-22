@@ -118,26 +118,25 @@
                     <span class="voucher-selected" id="voucher-selected">Chưa chọn</span>
                     <span class="arrow">▼</span>
                 </div>
-
-                <div class="vouchers" id="voucher-list">
-                    <label>
-                        <input type="radio" name="voucher">
-                        <span class="voucher-name">Giảm giá 5%</span>
-                        <span class="voucher-condition">Áp dụng cho đơn từ 200k</span>
-                    </label>
-
-                    <label>
-                        <input type="radio" name="voucher">
-                        <span class="voucher-name">Miễn phí vận chuyển</span>
-                        <span class="voucher-condition">Áp dụng cho đơn từ 0đ</span>
-                    </label>
-
-                    <label>
-                        <input type="radio" name="voucher">
-                        <span class="voucher-name">Giảm 10%</span>
-                        <span class="voucher-condition">Áp dụng cho đơn từ 500k</span>
-                    </label>
-                </div>
+                <c:choose>
+                    <c:when test="${empty vouchers}">
+                        <p class="no-voucher">Bạn chưa có voucher nào ¯\_(ツ)_/¯</p>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="vouchers" id="voucher-list">
+                            <c:forEach var="v" items="${vouchers}">
+                                <label>
+                                    <input type="radio" name="voucher"
+                                           value="${v.discount}"
+                                           data-name="${v.name}"
+                                           data-condition="${v.condition}">
+                                    <span class="voucher-name">${v.name}</span>
+                                    <span class="voucher-condition">Áp dụng cho đơn từ ${v.condition}</span>
+                                </label>
+                            </c:forEach>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
             </div>
             <div class="container-price">
                 <label>Tổng tiền:</label>
@@ -158,51 +157,52 @@
             <form id="form-input-info" action="../ct_Order/ct_Order.html">
                 <div class="container-user-title">
                     <h2>Thông tin người dùng</h2>
-                    <button type="button" class="edit-btn" id="editBtn">Chỉnh sửa <i class="fa-solid fa-pen"></i>
-                    </button>
+                    <a href="tai_khoan" class="edit-btn" id="editBtn">Chỉnh sửa <i class="fa-solid fa-pen"></i></a>
                 </div>
                 <div class="form-container">
-                    <div class="user-info-container">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="name">Họ tên:</label>
-                                <input type="text" id="name" placeholder="Họ tên" value="Name placeholder" required
-                                       disabled>
+                    <c:choose>
+                        <c:when test="${empty user.phone || empty user.address}">
+                            <div class="missing-information-container">
+                                <p>Vui lòng cập nhật đầy đủ thông tin cá nhân (Sđt, địa chỉ) trước khi thanh toán.</p>
                             </div>
-                            <div class="form-group">
-                                <label for="phone">Số điện thoại:</label>
-                                <input type="text" id="phone" placeholder="Số điện thoại" value="0123456789" required
-                                       disabled>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="user-info-container">
+                                <div class="form-group">
+                                    <label for="name">Họ tên: </label>
+                                    <p>${user.name}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Số điện thoại: </label>
+                                    <p>${user.phone}</p>
+                                </div>
+                                <div class="form-group">
+                                    <label for="address">Địa chỉ: </label>
+                                    <p>${user.address}</p>
+                                </div>
+                                <div class="optional-information">
+                                    <label for="note">Thông tin thêm:</label>
+                                    <textarea id="note" rows="3" placeholder="Optional"></textarea>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="address">Địa chỉ:</label>
-                            <input type="text" id="address"
-                                   placeholder="Địa chỉ..." value="1A/1 Tổ 1A, Khu phố 1, Phường An Bình, Tỉnh Đồng Nai"
-                                   required disabled>
-                        </div>
-                        <div class="form-group">
-                            <label for="note">Thông tin thêm:</label>
-                            <textarea id="note" rows="3" placeholder="Optional"></textarea>
-                        </div>
-                    </div>
 
-                    <div class="payment-container">
-                        <label>Phương thức thanh toán</label>
-                        <div class="radio-container">
-                            <label><input type="radio" name="payment" required>Vietcombank
-                                <img src="images/bankImages/vietcombank.jpg" alt="Chuyển ngân hàng">
-                            </label>
-                            <label><input type="radio" name="payment">Visa
-                                <img src="images/bankImages/visa.jpeg" alt="Chuyển ngân hàng">
-                            </label>
-                            <label><input type="radio" name="payment">Tiền mặt</label>
-                        </div>
-                    </div>
-
-                    <div class="container-buttons">
-                        <button type="submit" class="confirm-btn">Thanh toán</button>
-                    </div>
+                            <div class="payment-container">
+                                <label>Phương thức thanh toán</label>
+                                <div class="radio-container">
+                                    <label><input type="radio" name="payment" required>Vietcombank
+                                        <img src="images/bankImages/vietcombank.jpg" alt="Chuyển ngân hàng">
+                                    </label>
+                                    <label><input type="radio" name="payment">Visa
+                                        <img src="images/bankImages/visa.jpeg" alt="Chuyển ngân hàng">
+                                    </label>
+                                    <label><input type="radio" name="payment">Tiền mặt</label>
+                                </div>
+                            </div>
+                            <div class="container-buttons">
+                                <button type="submit" class="confirm-btn">Thanh toán</button>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </form>
         </div>
@@ -212,7 +212,6 @@
 </script>
 <script src="cartPage/cartPageJS/variant.js"></script>
 <script src="cartPage/cartPageJS/quantity.js"></script>
-<script src="cartPage/cartPageJS/voucher.js"></script>
 <script src="cartPage/cartPageJS/voucher.js"></script>
 </body>
 </html>
