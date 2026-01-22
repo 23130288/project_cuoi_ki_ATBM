@@ -14,12 +14,8 @@ public class trangChuController extends HttpServlet {
     private final ProductService productService = new ProductService();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        request.getRequestDispatcher("trang_chu/trang_chu.jsp")
-                .forward(request, response);
-    }
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<Product> hotProducts = productService.getHotProducts();
         List<Product> valiProducts = productService.getValiProducts();
@@ -33,4 +29,5 @@ public class trangChuController extends HttpServlet {
                 .forward(request, response);
 
     }
+
 }

@@ -36,7 +36,7 @@
                 <!-- PRODUCER -->
                 <div class="filter-group">
                     <label>Hãng sản xuất:</label>
-                    <input type="text" name="producer" placeholder="Nhập hãng...">
+                    <input type="text" name="producer" placeholder="Nhập tên hãng...">
                 </div>
 
                 <!-- CATEGORY -->
@@ -55,8 +55,14 @@
                     <select name="color">
                         <option value="">Tất cả</option>
                         <option value="do">Đỏ</option>
-                        <option value="den">Đen</option>
+                        <option value="cam">Cam</option>
+                        <option value="vang">Vàng</option>
+                        <option value="luc">Lục</option>
+                        <option value="xanh">Xanh</option>
+                        <option value="tim">Tím</option>
+                        <option value="hong">Hồng</option>
                         <option value="xam">Xám</option>
+                        <option value="den">Đen</option>
                     </select>
                 </div>
 
@@ -69,22 +75,26 @@
                         <option value="M">M</option>
                         <option value="L">L</option>
                         <option value="XL">XL</option>
+                        <option value="20">20 inch</option>
+                        <option value="24">24 inch</option>
+                        <option value="28">28 inch</option>
                     </select>
                 </div>
 
                 <!-- PRICE -->
                 <div class="filter-group">
-                    <label>Giá:</label>
-                    <input type="number" name="minPrice" placeholder="Từ">
-                    <input type="number" name="maxPrice" placeholder="Đến">
+                    <label>Giá từ:</label>
+                    <input type="number" name="minPrice" min="0" step="100000" placeholder="0">
+                    <label>Đến:</label>
+                    <input type="number" name="maxPrice" min="0" step="100000" placeholder="0">
                 </div>
 
                 <!-- SORT -->
                 <div class="filter-group">
                     <label>Sắp xếp:</label>
                     <select name="sort">
-                        <option value="price_asc">Giá thấp → cao</option>
-                        <option value="price_desc">Giá cao → thấp</option>
+                        <option value="price_asc">Giá Thấp → Cao</option>
+                        <option value="price_desc">Giá Cao → Thấp</option>
                         <option value="name_asc">Tên A → Z</option>
                         <option value="name_desc">Tên Z → A</option>
                     </select>

@@ -43,4 +43,6 @@ public class ProductVariantDao extends BaseDao {
                 .bind("pvid", pvid)
                 .mapToBean(ProductVariant.class).first());
     }
+
+
 }
