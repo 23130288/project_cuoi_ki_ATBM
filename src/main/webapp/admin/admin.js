@@ -78,7 +78,7 @@
         "Quản lý voucher": `
             <h2>Quản lý voucher</h2>
             <div class="Menu-bar">
-                <button class="bt_menu" id="btn-them-tb">+ Thêm voucher</button>
+                <button class="bt_menu" id="btn_them_v">+ Thêm voucher</button>
             </div>
             
              <div class="table-wrapper">
@@ -510,6 +510,11 @@ Vali cao cấp x1 - 1.200.000₫</textarea>
 
             if (text === "Quản lý voucher") {
                 loadVoucherList();
+
+                const btnThem = document.getElementById("btn_them_v");
+                if (btnThem) btnThem.addEventListener("click", () => {
+                    addVoucher()
+                });
             }
 
             if (text === "Quản lý thông báo") {
@@ -614,44 +619,36 @@ function openAdminPopup(title, bodyHTML, onConfirm) {
     };
 
 
-    // ======= XỬ LÝ VOUCHER =========
-    const targetSelect = document.getElementById("tb-target-type");
-    const uidBox = document.getElementById("uid-box");
-    const typeSelect = document.getElementById("tb-type");
-    const contentArea = document.getElementById("content-area");
-
-    if (targetSelect && uidBox) {
-        targetSelect.addEventListener("change", () => {
-            uidBox.style.display = targetSelect.value === "specific" ? "block" : "none";
-        });
-    }
-
-    function updateContentInput() {
-        if (!typeSelect || !contentArea) return;
-
-        const type = typeSelect.value;
-
-        if (type === "giam_gia") {
-            contentArea.innerHTML = `
-                <input type="number" id="amount" placeholder="Số tiền giảm (VD: 50000)">
-                <input type="number" id="min" placeholder="Áp dụng cho đơn hàng từ (VD: 200000)">
-            `;
-        } else if (type === "phan_tram") {
-            contentArea.innerHTML = `
-                <input type="number" id="percent" placeholder="Giảm (%) (VD: 10)">
-                <input type="number" id="min" placeholder="Áp dụng cho đơn hàng từ (VD: 200000)">
-            `;
-        } else if (type === "mien_phi_van_chuyen") {
-            contentArea.innerHTML = `
-                <input type="number" id="min" placeholder="Miễn phí vận chuyển cho đơn từ (VD: 300000)">
-            `;
-        }
-    }
-
-    if (typeSelect) {
-        typeSelect.addEventListener("change", updateContentInput);
-        updateContentInput(); // gọi 1 lần khi mở popup
-    }
+    // // ======= XỬ LÝ VOUCHER =========
+    // const typeSelect = document.getElementById("tb-type");
+    // const contentArea = document.getElementById("content-area");
+    //
+    // function updateContentInput() {
+    //     if (!typeSelect || !contentArea) return;
+    //
+    //     const type = typeSelect.value;
+    //
+    //     if (type === "giam_gia") {
+    //         contentArea.innerHTML = `
+    //             <input type="number" id="amount" placeholder="Số tiền giảm (VD: 50000)">
+    //             <input type="number" id="min" placeholder="Áp dụng cho đơn hàng từ (VD: 200000)">
+    //         `;
+    //     } else if (type === "phan_tram") {
+    //         contentArea.innerHTML = `
+    //             <input type="number" id="percent" placeholder="Giảm (%) (VD: 10)">
+    //             <input type="number" id="min" placeholder="Áp dụng cho đơn hàng từ (VD: 200000)">
+    //         `;
+    //     } else if (type === "mien_phi_van_chuyen") {
+    //         contentArea.innerHTML = `
+    //             <input type="number" id="min" placeholder="Miễn phí vận chuyển cho đơn từ (VD: 300000)">
+    //         `;
+    //     }
+    // }
+    //
+    // if (typeSelect) {
+    //     typeSelect.addEventListener("change", updateContentInput);
+    //     updateContentInput();
+    // }
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -1332,6 +1329,8 @@ function toggleProductStatus(pid) {
             alert("Có lỗi xảy ra");
         });
 }
+
+//================================= các phương thước phần product =================================
 function loadVoucherList() {
     fetch('/projectWeb_war/admin/Voucher/voucher_load')
         .then(res => res.json())
@@ -1355,12 +1354,12 @@ function loadVoucherList() {
                 row.innerHTML = `
                     <td>${v.vid}</td>
                     <td>${v.name}</td>
-                    <td>${v.discount}</td>
+                    <td>${formatDiscount(v)}</td>
                     <td>${v.condition}</td>
                     <td>${v.expiredDate}</td>
                     <td>${v.status ? "Đang áp dụng" : "Ngừng áp dụng"}</td>
                     <td>
-                        <button onclick="">
+                        <button onclick="toggleVoucherStatus(${v.vid})">
                             ${v.status ? "Khóa" : "Mở"}
                         </button>
                     </td>
@@ -1369,41 +1368,172 @@ function loadVoucherList() {
             });
         });
 }
-// const btnThemTB = document.getElementById("btn-them-tb");
-// if (btnThemTB) btnThemTB.addEventListener("click", () => {
-//     openAdminPopup(
-//         "Tạo voucher mới",
-//         `
-//                 <label>Đối tượng nhận voucher:</label>
-//                 <select id="tb-target-type">
-//                     <option value="all">Tất cả</option>
-//                     <option value="specific">Cụ thể</option>
-//                 </select>
-//
-//                 <!-- Ô nhập UID chỉ hiện khi chọn "specific" -->
-//                 <div id="uid-box" style="display:none; margin-top: 5px;">
-//                     <label>Nhập UID (hoặc danh sách UID, cách nhau bằng dấu phẩy):</label>
-//                     <input type="text" id="tb-uid" placeholder="VD: 0001, 0002, 0003">
-//                 </div>
-//
-//                 <label>Loại voucher:</label>
-//                 <select id="tb-type">
-//                     <option value="giam_gia">Giảm giá (VNĐ)</option>
-//                     <option value="phan_tram">Giảm theo %</option>
-//                     <option value="mien_phi_van_chuyen">Miễn phí vận chuyển</option>
-//                 </select>
-//
-//                 <label>Nội dung:</label>
-//                 <div id="content-area">
-//                     <!-- Nội dung sẽ tự thay đổi bằng JS -->
-//                 </div>
-//
-//                 <label>Ngày hết hạn:</label>
-//                 <input type="date" id="tb-expired">
-//
-//             `,
-//         () => {
-//             alert(`✔ Đã tạo voucher.`);
-//         }
-//     );
-// });
+
+function formatDiscount(v) {
+    if (v.name === "phan_tram") {
+        return (v.discount * 100.0) + "%";
+    }
+    if (v.name === "mien_phi_van_chuyen") {
+        return "Miễn phí";
+    }
+    return v.discount.toLocaleString("vi-VN") + "đ";
+}
+
+function addVoucher() {
+    openAdminPopup(
+        "Tạo voucher mới",
+        `
+            <label>Loại voucher:</label>
+            <select id="v_type">
+                <option value="giam_gia">Giảm giá (VNĐ)</option>
+                <option value="phan_tram">Giảm theo %</option>
+                <option value="mien_phi_van_chuyen">Miễn phí vận chuyển</option>
+            </select>
+
+            <label>Nội dung:</label>
+            <div id="v_content_area"></div>
+
+            <label>Ngày hết hạn:</label>
+            <input type="date" id="v_expired">
+        `,
+        function () {
+            /* ========= 1. LẤY DỮ LIỆU ========= */
+
+            const type = document.getElementById("v_type").value;
+            const expiredDate = document.getElementById("v_expired").value;
+
+            let discount = null;
+            let condition = null;
+
+            if (type === "giam_gia") {
+                discount = document.getElementById("amount")?.value;
+                condition = document.getElementById("min")?.value;
+            }
+
+            if (type === "phan_tram") {
+                discount = document.getElementById("percent")?.value;
+                condition = document.getElementById("min")?.value;
+            }
+
+            if (type === "mien_phi_van_chuyen") {
+                discount = 0.0;
+                condition = document.getElementById("min")?.value;
+            }
+
+            /* ========= 2. VALIDATE ========= */
+
+            if (!expiredDate) {
+                alert("Vui lòng chọn ngày hết hạn");
+                return;
+            }
+
+// convert sang number để check
+            const discountNum = discount !== null ? Number(discount) : null;
+            const conditionNum = condition !== null ? Number(condition) : null;
+
+// check condition chung
+            if (conditionNum === null || isNaN(conditionNum) || conditionNum < 0) {
+                alert("Điều kiện áp dụng phải là số không âm");
+                return;
+            }
+
+            if (type === "giam_gia") {
+                if (discountNum === null || isNaN(discountNum) || discountNum <= 0) {
+                    alert("Vui lòng nhập số tiền giảm hợp lệ (> 0)");
+                    return;
+                }
+            }
+
+            if (type === "phan_tram") {
+                if (
+                    discountNum === null ||
+                    isNaN(discountNum) ||
+                    discountNum < 1 ||
+                    discountNum > 100
+                ) {
+                    alert("Phần trăm giảm phải nằm trong khoảng 1–100");
+                    return;
+                }
+            }
+
+            if (type === "mien_phi_van_chuyen") {
+                // không cần check discount
+                discount = 0;
+            }
+
+            /* ========= 3. GỬI AJAX ========= */
+            fetch("/projectWeb_war/admin/Voucher_add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+                },
+                body:
+                    "type=" + encodeURIComponent(type) +
+                    "&discount=" + encodeURIComponent(discount ?? 0) +
+                    "&condition=" + encodeURIComponent(condition ?? 0) +
+                    "&expiredDate=" + encodeURIComponent(expiredDate)
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Tạo voucher thành công");
+                        loadVoucherList();
+                    } else {
+                        alert(data.message || "Tạo voucher thất bại");
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Có lỗi xảy ra");
+                });
+        }
+    );
+
+    /* ===== GẮN EVENT CHO FORM ĐỘNG ===== */
+    setTimeout(() => {
+        const typeSelect = document.getElementById("v_type");
+        const contentArea = document.getElementById("v_content_area");
+
+        function updateContentInput() {
+            const type = typeSelect.value;
+
+            if (type === "giam_gia") {
+                contentArea.innerHTML = `
+                    <input type="number" id="amount" min="1" step="1000" placeholder="Số tiền giảm">
+                    <input type="number" id="min" min="0" step="1000" placeholder="Áp dụng cho đơn từ (VD: 200000)">
+                `;
+            } else if (type === "phan_tram") {
+                contentArea.innerHTML = `
+                    <input type="number" id="percent" min="1" max="100" placeholder="Giảm (%)">
+                    <input type="number" id="min" min="0" step="1000" placeholder="Áp dụng cho đơn từ">
+                `;
+            } else if (type === "mien_phi_van_chuyen") {
+                contentArea.innerHTML = `
+                    <input type="number" id="min" placeholder="Áp dụng cho đơn từ">
+                `;
+            }
+        }
+
+        typeSelect.addEventListener("change", updateContentInput);
+        updateContentInput();
+    }, 0);
+}
+
+function toggleVoucherStatus(vid) {
+    if (!confirm("Bạn có chắc muốn thay đổi trạng thái voucher này?")) {
+        return;
+    }
+
+    fetch(`/projectWeb_war/admin/voucher/toggle_voucher_status?vid=${vid}`, {
+        method: "POST"
+    })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message);
+            loadVoucherList();
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Có lỗi xảy ra");
+        });
+}
