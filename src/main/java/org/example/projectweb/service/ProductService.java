@@ -18,52 +18,41 @@ public class ProductService {
     private ProductDao pDao = new ProductDao();
     private ProductVariantDao pvDao = new ProductVariantDao();
     private ImageProductDao ipDao = new ImageProductDao();
+    private NotificationService ns = new NotificationService();
 
     public boolean addProduct(String name, String type, String style, String material, String producer, String status, String description, List<Part> imageParts) {
-        // 1. Check tồn tại
         if (pDao.getProductByName(name) != null) {
             return false;
         }
-
-        // 2. Insert product → lấy pid
         int pid = pDao.insertProduct(name, type, style, material, producer, status, description);
 
-        if (pid <= 0) {
-            return false;
-        }
-
-        // 3. Xử lý ảnh
+        // Xử lý ảnh
         int index = 1;
-
         for (Part part : imageParts) {
             if (part == null || part.getSize() == 0) continue;
-
             boolean isMain = (index == 1);
 
             // Lấy đuôi file
-            String ext = Paths.get(part.getSubmittedFileName())
-                    .getFileName()
-                    .toString();
+            String ext = Paths.get(part.getSubmittedFileName()).getFileName().toString();
             ext = ext.substring(ext.lastIndexOf("."));
 
             // tên file: pid_index_isMain.jpg
             String fileName = pid + "_" + index + "_" + (isMain ? 1 : 0) + ext;
-
             String relativePath = "/images/product/" + pid + "/" + fileName;
             String realPath = getUploadDir(pid) + File.separator + fileName;
 
             try {
                 part.write(realPath);
-
-                // 4. Lưu DB từng ảnh
+                // Lưu từng ảnh
                 ipDao.insertProductImage(pid, relativePath, isMain);
-
                 index++;
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
         }
+        // Tạo thông báo
+        ns.createGlobalNotification("All", "Sản phẩm mới", "Sản phẩm \"" + name + "\" vừa ra mắt. Vào mua ngay thôi!", -1);
 
         return true;
     }
@@ -88,6 +77,8 @@ public class ProductService {
 
         // Tạo ProductVariant mới
         pvDao.addProductVariant(pid, size, color, price, quantity);
+        // Tạo thông báo
+        ns.createGlobalNotification("All", "Biến thể mới", "Sản phẩm \"" + pid + "\" vừa ra mắt biến thể mới. Vào mua ngay thôi!", -1);
         return true;
     }
 
@@ -196,17 +187,17 @@ public class ProductService {
 
         for (Product p : list) {
             p.setVariants(
-                pvDao.getVariantsByProductId(p.getPid())
-        );
+                    pvDao.getVariantsByProductId(p.getPid())
+            );
 //            p.setImages(
 //                ipDao.getImagesByProductId(p.getPid())
 //        );
             List<ImageProduct> images = ipDao.getImagesByProductId(p.getPid());
             p.setImages(images);
-    }
+        }
 
-    return list;
-}
+        return list;
+    }
 
     public List<Product> getValiProducts() {
         List<Product> list = pDao.getValiProducts();
@@ -229,8 +220,8 @@ public class ProductService {
 
         for (Product p : list) {
             p.setVariants(
-                pvDao.getVariantsByProductId(p.getPid())
-        );
+                    pvDao.getVariantsByProductId(p.getPid())
+            );
 //            p.setImages(
 //                ipDao.getImagesByProductId(p.getPid())
 //        );
@@ -238,9 +229,9 @@ public class ProductService {
             p.setImages(images);
 
 
-    }
+        }
         return list;
-}
+    }
 
     public void insertBatch(List<Product> products) {
         for (Product p : products) {

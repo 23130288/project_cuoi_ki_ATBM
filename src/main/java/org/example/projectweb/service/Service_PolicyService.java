@@ -9,6 +9,7 @@ import java.util.List;
 
 public class Service_PolicyService {
     Service_PolicyDao spDao = new Service_PolicyDao();
+    NotificationService ns = new NotificationService();
 
     public List<Service_Policy> getAllService_Policys() {
         return spDao.getListService_Policy();
@@ -45,6 +46,10 @@ public class Service_PolicyService {
         boolean status = true;
 
         spDao.addService_Policy(title, content, lastedUpdate, isService, status);
+        // Tạo thông báo
+        if(isService) ns.createGlobalNotification("All", "Có dịch vụ mới", "Dịch vụ " + title + " vừa được thêm vào!", -1);
+        else         ns.createGlobalNotification("All", "Có chính sách mới", "Chính sách " + title + " vừa được thêm vào!", -1);
+
         return true;
     }
 }

@@ -7,6 +7,7 @@ import java.util.List;
 
 public class VoucherService {
     final VoucherDao vDao = new VoucherDao();
+    final NotificationService ns = new NotificationService();
 
     public boolean addVoucher(String type, double discount, double condition, String expiredDate) {
         if ("phan_tram".equals(type)) {
@@ -17,6 +18,8 @@ public class VoucherService {
         boolean status = true;
 
         vDao.addVoucher( type, discount, condition, expiredDate, imagePath, status);
+        // Tạo thông báo
+        ns.createGlobalNotification("All", "Voucher mới", "Mã giảm giá mới vừa xuất hiện vào săn ngay!", -1);
         return true;
     }
 
