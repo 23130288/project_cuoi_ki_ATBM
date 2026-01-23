@@ -65,14 +65,15 @@
                     <a href="productDetail?pid=${p.pid}" class="product-link">
                         <div class="product-card">
 
-<%--                            <c:choose>--%>
-<%--                                <c:when test="${not empty p.mainImage}">--%>
-<%--                                    <img src="${p.mainImage.image}" alt="${p.name}">--%>
-<%--                                </c:when>--%>
-<%--                                <c:otherwise>--%>
-<%--                                    <img src="image/no-image.png" alt="No image">--%>
-<%--                                </c:otherwise>--%>
-<%--                            </c:choose>--%>
+                            <c:choose>
+                                <c:when test="${not empty p.mainImage}">
+<%--                                    <img src="${p.images[0].image}" alt="${p.name}">--%>
+                                    <img src="${pageContext.request.contextPath}/${p.mainImage.image}" alt="">
+                                </c:when>
+                                <c:otherwise>
+                                    <img src="${pageContext.request.contextPath}/trang_chu/image/balo_leo_nui.png" alt="">
+                                </c:otherwise>
+                            </c:choose>
 
                             <h3>${p.name}</h3>
 
@@ -110,14 +111,15 @@
                 <a href="productDetail?pid=${p.pid}" class="product-link">
                     <div class="product-card">
 
-<%--                        <c:choose>--%>
-<%--                            <c:when test="${not empty p.mainImage}">--%>
-<%--                                <img src="${p.mainImage.image}" alt="${p.name}">--%>
-<%--                            </c:when>--%>
-<%--                            <c:otherwise>--%>
-<%--                                <img src="image/no-image.png" alt="No image">--%>
-<%--                            </c:otherwise>--%>
-<%--                        </c:choose>--%>
+                        <c:choose>
+                            <c:when test="${not empty p.mainImage}">
+<%--                                <img src="${p.images[0].image}" alt="${p.name}">--%>
+                                <img src="${pageContext.request.contextPath}/${p.mainImage.image}" alt="">
+                            </c:when>
+                            <c:otherwise>
+                                <img src="${pageContext.request.contextPath}/trang_chu/image/vali_keo_chong_nuoc.png" alt="">
+                            </c:otherwise>
+                        </c:choose>
 
                         <h3>${p.name}</h3>
 
@@ -154,14 +156,15 @@
                 <a href="productDetail?pid=${p.pid}" class="product-link">
                     <div class="product-card">
 
-<%--                        <c:choose>--%>
-<%--                            <c:when test="${not empty p.mainImage}">--%>
-<%--                                <img src="${p.mainImage.image}" alt="${p.name}">--%>
-<%--                            </c:when>--%>
-<%--                            <c:otherwise>--%>
-<%--                                <img src="image/no-image.png" alt="No image">--%>
-<%--                            </c:otherwise>--%>
-<%--                        </c:choose>--%>
+                        <c:choose>
+                            <c:when test="${not empty p.mainImage}">
+<%--                                <img src="${p.images[0].image}" alt="${p.name}">--%>
+                                <img src="${pageContext.request.contextPath}/${p.mainImage.image}" alt="">
+                            </c:when>
+                            <c:otherwise>
+                                <img src="${pageContext.request.contextPath}/trang_chu/image/balo_giu_nhiet.png" alt="">
+                            </c:otherwise>
+                        </c:choose>
 
                         <h3>${p.name}</h3>
 

@@ -201,6 +201,8 @@ public class ProductService {
 //            p.setImages(
 //                ipDao.getImagesByProductId(p.getPid())
 //        );
+            List<ImageProduct> images = ipDao.getImagesByProductId(p.getPid());
+            p.setImages(images);
     }
 
     return list;
@@ -216,6 +218,8 @@ public class ProductService {
 //            p.setImages(
 //                    ipDao.getImagesByProductId(p.getPid())
 //            );
+            List<ImageProduct> images = ipDao.getImagesByProductId(p.getPid());
+            p.setImages(images);
         }
         return list;
     }
@@ -230,6 +234,10 @@ public class ProductService {
 //            p.setImages(
 //                ipDao.getImagesByProductId(p.getPid())
 //        );
+            List<ImageProduct> images = ipDao.getImagesByProductId(p.getPid());
+            p.setImages(images);
+
+
     }
         return list;
 }

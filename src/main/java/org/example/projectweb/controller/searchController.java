@@ -46,4 +46,5 @@ public class searchController extends HttpServlet {
         request.getRequestDispatcher("trang_tim_kiem/trang_tim_kiem.jsp")
                 .forward(request, response);
     }
+    
 }
