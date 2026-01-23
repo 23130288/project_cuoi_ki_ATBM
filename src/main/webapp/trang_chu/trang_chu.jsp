@@ -68,10 +68,10 @@
                             <c:choose>
                                 <c:when test="${not empty p.mainImage}">
 <%--                                    <img src="${p.images[0].image}" alt="${p.name}">--%>
-                                    <img src="trang_chu/image/${p.mainImage.image}" alt="">
+                                    <img src="${pageContext.request.contextPath}/${p.mainImage.image}" alt="">
                                 </c:when>
                                 <c:otherwise>
-                                    <img src="trang_chu/image/no-image.png" alt="">
+                                    <img src="${pageContext.request.contextPath}/trang_chu/image/balo_leo_nui.png" alt="">
                                 </c:otherwise>
                             </c:choose>
 
@@ -114,10 +114,10 @@
                         <c:choose>
                             <c:when test="${not empty p.mainImage}">
 <%--                                <img src="${p.images[0].image}" alt="${p.name}">--%>
-                                <img src="trang_chu/image/${p.mainImage.image}" alt="">
+                                <img src="${pageContext.request.contextPath}/${p.mainImage.image}" alt="">
                             </c:when>
                             <c:otherwise>
-                                <img src="trang_chu/image/no-image.png" alt="">
+                                <img src="${pageContext.request.contextPath}/trang_chu/image/vali_keo_chong_nuoc.png" alt="">
                             </c:otherwise>
                         </c:choose>
 
@@ -159,10 +159,10 @@
                         <c:choose>
                             <c:when test="${not empty p.mainImage}">
 <%--                                <img src="${p.images[0].image}" alt="${p.name}">--%>
-                                <img src="trang_chu/image/${p.mainImage.image}" alt="">
+                                <img src="${pageContext.request.contextPath}/${p.mainImage.image}" alt="">
                             </c:when>
                             <c:otherwise>
-                                <img src="trang_chu/image/no-image.png" alt="">
+                                <img src="${pageContext.request.contextPath}/trang_chu/image/balo_giu_nhiet.png" alt="">
                             </c:otherwise>
                         </c:choose>
 
