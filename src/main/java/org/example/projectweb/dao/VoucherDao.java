@@ -42,7 +42,7 @@ public class VoucherDao extends BaseDao {
                 """).bind("uvid", uvid).mapToBean(Voucher.class).one());
     }
 
-    public void deleteUserVoucher(int uvid) {
+    public void deleteUserVoucherByUvid(int uvid) {
         get().useHandle(h -> h.createUpdate("""
                 delete from voucher_user
                 where uvid = :uvid

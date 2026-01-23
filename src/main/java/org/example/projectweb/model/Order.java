@@ -5,17 +5,70 @@ import java.io.Serializable;
 public class Order implements Serializable {
     private int oid;
     private int uid;
-    private int vid;
+    private int uvid;
+    private String description;
     private String createdDate;
+    private String status;
 
-    public Order() {}
-    public Order(int oid, int uid, int vid, String createdDate) {
-        this.oid = oid;
-        this.uid = uid;
-        this.vid = vid;
-        this.createdDate = createdDate;
+    private double totalPrice;
+    private double discount;
+    private double finalPrice;
+
+    public Order() {
     }
 
+    public Order(int oid, int uid, int uvid, String description, String createdDate, String status) {
+        this.oid = oid;
+        this.uid = uid;
+        this.uvid = uvid;
+        this.description = description;
+        this.createdDate = createdDate;
+        this.status = status;
+    }
+
+    /**
+     * GETTERS
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+
+    public int getOid() {
+        return oid;
+    }
+
+    public int getUid() {
+        return uid;
+    }
+
+    public int getUvid() {
+        return uvid;
+    }
+
+    public String getCreatedDate() {
+        return createdDate;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public double getFinalPrice() {
+        return finalPrice;
+    }
+
+    /**
+     * SETTERS
+     */
     public void setOid(int oid) {
         this.oid = oid;
     }
@@ -24,11 +77,31 @@ public class Order implements Serializable {
         this.uid = uid;
     }
 
-    public void setVid(int vid) {
-        this.vid = vid;
+    public void setUvid(int uvid) {
+        this.uvid = uvid;
     }
 
     public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    public void setFinalPrice(double finalPrice) {
+        this.finalPrice = finalPrice;
     }
 }

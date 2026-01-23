@@ -56,5 +56,9 @@ public class VoucherService {
     public Voucher getVoucherByUvid(int uvid) {
         return vDao.getVoucherByUvid(uvid);
     }
+
+    public void deleteVoucherUserByUvid(int uvid) {
+        vDao.deleteUserVoucherByUvid(uvid);
+    }
 }
 

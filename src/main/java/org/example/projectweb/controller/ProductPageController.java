@@ -3,9 +3,7 @@ package org.example.projectweb.controller;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import org.example.projectweb.model.Product;
-import org.example.projectweb.model.ProductVariant;
-import org.example.projectweb.model.Review;
+import org.example.projectweb.model.*;
 import org.example.projectweb.service.*;
 
 import java.io.IOException;
@@ -20,10 +18,11 @@ public class ProductPageController extends HttpServlet {
         ProductService ps = new ProductService();
         ReviewService rs = new ReviewService();
         WishlistService ws = new WishlistService();
-        UserService us = new UserService();
-        OrderService os = new OrderService();
 
-        int userId = 1;
+        UserService us = new UserService();
+        User u = us.getUserById(1);
+//        HttpSession session = request.getSession();
+//        User u = (User) session.getAttribute("user");
         int productId = Integer.parseInt(request.getParameter("pid"));
 
         Product p = ps.getProductById(productId);
@@ -35,7 +34,7 @@ public class ProductPageController extends HttpServlet {
             colors.add(pv.getColor());
             sizes.add(pv.getSize());
         }
-        Review userReview = rs.getReviewByUidAndPid(userId, productId);
+        Review userReview = rs.getReviewByUidAndPid(u.getUid(), productId);
 
         // product
         request.setAttribute("p", p);
@@ -45,11 +44,10 @@ public class ProductPageController extends HttpServlet {
         request.setAttribute("imgs", ps.getImgsByPid(productId));
         request.setAttribute("mainImg", ps.getMainImg(productId));
         request.setAttribute("avgRating", rs.getAvgRating(productId));
-        request.setAttribute("inWishlist", ws.inWishlist(userId, productId));
+        request.setAttribute("inWishlist", ws.inWishlist(u.getUid(), productId));
 
         // user
-        request.setAttribute("user", us.getUserById(userId));
-        request.setAttribute("canReview", os.hasPurchased(userId, productId));
+        request.setAttribute("user", us.getUserById(u.getUid()));
         request.setAttribute("userReview", userReview);
         request.setAttribute("reviews", rs.getReviewsForProduct(productId));
 
@@ -58,15 +56,18 @@ public class ProductPageController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int userId = 1;
-        int productId = Integer.parseInt(request.getParameter("productId"));
+        UserService us = new UserService();
+        User u = us.getUserById(1);
+//        HttpSession session = request.getSession();
+//        User u = (User) session.getAttribute("user");
 
+        int productId = Integer.parseInt(request.getParameter("productId"));
         WishlistService ws = new WishlistService();
 
-        if (ws.inWishlist(userId, productId)) {
-            ws.removeFromWishlist(userId, productId);
+        if (ws.inWishlist(u.getUid(), productId)) {
+            ws.removeFromWishlist(u.getUid(), productId);
         } else {
-            ws.addToWishlist(userId, productId);
+            ws.addToWishlist(u.getUid(), productId);
         }
 
         response.sendRedirect("productPage?pid=" + productId);

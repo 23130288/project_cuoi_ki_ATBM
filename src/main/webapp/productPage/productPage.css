@@ -71,9 +71,22 @@ main {
     font-weight: bold;
     color: #F2B035;
 }
-
-.section-product .product-details > label {
-    font-size: 20px;
+.section-product .product-details .product-group {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    margin-bottom: 22px;
+    align-items: center;
+}
+.section-product .product-details .product-group.description {
+    align-items: normal;
+    flex-direction: column;
+}
+.section-product .product-details .product-group label {
+    font-size: 16px;
+}
+.section-product .product-details .product-group p {
+    margin: 0;
 }
 
 .section-product .product-details .desc {
@@ -95,7 +108,7 @@ you choosing size, colors for your product
 
 .section-product .product-details .container-options .option label {
     display: block;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;
 }
 
@@ -119,6 +132,7 @@ you choosing size, colors for your product
 .section-product .product-details .container-options .color-options .color-btn.black {
     background: black;
 }
+
 .section-product .product-details .container-options .color-options .color-btn.grey {
     background: grey;
 }
@@ -130,6 +144,7 @@ you choosing size, colors for your product
 .section-product .product-details .container-options .color-options .color-btn.blue {
     background: blue;
 }
+
 .section-product .product-details .container-options .color-options .color-btn.pink {
     background: pink;
 }
@@ -149,11 +164,13 @@ you choosing size, colors for your product
     transition: 0.3s;
 
 }
+
 .section-product .product-details .container-options .size-options button.disabled {
     opacity: 0.4;
     cursor: not-allowed;
     pointer-events: none;
 }
+
 .section-product .product-details .container-options .size-options button:hover {
     background: white;
     border-color: #F2B035;
@@ -220,227 +237,6 @@ you choosing size, colors for your product
     opacity: 1;
 }
 
-/*======================= Pop up =======================*/
-/* pop up appears when you press the buy button */
-.section-product .product-details .popup {
-    display: none; /* ẩn mặc định */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-}
-
-.section-product .product-details .popup .popup-content {
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    width: 40%;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    max-height: 80%;
-    overflow-y: auto;
-}
-
-.section-product .product-details .popup .popup-content .container-popup-title h2 {
-    margin-top: 0;
-}
-
-.section-product .product-details .popup .popup-content .container-popup-title {
-    display: flex;
-    gap: 15px;
-}
-
-.section-product .product-details .popup .popup-content .container-popup-title .edit-btn {
-    background: none;
-    border: none;
-    padding: 0;
-    font-size: 16px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.section-product .product-details .popup .popup-content .container-popup-title .edit-btn:hover {
-    transform: scale(1.05);
-}
-
-.section-product .product-details .popup .popup-content label {
-    display: block;
-    margin-top: 10px;
-    font-weight: 600;
-}
-
-.section-product .product-details .popup .popup-content > label input,
-.section-product .product-details .popup .popup-content > label textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #CCCCCC;
-    margin-top: 10px;
-    border-radius: 5px;
-    resize: none;
-    box-sizing: border-box;
-}
-
-/* payment method */
-.section-product .product-details .popup .payment-container .radio-container {
-    padding: 10px;
-    border: lightgrey 1px solid;
-    border-radius: 4px;
-}
-
-.section-product .product-details .popup .payment-container .radio-container input {
-    margin: 0 10px;
-}
-
-.section-product .product-details .popup .payment-container .radio-container label {
-    display: flex;
-    margin: 8px 0;
-    align-items: center;
-    font-weight: normal;
-}
-
-.section-product .product-details .popup .payment-container .radio-container img {
-    width: auto;
-    height: 30px;
-}
-
-
-/* voucher */
-/*.section-product .product-details .popup #container-voucher {*/
-/*    display: flex;*/
-/*    justify-content: left;*/
-/*    align-items: center;*/
-/*    gap: 10px;*/
-/*    border-bottom: lightgrey solid 1px;*/
-/*    padding: 10px;*/
-/*    margin-top: 10px;*/
-/*}*/
-
-/*.section-product .product-details .popup #container-voucher > label {*/
-/*    margin: 0;*/
-/*}*/
-
-/*.section-product .product-details .popup #container-voucher .voucher-input {*/
-/*    display: flex;*/
-/*    gap: 5px;*/
-/*}*/
-
-/*.section-product .product-details .popup #container-voucher input {*/
-/*    padding: 5px;*/
-/*    border: 1px solid lightgrey;*/
-/*    border-radius: 4px;*/
-/*    outline: none;*/
-/*}*/
-
-/*.section-product .product-details .popup #container-voucher button {*/
-/*    padding: 5px;*/
-/*    border: none;*/
-/*    background: #F2C641;*/
-/*    border-radius: 4px;*/
-/*    outline: none;*/
-/*    transition: 0.3s;*/
-
-/*}*/
-
-/*.section-product .product-details .popup #container-voucher button:hover {*/
-/*    background: #F2B035;*/
-/*}*/
-.section-product .product-details .popup .container-voucher {
-    margin-top: 10px;
-}
-
-.section-product .product-details .popup .container-voucher .voucher-container {
-    padding: 10px;
-    border: 1px solid lightgrey;
-    border-radius: 4px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.section-product .product-details .popup .container-voucher .voucher-container label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 5px;
-    border: 1px solid lightgrey;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.section-product .product-details .popup .container-voucher .voucher-container input {
-    margin: 0;
-}
-
-/* price popup */
-.section-product .product-details .popup .container-product-price {
-    background: white;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: lightgrey 1px solid;
-}
-
-.section-product .product-details .popup .container-product-price .container-price {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 5px;
-    font-size: 14px;
-}
-
-.section-product .product-details .popup .container-product-price .container-price label {
-    font-weight: normal;
-}
-
-.section-product .product-details .popup .container-product-price .container-price p {
-    margin: 10px;
-}
-
-.section-product .product-details .popup .container-product-price #final-price .title {
-    font-weight: bold;
-}
-
-.section-product .product-details .popup .container-product-price #final-price .final-price-para {
-    font-weight: bold;
-    color: #F2B035;
-}
-
-/* buttons for popup */
-.section-product .product-details .popup .popup-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-
-.section-product .product-details .popup .popup-buttons button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.section-product .product-details .popup #confirmBuy {
-    background: #F2C641;
-    font-weight: bold;
-}
-
-.section-product .product-details .popup #confirmBuy:hover {
-    background: #F2B035;
-}
-
-.section-product .product-details .popup #cancelBuy {
-    background: lightgray;
-}
-
-.section-product .product-details .popup #cancelBuy:hover {
-    color: white;
-    background: red;
-}
-
 
 /* ======================= comment section ======================= */
 /* =============================================================== */
@@ -458,10 +254,12 @@ main .section-review .container-review .container-rating {
     align-items: center;
     gap: 10px;
 }
+
 main .section-review .container-review .container-rating h3 {
     font-size: 22px;
     margin: 0;
 }
+
 main .section-review .container-review .container-rating .stars {
     display: inline-flex;
     flex-direction: row-reverse;

@@ -82,6 +82,7 @@ main .product-item .product-item-title {
     align-items: center;
     text-align: left;
 }
+
 main .product-item .product-item-title .product-item-info .product-item-variant {
     font-size: 14px;
     color: #444;
@@ -90,13 +91,35 @@ main .product-item .product-item-title .product-item-info .product-item-variant 
 main .product-item .product-item-title .product-item-info .product-item-variant .product-item-variant p {
     margin: 2px 0;
 }
+
 main .product-item .product-item-title .product-item-info .product-item-variant .variant-color {
     width: 15px;
     height: 15px;
     border: 1px solid lightgrey;
     border-radius: 50%;
-    background: #F2B035;
 }
+
+/* colors for buttons */
+main .product-item .product-item-title .product-item-info .product-item-variant .variant-color.black {
+    background: black;
+}
+
+main .product-item .product-item-title .product-item-info .product-item-variant .variant-color.grey {
+    background: grey;
+}
+
+main .product-item .product-item-title .product-item-info .product-item-variant .variant-color.red {
+    background: red;
+}
+
+main .product-item .product-item-title .product-item-info .product-item-variant .variant-color.blue {
+    background: blue;
+}
+
+main .product-item .product-item-title .product-item-info .product-item-variant .variant-color.pink {
+    background: pink;
+}
+
 main .product-item .product-item-title .product-item-info .product-item-variant .variant-size {
     font-weight: bold;
 }
@@ -106,6 +129,7 @@ main .product-item .product-item-quantity {
     align-items: center;
     justify-content: center;
 }
+
 main .product-item .product-item-quantity {
     display: flex;
     align-items: center;

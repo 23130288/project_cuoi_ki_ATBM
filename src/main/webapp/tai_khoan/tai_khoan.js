@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
         "Thông báo": `
       <h2>Thông báo</h2>
       
-      <a href="../ct_Order/ct_Order.html" class="notification_item">
+      <a href="../ct_Order/ct_Order.jsp" class="notification_item">
         <div class="avatar">
           <img src="image/balo_cam_trai.png" alt="Ảnh đại diện">
         </div>
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
       </a>
       
-      <a href="../ct_Order/ct_Order.html" class="notification_item">
+      <a href="../ct_Order/ct_Order.jsp" class="notification_item">
         <div class="avatar">
           <img src="image/balo_giu_nhiet.png" alt="Ảnh đại diện">
         </div>
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
         </div>
       </a>
       
-      <a href="../ct_Order/ct_Order.html" class="notification_item">
+      <a href="../ct_Order/ct_Order.jsp" class="notification_item">
         <div class="avatar">
           <img src="image/balo_1_quai_đeo.png" alt="Ảnh đại diện">
         </div>
@@ -461,7 +461,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.querySelectorAll('.notification_item').forEach(item => {
     item.addEventListener('click', () => {
-        window.location.href = 'ct_Order.html';
+        window.location.href = 'ct_Order.jsp';
     });
 });
 
