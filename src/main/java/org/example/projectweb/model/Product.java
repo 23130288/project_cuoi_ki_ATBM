@@ -17,6 +17,7 @@ public class Product implements Serializable {
     private List<ProductVariant> variants;
     private List<ImageProduct> images;
 
+
     public Product() {
 
     }
@@ -136,4 +137,18 @@ public class Product implements Serializable {
                 ", status='" + status + '\'' +
                 '}';
     }
+    public ImageProduct getMainImage() {
+        if (images == null || images.isEmpty()) {
+            return null;
+        }
+        for (ImageProduct img : images) {
+            if (img.isMain()) {
+                return img;
+            }
+        }
+        return images.get(0);
+    }
+
+
+
 }
