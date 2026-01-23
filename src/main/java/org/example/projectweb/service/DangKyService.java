@@ -1,10 +1,10 @@
 package org.example.projectweb.service;
 
-import org.example.projectweb.dao.userDao;
+import org.example.projectweb.dao.UserDao;
 
 public class DangKyService {
 
-    private static userDao userDao = new userDao();
+    private static UserDao userDao = new UserDao();
 
     public static boolean addUser(String email, String password, String name) {
         // Check email đã tồn tại

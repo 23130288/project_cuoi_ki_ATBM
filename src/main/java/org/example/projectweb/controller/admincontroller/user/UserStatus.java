@@ -5,7 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.projectweb.dao.userDao;
+import org.example.projectweb.dao.UserDao;
 import org.example.projectweb.model.User;
 
 import java.io.IOException;
@@ -17,7 +17,7 @@ public class UserStatus extends HttpServlet {
 
     }
 
-    final userDao userDao = new userDao();
+    final UserDao userDao = new UserDao();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
