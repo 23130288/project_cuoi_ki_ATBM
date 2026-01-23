@@ -49,15 +49,6 @@ public class VoucherDao extends BaseDao {
                 """).bind("uvid", uvid).execute());
     }
 
-//    public void updateStatus(int uid) {
-//        get().useHandle(h ->
-//                h.createUpdate(
-//                                "UPDATE user SET status = IF(status = 1, 0, 1) WHERE uid = :uid"
-//                        )
-//                        .bind("uid", uid)
-//                        .execute()
-//        );
-//    }
     public void updateStatus(int vid) {
         get().useHandle(h ->
                 h.createUpdate("UPDATE voucher SET status = IF(status = 1, 0, 1) WHERE vid = :vid")
