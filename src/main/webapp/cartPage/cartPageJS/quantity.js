@@ -1,4 +1,4 @@
-function updateQuantity(pid, delta, qtyEl) {
+function updateQuantity(pid, delta, quantity) {
     if (!pid) {
         console.error("pid is undefined");
         return;
@@ -17,30 +17,34 @@ function updateQuantity(pid, delta, qtyEl) {
         .then(data => {
             if (data.success) {
                 // quantity
-                qtyEl.textContent = data.quantity;
+                quantity.textContent = data.quantity;
 
                 // total cost of an item
-                const item = qtyEl.closest(".product-item");
-                item.querySelector(".total").textContent = data.itemTotalPrice + " đ";
+                const item = quantity.closest(".product-item");
+                item.querySelector(".total").textContent = formatPrice(data.itemTotalPrice);
 
                 // total price of the cart
                 const totalPrice = document.getElementById("cart-total-price")
                 const finalPrice = document.getElementById("cart-final-price");
-                totalPrice.textContent = data.cartTotalPrice + " đ";
+                totalPrice.textContent = formatPrice(data.cartTotalPrice);
                 totalPrice.dataset.value = data.cartTotalPrice;
-                finalPrice.textContent = data.cartFinalPrice + " đ";
+                finalPrice.textContent = formatPrice(data.cartFinalPrice);
             }
         });
 }
 
+function formatPrice(value) {
+    return Number(value).toLocaleString('vi-VN') + " đ";
+}
+
 document.querySelectorAll('.product-item-quantity').forEach(control => {
     const pid = control.dataset.pid;
-    const qtyEl = control.querySelector('.quantity');
+    const quantity = control.querySelector('.quantity');
 
     control.querySelector('.plus-quantity-button').addEventListener('click', () => {
-        updateQuantity(pid, 1, qtyEl);
+        updateQuantity(pid, 1, quantity);
     });
     control.querySelector('.minus-quantity-button').addEventListener('click', () => {
-        updateQuantity(pid, -1, qtyEl);
+        updateQuantity(pid, -1, quantity);
     });
 });

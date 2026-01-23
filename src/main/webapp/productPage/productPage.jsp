@@ -1,5 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="vi_VN"/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,16 +40,30 @@
                 </c:forEach>
                 <span class="rating-number">(${avgRating})</span>
             </div>
-            <p class="price" id="price">${pvs[0].price} Đ</p>
 
-            <label>Nhà sản xuất:</label>
-            <p class="desc">${p.producer}</p>
-            <label>Loại: <p class="desc">${p.type}</p></label>
-            <label>Kiểu dáng: <p class="desc">${p.style}</p></label>
-            <label>Chất liệu: <p class="desc">${p.material}</p></label>
+            <p class="price" id="price"><fmt:formatNumber value="${pvs[0].price}" type="number" groupingUsed="true"/> đ</p>
 
-            <label>Mô tả sản phẩm:</label>
-            <p class="desc">${p.description}</p>
+            <div class="product-group">
+                <label>Nhà sản xuất:</label>
+                <p class="desc">${p.producer}</p>
+            </div>
+            <div class="product-group">
+                <label>Loại: </label>
+                <p class="desc">${p.type}</p>
+            </div>
+            <div class="product-group">
+                <label>Kiểu dáng: </label>
+                <p class="desc">${p.style}</p>
+            </div>
+            <div class="product-group">
+                <label>Chất liệu: </label>
+                <p class="desc">${p.material}</p>
+            </div>
+            <div class="product-group description">
+                <label>Mô tả sản phẩm:</label>
+                <p class="desc">${p.description}</p>
+            </div>
+
             <!--option section-->
             <div class="container-options">
                 <div class="option">
@@ -89,86 +105,6 @@
                 </form>
             </div>
             <p id="statusMessage" class="status-msg"></p>
-            <div class="popup" id="buyPopup">
-                <div class="popup-content">
-                    <div class="container-popup-title">
-                        <h2>Thông tin mua hàng</h2>
-                        <button type="button" class="edit-btn" id="editBtn">Chỉnh sửa <i class="fa-solid fa-pen"></i>
-                        </button>
-                    </div>
-                    <label>Họ tên:<input type="text" id="name" placeholder="Nhập họ tên..."
-                                         value="${user.name}" required disabled></label>
-                    <label>Số điện thoại:<input type="text" id="phone" placeholder="Nhập số điện thoại..."
-                                                value="${user.phone}" required disabled></label>
-                    <label>Địa chỉ giao hàng:<input id="address" placeholder="Nhập địa chỉ..." value="${user.address}"
-                                                    required disabled></label>
-
-                    <div class="payment-container">
-                        <label>Phương thức thanh toán</label>
-                        <div class="radio-container">
-                            <label><input type="radio" name="payment" required>Vietcombank
-                                <img src="../images/bankImages/vietcombank.jpg" alt="Chuyển ngân hàng">
-                            </label>
-                            <label><input type="radio" name="payment">Visa
-                                <img src="../images/bankImages/visa.jpeg" alt="Chuyển ngân hàng">
-                            </label>
-                            <label><input type="radio" name="payment">Tiền mặt</label>
-                        </div>
-                    </div>
-
-                    <!--                    <div class="container-voucher" id="container-voucher">-->
-                    <!--                        <label for="voucher">Voucher:</label>-->
-                    <!--                        <div class="voucher-input">-->
-                    <!--                            <input type="text" id="voucher" placeholder="Nhập mã giảm giá">-->
-                    <!--                            <button id="apply-voucher">Áp dụng</button>-->
-                    <!--                        </div>-->
-                    <!--                    </div>-->
-
-                    <div class="container-voucher" id="container-voucher">
-                        <label>Voucher:</label>
-                        <div class="voucher-container">
-                            <label>
-                                <input type="checkbox" name="voucher" value="5%">
-                                <span class="voucher-name">Giảm giá 5%</span>
-                                <span class="voucher-condition">Áp dụng cho đơn từ 200k</span>
-                            </label>
-
-                            <label>
-                                <input type="checkbox" name="voucher" value="free_ship">
-                                <span class="voucher-name">Miễn phí vận chuyển</span>
-                                <span class="voucher-condition">Áp dụng cho đơn từ 0đ</span>
-                            </label>
-
-                            <label>
-                                <input type="checkbox" name="voucher" value="10%">
-                                <span class="voucher-name">Giảm 10%</span>
-                                <span class="voucher-condition">Áp dụng cho đơn từ 500k</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="container-product-price">
-                        <div class="container-price">
-                            <label>Tổng tiền:</label>
-                            <p>345.000 đ</p>
-                        </div>
-                        <div class="container-price">
-                            <label>Giảm giá:</label>
-                            <p>0 đ</p>
-                        </div>
-                        <div class="container-price" id="final-price">
-                            <label class="title">Tổng thanh toán:</label>
-                            <p class="final-price-para">345.000 đ</p>
-                        </div>
-                    </div>
-                    <div class="popup-buttons">
-                        <a href="../ct_Order/ct_Order.html">
-                            <button id="confirmBuy">Xác nhận</button>
-                        </a>
-                        <button id="cancelBuy">Hủy</button>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -278,7 +214,6 @@
 </main>
 <script src="productPage/productPageJS/changeImage.js"></script>
 <script src="productPage/productPageJS/buttonHandler.js"></script>
-<script src="cartPage/cartPageJS/editInfo.js"></script>
 <script>
     const variants = [
         <c:forEach var="v" items="${pvs}" varStatus="s">
@@ -286,7 +221,7 @@
             pvid: ${v.pvid},
             color: "${v.color}",
             size: "${v.size}",
-            price: "${v.price}"
+            price: ${v.price}
         }
         <c:if test="${!s.last}">, </c:if>
         </c:forEach>
