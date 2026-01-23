@@ -76,8 +76,8 @@
                 <li><a href="wishlist">WISHLIST</a></li>
                 <li><a href="helpPage/helpPage.jsp">LIÊN HỆ</a></li>
                 <li><a href="thong_tin/thong_tin.jsp">ABOUT US</a></li>
-                <li><a href="chinh_sach/chinh_sach.jsp">CHÍNH SÁCH</a></li>
-                <li><a href="dich_vu/dich_vu.jsp">DỊCH VỤ</a></li>
+                <li><a href="chinh_sach">CHÍNH SÁCH</a></li>
+                <li><a href="dich_vu">DỊCH VỤ</a></li>
             </ul>
         </div>
     </nav>

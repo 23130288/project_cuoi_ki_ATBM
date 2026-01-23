@@ -42,14 +42,52 @@ public class AddService_Policy extends HttpServlet {
             return;
         }
         StringBuilder content = new StringBuilder();
+        boolean inList = false;
 
         try (InputStream is = filePart.getInputStream();
              XWPFDocument doc = new XWPFDocument(is)) {
 
             for (XWPFParagraph p : doc.getParagraphs()) {
-                content.append(p.getText()).append("\n");
+                String text = p.getText().trim();
+                if (text.isEmpty()) continue;
+                String style = p.getStyle();
+
+                // 1. Heading
+                if (style != null && style.startsWith("Heading") || text.matches("^\\d+\\.\\s+.*")) {
+                    if (inList) {
+                        content.append("</ul>");
+                        inList = false;
+                    }
+                    content.append("<h3>").append(text).append("</h3>");
+                }
+
+                // 2. Dòng kết thúc bằng ":" → mở danh sách
+                else if (text.endsWith(":")) {
+                    if (inList) {
+                        content.append("</ul>");
+                    }
+                    content.append("<p>").append(text).append("</p>");
+                    content.append("<ul>");
+                    inList = true;
+                }
+
+                // 3. Item của danh sách
+                else if (inList) {
+                    content.append("<li>").append(text).append("</li>");
+                }
+
+                // 4. Paragraph thường
+                else {
+                    content.append("<p>").append(text).append("</p>");
+                }
+            }
+
+            // Đóng ul nếu file kết thúc khi đang trong list
+            if (inList) {
+                content.append("</ul>");
             }
         }
+
 
         if (sps.addServicePolicy(title, content.toString(), isService))
             response.getWriter().write("{\"success\":true}");

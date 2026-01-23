@@ -5,6 +5,7 @@
       <map>
         <entry key="file://$PROJECT_DIR$/src/main/webapp/admin/admin.jsp" value="file://$PROJECT_DIR$/src/main/webapp/admin" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/cartPage/cartPage.jsp" value="file://$PROJECT_DIR$/src/main/webapp/cartPage" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/chinh_sach/chinh_sach.html" value="file://$PROJECT_DIR$/src/main/webapp/chinh_sach" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/dang_nhap/dang_nhap.jsp" value="file://$PROJECT_DIR$/src/main/webapp/dang_nhap" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/helpPage/helpPage.jsp" value="file://$PROJECT_DIR$/src/main/webapp/helpPage" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/productPage/productPage.jsp" value="file://$PROJECT_DIR$/src/main/webapp/productPage" />

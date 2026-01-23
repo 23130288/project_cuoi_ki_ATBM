@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Service_Policy implements Serializable {
     private int spid;
     private String title;
-    private String comment;
+    private String content;
     private String lasted_update;
     private boolean isService;
     private boolean status;
@@ -13,10 +13,10 @@ public class Service_Policy implements Serializable {
     public Service_Policy() {
     }
 
-    public Service_Policy(int spid, String title, String comment, String lasted_update, boolean isService, boolean status) {
+    public Service_Policy(int spid, String title, String content, String lasted_update, boolean isService, boolean status) {
         this.spid = spid;
         this.title = title;
-        this.comment = comment;
+        this.content = content;
         this.lasted_update = lasted_update;
         this.isService = isService;
         this.status = status;
@@ -38,12 +38,12 @@ public class Service_Policy implements Serializable {
         this.title = title;
     }
 
-    public String getComment() {
-        return comment;
+    public String getcontent() {
+        return content;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setcontent(String content) {
+        this.content = content;
     }
 
     public String getLastedUpdate() {
