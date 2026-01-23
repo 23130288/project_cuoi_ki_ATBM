@@ -2,6 +2,7 @@ package org.example.projectweb.service;
 
 import org.example.projectweb.dao.Service_PolicyDao;
 import org.example.projectweb.model.Service_Policy;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -11,6 +12,18 @@ public class Service_PolicyService {
 
     public List<Service_Policy> getAllService_Policys() {
         return spDao.getListService_Policy();
+    }
+
+    public List<Service_Policy> getActivePolicyTitles() {
+        return spDao.getActivePolicyTitles();
+    }
+
+    public List<Service_Policy> getActiveServiceTitles() {
+        return spDao.getActiveServiceTitles();
+    }
+
+    public Service_Policy getService_PolicyById(int spid) {
+        return spDao.getService_PolicyById(spid);
     }
 
     public boolean updateService_PolicyStatus(int spid) {

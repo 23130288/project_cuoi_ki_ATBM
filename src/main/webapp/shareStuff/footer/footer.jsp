@@ -17,8 +17,8 @@
 
             <div class="footer1-column">
                 <h4>Dịch vụ khách hàng</h4>
-                <a href="dich_vu/dich_vu.jsp">Dịch vụ giao hàng</a>
-                <a href="dich_vu/dich_vu.jsp">Dịch vụ đổi trả</a>
+                <a href="dich_vu?spid=12">Dịch vụ giao hàng</a>
+                <a href="dich_vu?spid=10">Dịch vụ đổi trả</a>
             </div>
 
             <div class="footer1-column">
@@ -28,9 +28,9 @@
 
             <div class="footer1-column">
                 <h4>Điều khoản pháp lý</h4>
-                <a href="chinh_sach/chinh_sach.jsp">Chính sách bảo mật</a>
-                <a href="chinh_sach/chinh_sach.jsp">Chính sách bảo hành</a>
-                <a href="chinh_sach/chinh_sach.jsp">Điều khoản sử dụng</a>
+                <a href="chinh_sach?spid=5">Chính sách bảo mật</a>
+                <a href="chinh_sach?spid=6">Chính sách bảo hành</a>
+                <a href="chinh_sach?spid=7">Điều khoản sử dụng</a>
             </div>
         </div>
     </div>

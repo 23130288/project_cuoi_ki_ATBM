@@ -1493,7 +1493,7 @@ function loadService_PolicyList() {
                 const row = document.createElement("tr");
                 row.innerHTML = `
                     <td>${sp.spid}</td>
-                    <td>${sp.service ? "Dịch vụ" : "Chính sách"}</td>
+                    <td>${sp.isService ? "Dịch vụ" : "Chính sách"}</td>
                     <td>${sp.title}</td>
                     <td>${sp.lasted_update}</td>
                     <td>${sp.status ? "Đang áp dụng" : "Ngừng áp dụng"}</td>
