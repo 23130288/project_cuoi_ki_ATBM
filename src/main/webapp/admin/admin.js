@@ -91,7 +91,7 @@
         "Quản lý dịch vụ, chính sách": `
             <h2>Quản lý dịch vụ, chính sách</h2>
             <div class="Menu-bar">
-                <button class="bt_menu" id="btn-them-tb">+ Thêm dịch vụ, chính sách</button>
+                <button class="bt_menu" id="btn_them_sp">+ Thêm dịch vụ, chính sách</button>
                 
                 <div class="search-bar">
                     <input type="text" name="query" placeholder="Tên chính sách, dịch vụ..."/>
@@ -99,19 +99,11 @@
                 </div>
             </div>
                
-            <div class="table-wrapper">     
-                <table class="table_data">
-                    <tr><th>Mã</th><th>Tiêu đề</th><th>Nội dung</th><th>Ngày tạo</th><th>Trạng thái</th><th>Thao tác</th></tr>
-                    <tr><td>p001</td><td>chính sách mua hàng</td><td>chính sách ......</td><td>15/11/2025</td><td>đang áp dụng</td>
-                    <td><button class="btn-sua" id="sua_cs_dv">Sửa</button>
-                    <tr><td>p002</td><td>chính sách đổi trả</td><td>chính sách ......</td><td>15/11/2025</td><td>đang áp dụng</td>
-                    <td><button class="btn-sua" id="sua_cs_dv">Sửa</button>
-                    <tr><td>s001</td><td>dịch vụ tư vấn</td><td>dịch vụ ......</td><td>15/11/2025</td><td>đang áp dụng</td>
-                    <td><button class="btn-sua" id="sua_cs_dv">Sửa</button>
-                    <tr><td>s001</td><td>dịch vụ đổi cũ lấy mới</td><td>dịch vụ ......</td><td>5/12/2025</td><td>dừng áp dụng</td>
-                    <td><button class="btn-sua" id="sua_cs_dv">Sửa</button>
+            <div class="table-wrapper">
+                <table class="table_data" id="Service_PolicyTable">
+<!--                  load nội dung bằng hàm riêng-->
                 </table>
-            </div>
+            </div>  
         `,
 
         "Quản lý thông báo": `
@@ -554,33 +546,11 @@ Vali cao cấp x1 - 1.200.000₫</textarea>
             }
 
             if (text === "Quản lý dịch vụ, chính sách") {
-                const btnThemTB = document.getElementById("btn-them-tb");
-                if (btnThemTB) btnThemTB.addEventListener("click", () => {
-                    openAdminPopup(
-                        "Tạo thông báo mới",
-                        `
-                <label>Tên chính sách, dịch vụ:</label>
-                <input type="text" id="cs_dv-name" placeholder="Nhập tiêu đề">
-            
-                <label>Loại:</label>
-                <select id="tb-type">
-                    <option value="chính sách">Chính sách</option>
-                    <option value="dich_vu">Dịch vụ</option>
-                </select>
-            
-                <label>Trạng thái:</label>
-                <select id="sp-Status">
-                    <option value="đang bán">Đang áp dụng</option>
-                    <option value="dừng bán">Dừng áp dụng</option>
-                </select>
-            
-                <label>Nội dung:</label>
-                <textarea id="tb-content" placeholder="Nhập nội dung"></textarea>
-            `,
-                        () => {
-                            alert(`✔ Đã Thêm chính sách, dịch vụ.`);
-                        }
-                    );
+                loadService_PolicyList();
+
+                const btnThem = document.getElementById("btn_them_sp");
+                if (btnThem) btnThem.addEventListener("click", () => {
+                    addService_Policy()
                 });
             }
 
@@ -617,74 +587,42 @@ function openAdminPopup(title, bodyHTML, onConfirm) {
             popup.style.display = "none";
         });
     };
-
-
-    // // ======= XỬ LÝ VOUCHER =========
-    // const typeSelect = document.getElementById("tb-type");
-    // const contentArea = document.getElementById("content-area");
-    //
-    // function updateContentInput() {
-    //     if (!typeSelect || !contentArea) return;
-    //
-    //     const type = typeSelect.value;
-    //
-    //     if (type === "giam_gia") {
-    //         contentArea.innerHTML = `
-    //             <input type="number" id="amount" placeholder="Số tiền giảm (VD: 50000)">
-    //             <input type="number" id="min" placeholder="Áp dụng cho đơn hàng từ (VD: 200000)">
-    //         `;
-    //     } else if (type === "phan_tram") {
-    //         contentArea.innerHTML = `
-    //             <input type="number" id="percent" placeholder="Giảm (%) (VD: 10)">
-    //             <input type="number" id="min" placeholder="Áp dụng cho đơn hàng từ (VD: 200000)">
-    //         `;
-    //     } else if (type === "mien_phi_van_chuyen") {
-    //         contentArea.innerHTML = `
-    //             <input type="number" id="min" placeholder="Miễn phí vận chuyển cho đơn từ (VD: 300000)">
-    //         `;
-    //     }
-    // }
-    //
-    // if (typeSelect) {
-    //     typeSelect.addEventListener("change", updateContentInput);
-    //     updateContentInput();
-    // }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    const btnDoiThongTin = document.getElementById("btn-doi-thong-tin");
-    if (btnDoiThongTin) {
-        btnDoiThongTin.addEventListener("click", () => {
-            // language=HTML format=false
-            openAdminPopup(
-                "Thay đổi thông tin",
-                `
-                <div class="popup_item">
-                    <label>Tên tài khoản</label>
-                    <input class="in4_input" type="text" id="name" value="Nguyễn Văn A" readonly>
-                </div>
-                 
-                <div class="popup_item"> 
-                    <label>Avata</label>                  
-                    <div class="popup_avata">
-                        <div class="preview-item">
-                            <img src="admin/image/avatar.jpg">
-                        </div>    
-                              
-                        <div class="img-upload-box" id="drop-zone">
-                            <span>+</span>
-                            <p>Kéo hoặc click để thêm ảnh</p>
-                        </div>
-                    </div>
-                </div>
-                `,
-                () => {
-                    alert("Đã thay đổi thông tin thành công!");
-                }
-            );
-        });
-    }
-});
+// document.addEventListener("DOMContentLoaded", function () {
+//     const btnDoiThongTin = document.getElementById("btn-doi-thong-tin");
+//     if (btnDoiThongTin) {
+//         btnDoiThongTin.addEventListener("click", () => {
+//             // language=HTML format=false
+//             openAdminPopup(
+//                 "Thay đổi thông tin",
+//                 `
+//                 <div class="popup_item">
+//                     <label>Tên tài khoản</label>
+//                     <input class="in4_input" type="text" id="name" value="Nguyễn Văn A" readonly>
+//                 </div>
+//
+//                 <div class="popup_item">
+//                     <label>Avata</label>
+//                     <div class="popup_avata">
+//                         <div class="preview-item">
+//                             <img src="admin/image/avatar.jpg">
+//                         </div>
+//
+//                         <div class="img-upload-box" id="drop-zone">
+//                             <span>+</span>
+//                             <p>Kéo hoặc click để thêm ảnh</p>
+//                         </div>
+//                     </div>
+//                 </div>
+//                 `,
+//                 () => {
+//                     alert("Đã thay đổi thông tin thành công!");
+//                 }
+//             );
+//         });
+//     }
+// });
 
 //hàm hỗ trợ ajax-json
 //load user
@@ -973,7 +911,6 @@ function addProduct() {
                 div.className = "preview-item excel-preview";
 
                 div.innerHTML = `
-                <span style="font-weight:600;">XLS</span>
                 <span class="file-name">${file.name}</span>
             `;
 
@@ -997,9 +934,10 @@ function addProduct() {
                 const div = document.createElement("div");
                 div.className = "preview-item";
 
+                // language=HTML
                 div.innerHTML = `
-                <img src="${URL.createObjectURL(file)}">
-            `;
+                    <img src="${URL.createObjectURL(file)}" alt="">
+                `;
 
                 previewImgBox.appendChild(div);
             });
@@ -1074,7 +1012,6 @@ function addProductVariantExcel() {
                 div.className = "preview-item excel-preview";
 
                 div.innerHTML = `
-                <span style="font-weight:600;">XLS</span>
                 <span class="file-name">${file.name}</span>
             `;
 
@@ -1330,7 +1267,7 @@ function toggleProductStatus(pid) {
         });
 }
 
-//================================= các phương thước phần product =================================
+//================================= các phương thước phần Voucher =================================
 function loadVoucherList() {
     fetch('/projectWeb_war/admin/Voucher/voucher_load')
         .then(res => res.json())
@@ -1427,11 +1364,11 @@ function addVoucher() {
                 return;
             }
 
-// convert sang number để check
+            // convert sang number để check
             const discountNum = discount !== null ? Number(discount) : null;
             const conditionNum = condition !== null ? Number(condition) : null;
 
-// check condition chung
+            // check condition chung
             if (conditionNum === null || isNaN(conditionNum) || conditionNum < 0) {
                 alert("Điều kiện áp dụng phải là số không âm");
                 return;
@@ -1448,7 +1385,7 @@ function addVoucher() {
                 if (
                     discountNum === null ||
                     isNaN(discountNum) ||
-                    discountNum < 1 ||
+                    discountNum < 0 ||
                     discountNum > 100
                 ) {
                     alert("Phần trăm giảm phải nằm trong khoảng 1–100");
@@ -1488,8 +1425,6 @@ function addVoucher() {
                 });
         }
     );
-
-    /* ===== GẮN EVENT CHO FORM ĐỘNG ===== */
     setTimeout(() => {
         const typeSelect = document.getElementById("v_type");
         const contentArea = document.getElementById("v_content_area");
@@ -1499,12 +1434,12 @@ function addVoucher() {
 
             if (type === "giam_gia") {
                 contentArea.innerHTML = `
-                    <input type="number" id="amount" min="1" step="1000" placeholder="Số tiền giảm">
+                    <input type="number" id="amount" min="0" step="1000" placeholder="Số tiền giảm">
                     <input type="number" id="min" min="0" step="1000" placeholder="Áp dụng cho đơn từ (VD: 200000)">
                 `;
             } else if (type === "phan_tram") {
                 contentArea.innerHTML = `
-                    <input type="number" id="percent" min="1" max="100" placeholder="Giảm (%)">
+                    <input type="number" id="percent" min="0" max="100" placeholder="Giảm (%)">
                     <input type="number" id="min" min="0" step="1000" placeholder="Áp dụng cho đơn từ">
                 `;
             } else if (type === "mien_phi_van_chuyen") {
@@ -1536,4 +1471,154 @@ function toggleVoucherStatus(vid) {
             console.error(err);
             alert("Có lỗi xảy ra");
         });
+}
+
+//================================= các phương thước phần dịch vụ, chính sách =================================
+function loadService_PolicyList() {
+    fetch('/projectWeb_war/admin/Service_Policy/Service_Policy_load')
+        .then(res => res.json())
+        .then(Service_Policys => {
+            const table = document.getElementById("Service_PolicyTable");
+            table.innerHTML = `
+                <tr>
+                    <th>ID</th>
+                    <th>Loại</th>
+                    <th>Tiêu đề</th>
+                    <th>Ngày đăng</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                </tr>
+                `;
+            Service_Policys.forEach(sp => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${sp.spid}</td>
+                    <td>${sp.service ? "Dịch vụ" : "Chính sách"}</td>
+                    <td>${sp.title}</td>
+                    <td>${sp.lasted_update}</td>
+                    <td>${sp.status ? "Đang áp dụng" : "Ngừng áp dụng"}</td>
+                    <td>
+                        <button onclick="toggleServicePolicyStatus(${sp.spid})">
+                            ${sp.status ? "Khóa" : "Mở"}
+                        </button>
+                    </td>
+                    `;
+                table.appendChild(row);
+            });
+        });
+}
+
+function toggleServicePolicyStatus(spid) {
+    if (!confirm("Bạn có chắc muốn thay đổi trạng thái của mục này?")) {
+        return;
+    }
+
+    fetch(`/projectWeb_war/admin/Service_Policy/toggle_Service_Policy_status?spid=${spid}`, {
+        method: "POST"
+    })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message);
+            loadService_PolicyList();
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Có lỗi xảy ra");
+        });
+}
+
+function addService_Policy() {
+    openAdminPopup(
+        "Tạo dịch vụ, chính sách mới",
+        `
+           <label>Tên chính sách, dịch vụ:</label>
+                 <input type="text" id="sp_title" placeholder="Nhập tiêu đề">
+
+                 <label>Loại:</label>
+                 <select id="sp_type">
+                    <option value="0">Chính sách</option>
+                    <option value="1">Dịch vụ</option>
+                </select>
+
+                 <label>Nội dung:</label>
+                 <div class="popup_item">
+                <label>Nhập nhập từ Word:</label>
+                <div class="img-upload-box" id="excel-drop-zone">
+                    <span>+</span>
+                    <p>Kéo hoặc click để tải file Word (.xlsx)</p>
+                    <input type="file" id="sp_word_file" accept=".doc,.docx" multiple>
+                </div>
+                <p style="font-size:13px; color:#666;">
+                Chỉ được nhập 1 file word, file ko được chứa hình ảnh.
+                </p>
+                                
+                 <!-- Khu vực preview -->
+                <div class="excel-preview" id="sp_excel_preview_list">
+                    <!-- file excel sẽ hiện ở đây -->
+                </div>
+            </div>
+        `,
+        function () {
+            /* ===== 1. LẤY DỮ LIỆU ===== */
+            const title = document.getElementById("sp_title").value.trim();
+            const type = document.getElementById("sp_type").value;
+            const file = document.getElementById("sp_word_file").files[0];
+
+            /* ===== 2. VALIDATE ===== */
+            if (!title) {
+                alert("Vui lòng nhập tiêu đề");
+                return;
+            }
+
+            if (!file) {
+                alert("Vui lòng chọn file Word");
+                return;
+            }
+
+            /* ===== 3. GỬI FORM ===== */
+            const formData = new FormData();
+            formData.append("title", title);
+            formData.append("type", type);
+            formData.append("contentFile", file);
+
+            fetch("/projectWeb_war/admin/Service_Policy_add", {
+                method: "POST",
+                body: formData
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Tạo dịch vụ / chính sách thành công");
+                        loadService_PolicyList();
+                    } else {
+                        alert(data.message || "Thất bại");
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Có lỗi xảy ra");
+                });
+        }
+    );
+    setTimeout(() => {
+        const excelInput = document.getElementById("sp_word_file");
+        const previewBox = document.getElementById("sp_excel_preview_list");
+
+        if (!excelInput || !previewBox) return;
+
+        excelInput.addEventListener("change", () => {
+            previewBox.innerHTML = "";
+
+            Array.from(excelInput.files).forEach(file => {
+                const div = document.createElement("div");
+                div.className = "preview-item excel-preview";
+
+                div.innerHTML = `
+                <span class="file-name">${file.name}</span>
+            `;
+
+                previewBox.appendChild(div);
+            });
+        });
+    }, 0);
 }
