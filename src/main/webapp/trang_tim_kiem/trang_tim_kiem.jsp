@@ -54,16 +54,17 @@
                     <label>Màu sắc:</label>
                     <select name="color">
                         <option value="">Tất cả</option>
-                        <option value="do">Đỏ</option>
-                        <option value="cam">Cam</option>
-                        <option value="vang">Vàng</option>
-                        <option value="luc">Lục</option>
-                        <option value="xanh">Xanh</option>
-                        <option value="tim">Tím</option>
-                        <option value="hong">Hồng</option>
-                        <option value="xam">Xám</option>
-                        <option value="den">Đen</option>
+                        <option value="red">Đỏ</option>
+                        <option value="orange">Cam</option>
+                        <option value="yellow">Vàng</option>
+                        <option value="green">Lục</option>
+                        <option value="blue">Xanh</option>
+                        <option value="purple">Tím</option>
+                        <option value="pink">Hồng</option>
+                        <option value="grey">Xám</option>
+                        <option value="black">Đen</option>
                     </select>
+
                 </div>
 
                 <!-- SIZE -->
@@ -75,9 +76,9 @@
                         <option value="M">M</option>
                         <option value="L">L</option>
                         <option value="XL">XL</option>
-                        <option value="20">20 inch</option>
-                        <option value="24">24 inch</option>
-                        <option value="28">28 inch</option>
+                        <option value="20 inch">20 inch</option>
+                        <option value="24 inch">24 inch</option>
+                        <option value="28 inch">28 inch</option>
                     </select>
                 </div>
 
@@ -112,24 +113,32 @@
 </div>
 
 <section class="results">
+
     <c:choose>
-    <c:when test="${not empty searchResults}">
-        <h1>Kết quả tìm kiếm cho: "${param.query}"</h1>
-        <div class="slider-container">
+        <c:when test="${not empty searchResults}">
             <div class="product-grid">
                 <c:forEach var="p" items="${searchResults}">
                     <div class="product-card">
-                        <a href="productDetail?pid=${p.pid}">
-                            <img src="${p.mainImage.image}" alt="${p.name}">
-                            <h2>${p.name}</h2>
-                        </a>
-                        <p class="price">
+                        <c:choose>
+                            <c:when test="${ not empty p.mainImage}">
+                                <img src="${p.mainImage.image}" alt="">
+                            </c:when>
+                            <c:otherwise>
+                                <img src="trang_chu/image/balo_phuot.png" alt="">
+                            </c:otherwise>
+                        </c:choose>
+
+                        <h3>${p.name}</h3>
+
+                        <c:if test="${not empty p.variants}">
+                            <p class="price">
                                 <span class="new-price">
                                     <fmt:formatNumber value="${p.variants[0].price}" pattern="#,###"/>đ
                                 </span>
-                        </p>
+                            </p>
+                        </c:if>
                         <div class="product-actions">
-                            <button class="buy-btn">Mua Ngay</button>
+                            <button class="buy-btn">Xem Ngay</button>
                             <div class="inner-circle1">
                                 <i class="fa fa-shopping-cart"></i>
                             </div>
@@ -137,20 +146,16 @@
                     </div>
                 </c:forEach>
             </div>
-        </div>
-    </c:when>
-    <c:otherwise>
-        <div class="no-results-container">
-            <h2 class="no-results-title">Không tìm thấy sản phẩm nào!</h2>
-            <p class="no-results-text">
-                Rất tiếc, chúng tôi không tìm thấy kết quả cho từ khóa:
-                <strong class="highlight-keyword">"${param.query}"</strong>
-            </p>
-            <p class="no-results-subtext">Vui lòng kiểm tra lại chính tả hoặc tìm kiếm bằng từ khóa khác.</p>
-        </div>
-    </c:otherwise>
+        </c:when>
+
+        <c:otherwise>
+            <h2>Không tìm thấy sản phẩm.Vui lòng thử lại</h2>
+        </c:otherwise>
     </c:choose>
+
+
 </section>
+
 <footer>
     <div id="footer-placeholder"></div>
     <script src="../shareStuff/footer/footerGetter.js"></script>

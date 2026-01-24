@@ -61,7 +61,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
-    padding: 55px 0;
+    padding: 55px 180px;
     text-align: center;
 }
 .product-link {
@@ -280,5 +280,7 @@
     background: #F2C641;
     border-color: #F2C641;
 }
+
+
 
 
