@@ -95,141 +95,95 @@ public class ProductDao extends BaseDao {
         );
     }
 
-    public List<Product> getAllProducts() {
-        return get().withHandle(h -> h.createQuery(" select pid, name, producer, type, material, style, description, status from product ")
-                .mapToBean(Product.class)
-                .list()
-        );
+    public List<Product> searchByFilter(
+        String producer,
+        String category,
+        String color,
+        String size,
+        Double minPrice,
+        Double maxPrice,
+        String sort
+) {
+
+    String sql = " SELECT DISTINCT p.pid, p.name, p.producer, p.type, p.material, p.style, p.description, p.status FROM product p JOIN product_variant v ON p.pid = v.pid WHERE 1 = 1 ";
+
+    if (producer != null && !producer.isBlank()) {
+        sql += " AND LOWER(p.producer) LIKE LOWER(:producer) ";
     }
 
-    public List<Product> getProductByProducer(List<Product> list, String producer) {
-        return get().withHandle(h -> h.createQuery(" select pid, name, producer, type, material, style, description, status from product where producer = :producer ")
-                .bind("producer", producer)
-                .mapToBean(Product.class)
-                .list()
-        );
+    if (category != null && !category.isBlank()) {
+        sql += " AND LOWER(p.type) = LOWER(:category) ";
     }
 
-    public List<Product> getProductByCategory(List<Product> list, String category) {
-        return get().withHandle(h -> h.createQuery(" select pid, name, producer, type, material, style, description, status from product where type = :category ")
-                .bind("category", category)
-                .mapToBean(Product.class)
-                .list()
-        );
+    if (color != null && !color.isBlank()) {
+        sql += " AND LOWER(v.color) = LOWER(:color) ";
     }
 
-    public List<Product> getProductByColor(List<Product> list, String color) {
-        return get().withHandle(h -> h.createQuery(" select distinct p.pid, p.name, p.producer, p.type, p.material, p.style, p.description, p.status from product p join product_variant v on p.pid = v.pid WHERE v.color = :color ")
-                .bind("color", color)
-                .mapToBean(Product.class)
-                .list()
-        );
+    if (size != null && !size.isBlank()) {
+        sql += " AND v.size = :size ";
     }
 
-    public List<Product> getProductBySize(List<Product> list, String size) {
-        return get().withHandle(h -> h.createQuery(" select distinct p.pid, p.name, p.producer, p.type, p.material, p.style, p.description, p.status from product p join product_variant v on p.pid = v.pid where v.size = :size ")
-                .bind("size", size)
-                .mapToBean(Product.class)
-                .list()
-        );
+    if (minPrice != null) {
+        sql += " AND v.price >= :minPrice ";
     }
 
-    public List<Product> getProductByPrice(double min, double max) {
-        return get().withHandle(h -> h.createQuery(" select distinct p.pid, p.name, p.producer, p.type, p.material, p.style, p.description, p.status from product p join product_variant v on p.pid = v.pid where v.price >= :min and v.price <= :max ")
-                .bind("min", min)
-                .bind("max", max)
-                .mapToBean(Product.class)
-                .list()
-        );
-
+    if (maxPrice != null) {
+        sql += " AND v.price <= :maxPrice ";
     }
 
-    public List<Product> sortByPrice(boolean asc) {
-        String order = asc ? "ASC" : "DESC";
-        return get().withHandle(h -> h.createQuery(" select distinct p.pid, p.name, p.producer, p.type, p.material, p.style, p.description, p.status from product p join product_variant v on p.pid = v.pid order by v.price " + order)
-                .mapToBean(Product.class)
-                .list()
-        );
+    if ("price_asc".equals(sort)) {
+        sql += " ORDER BY v.price ASC ";
+    } else if ("price_desc".equals(sort)) {
+        sql += " ORDER BY v.price DESC ";
+    } else if ("name_asc".equals(sort)) {
+        sql += " ORDER BY p.name ASC ";
+    } else if ("name_desc".equals(sort)) {
+        sql += " ORDER BY p.name DESC ";
     }
 
-    public List<Product> sortByName(boolean asc) {
-        String order = asc ? "ASC" : "DESC";
-        return get().withHandle(h -> h.createQuery(" select pid, name, producer, type, material, style, description, status from product order by name " + order)
-                .mapToBean(Product.class)
-                .list()
-        );
-    }
+        String finalSql = sql;
+        return get().withHandle(h -> {
+        var query = h.createQuery(finalSql);
 
-    public List<Product> sortByBestSeller() {
-        return get().withHandle(h -> h.createQuery(" select p.pid, p.name, p.producer, p.type, p.material, p.style, p.description, p.status, sum(od.quantity) as totalSold from product p join order_detail od on p.pid = od.pid group by p.pid order by totalSold desc ")
-                .mapToBean(Product.class)
-                .list()
-        );
-    }
+        if (producer != null && !producer.isBlank())
+            query.bind("producer", "%" + producer + "%");
 
-    public List<Product> sortByRating() {
-        return get().withHandle(h -> h.createQuery(" select p.pid, p.name, p.producer, p.type, p.material, p.style, p.description, p.status, avg(r.rating) as avgRating from product p join review r on p.pid = r.pid group by p.pid order by avgRating desc ")
-                .mapToBean(Product.class)
-                .list()
-        );
-    }
+        if (category != null && !category.isBlank())
+            query.bind("category", category);
 
-    public List<Product> sortByHot() {
-        return get().withHandle(h -> h.createQuery(" select pid, name, producer, type, material, style, description, status from product where status = 'HOT' order by pid desc ")
-                .mapToBean(Product.class)
-                .list()
-        );
-    }
+        if (color != null && !color.isBlank())
+            query.bind("color", color);
 
-    public List<Product> getProductBySort(List<Product> products, String sort) {
+        if (size != null && !size.isBlank())
+            query.bind("size", size);
 
-        if (sort == null || sort.isEmpty()) {
-            return getAllProducts();
-        }
+        if (minPrice != null)
+            query.bind("minPrice", minPrice);
 
-        switch (sort) {
-            case "price_Asc":
-                return sortByPrice(true);
+        if (maxPrice != null)
+            query.bind("maxPrice", maxPrice);
 
-            case "price_Desc":
-                return sortByPrice(false);
+        return query.mapToBean(Product.class).list();
+    });
+}
 
-            case "nameA-Z":
-                return sortByName(true);
-
-            case "nameZ-A":
-                return sortByName(false);
-
-            case "bestSeller":
-                return sortByBestSeller();
-
-            case "rating":
-                return sortByRating();
-
-            case "hot":
-                return sortByHot();
-
-            default:
-                return getAllProducts();
-        }
-    }
     public List<Product> getHotProducts() {
         return get().withHandle(h ->
-                h.createQuery("SELECT pid, name, producer, type, material, style, description, status FROM product WHERE LOWER(status) = 'hot'")
+                h.createQuery("SELECT pid, name, producer, type, material, style, description, status FROM product WHERE LOWER(status) = 'hot' LIMIT 12")
                         .mapToBean(Product.class)
                         .list()
         );
     }
     public List<Product> getValiProducts() {
         return get().withHandle(h ->
-                h.createQuery("SELECT pid, name, producer, type, material, style, description, status FROM product WHERE LOWER(type) = 'vali'")
+                h.createQuery("SELECT pid, name, producer, type, material, style, description, status FROM product WHERE LOWER(type) = 'vali' LIMIT 12")
                         .mapToBean(Product.class)
                         .list()
         );
     }
     public List<Product> getBaloProducts() {
         return get().withHandle(h ->
-                h.createQuery("SELECT pid, name, producer, type, material, style, description, status FROM product WHERE LOWER(type) = 'balo'")
+                h.createQuery("SELECT pid, name, producer, type, material, style, description, status FROM product WHERE LOWER(type) = 'balo' LIMIT 12")
                         .mapToBean(Product.class)
                         .list()
         );
