@@ -2,6 +2,7 @@ package org.example.projectweb.service;
 
 import org.example.projectweb.dao.VoucherDao;
 import org.example.projectweb.model.Voucher;
+import org.example.projectweb.model.VoucherUser;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class VoucherService {
         String imagePath = getImageByType(type);
         boolean status = true;
 
-        vDao.addVoucher( type, discount, condition, expiredDate, imagePath, status);
+        vDao.addVoucher(type, discount, condition, expiredDate, imagePath, status);
         // Tạo thông báo
         ns.createGlobalNotification("All", "Voucher mới", "Mã giảm giá mới vừa xuất hiện vào săn ngay!", -1);
         return true;
@@ -49,16 +50,16 @@ public class VoucherService {
         return true;
     }
 
-    public List<Voucher> getVouchersByUid(int uid) {
-        return vDao.getVouchersByUid(uid);
+    public List<VoucherUser> getVoucherUsersByUid(int uid) {
+        return vDao.getVoucherUsersByUid(uid);
     }
 
-    public Voucher getVoucherByUvid(int uvid) {
-        return vDao.getVoucherByUvid(uvid);
+    public VoucherUser getVoucherUserByUvid(int uvid) {
+        return vDao.getVoucherUserByUvid(uvid);
     }
 
-    public void deleteVoucherUserByUvid(int uvid) {
-        vDao.deleteUserVoucherByUvid(uvid);
+    public void setApplicable(int uvid, int bool) {
+        vDao.setApplicable(uvid, bool);
     }
 }
 

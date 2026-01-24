@@ -5,7 +5,7 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import org.example.projectweb.cart.Cart;
 import org.example.projectweb.model.User;
-import org.example.projectweb.model.Voucher;
+import org.example.projectweb.model.VoucherUser;
 import org.example.projectweb.service.OrderService;
 import org.example.projectweb.service.UserService;
 import org.example.projectweb.service.VoucherService;
@@ -37,15 +37,14 @@ public class CheckOutController extends HttpServlet {
         VoucherService vs = new VoucherService();
         OrderService os = new OrderService();
 
-        Voucher v = c.getVoucher();
-
-        Integer vid = null;
+        VoucherUser v = c.getVoucher();
+        Integer uvid = null;
         if (v != null) {
-            vs.deleteVoucherUserByUvid(v.getUvid());
-            vid = v.getVid();
+            vs.setApplicable(v.getUvid(), 0);
+            uvid = v.getUvid();
         }
 
-        int oid = os.createOrder(u.getUid(), vid, description);
+        int oid = os.createOrder(u.getUid(), uvid, description);
         os.createOrderDetails(oid, c);
 
         c.removeAll();

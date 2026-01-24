@@ -21,11 +21,11 @@ public class OrderDao extends BaseDao {
                 .mapTo(Boolean.class).first());
     }
 
-    public int createOrder(int uid, Integer vid, String description) {
+    public int createOrder(int uid, Integer uvid, String description) {
         return get().withHandle(h -> h.createUpdate("""
-                        insert into `order` (uid, vid, description, created_date, status)
-                        values (:uid, :vid, :description, now(), 'delivering')
-                        """).bind("uid", uid).bind("vid", vid).bind("description", description)
+                        insert into `order` (uid, uvid, description, created_date, status)
+                        values (:uid, :uvid, :description, now(), 'delivering')
+                        """).bind("uid", uid).bind("uvid", uvid).bind("description", description)
                 .executeAndReturnGeneratedKeys("oid")
                 .mapTo(Integer.class).one());
     }
@@ -45,7 +45,7 @@ public class OrderDao extends BaseDao {
 
     public Order getOrderByOid(int oid) {
         return get().withHandle(h -> h.createQuery("""
-                        select oid, uid, vid, description, created_date as createdDate, status
+                        select oid, uid, uvid, description, created_date as createdDate, status
                         from `order` where oid = :oid
                         """).bind("oid", oid)
                 .mapToBean(Order.class).one());
@@ -78,7 +78,9 @@ public class OrderDao extends BaseDao {
         return  get().withHandle(h -> {
             return h.createQuery("""
                     select coalesce(v.discount, 0)
-                    from `order` o left join voucher v on o.vid = v.vid
+                    from `order` o
+                    left join voucher_user vu on o.uvid = vu.uvid
+                    left join voucher v on vu.vid = v.vid
                     where o.oid = :oid
                     """).bind("oid", oid)
                     .mapTo(Double.class).one();

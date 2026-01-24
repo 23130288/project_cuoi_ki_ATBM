@@ -16,8 +16,8 @@ public class OrderService {
         return od.hasPurchased(userId, productId);
     }
 
-    public int createOrder(int uid, Integer vid, String description) {
-        return od.createOrder(uid, vid, description);
+    public int createOrder(int uid, Integer uvid, String description) {
+        return od.createOrder(uid, uvid, description);
     }
 
     public void createOrderDetails(int oid, Cart c) {
