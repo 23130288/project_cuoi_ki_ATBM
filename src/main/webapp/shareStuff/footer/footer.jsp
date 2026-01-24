@@ -12,7 +12,7 @@
         <div class="footer1-container">
             <div class="footer1-column">
                 <h4>Cửa hàng Travel</h4>
-                <a href="trang_chu/trang_chu.jsp">Balo & Vali Lịch</a>
+                <a href="trangChu">Balo & Vali Lịch</a>
             </div>
 
             <div class="footer1-column">
@@ -23,7 +23,7 @@
 
             <div class="footer1-column">
                 <h4>Liên hệ admin</h4>
-                <a href="helpPage/helpPage.jsp">Liên hệ</a>
+                <a href="support">Liên hệ</a>
             </div>
 
             <div class="footer1-column">

@@ -36,21 +36,21 @@
                 </div>
                 <input type="text" name="query" placeholder="Nhập từ khóa..."/>
                 <div class="divider"></div>
-                <a href="trang_tim_kiem/trang_tim_kiem.jsp" class="search-button">TÌM KIẾM</a>
+                <a href="search" class="search-button">TÌM KIẾM</a>
             </form>
         </div>
         <div class="container-icons">
 
             <div class="avatar-icon-shopping-cart">
                 <div class="inner-circle">
-                    <a href="cartPage/cartPage.jsp">
+                    <a href="cart">
                         <i class="fa fa-shopping-cart"></i>
                     </a>
                 </div>
             </div>
             <div class="avatar-icon-user">
                 <div class="inner-circle">
-                    <a href="dang_nhap/dang_nhap.jsp">
+                    <a href="dang_nhap">
                         <i class="fa fa-user"></i>
                     </a>
                 </div>
@@ -64,9 +64,9 @@
             <!--                <i class="fa fa-bars" aria-hidden="true"></i>-->
             <!--            </button>-->
             <ul>
-                <li><a href="../trang_chu/trang_chu.html">TRANG CHỦ</a></li>
+                <li><a href="trangChu">TRANG CHỦ</a></li>
                 <li class="dropdown">
-                    <a href="../trang_tim_kiem/trang_tim_kiem.html">SẢN PHẨM</a>
+                    <a href="trangChu">SẢN PHẨM</a>
                     <ul class="dropdown-menu">
                         <li><a href="#">TẤT CẢ</a></li>
                         <li><a href="#">VALI</a></li>
@@ -74,7 +74,7 @@
                     </ul>
                 </li>
                 <li><a href="wishlist">WISHLIST</a></li>
-                <li><a href="helpPage/helpPage.jsp">LIÊN HỆ</a></li>
+                <li><a href="support">LIÊN HỆ</a></li>
                 <li><a href="thong_tin/thong_tin.jsp">ABOUT US</a></li>
                 <li><a href="chinh_sach">CHÍNH SÁCH</a></li>
                 <li><a href="dich_vu">DỊCH VỤ</a></li>

@@ -2,10 +2,8 @@ package org.example.projectweb.service;
 
 import org.example.projectweb.cart.Cart;
 import org.example.projectweb.dao.OrderDao;
-import org.example.projectweb.dao.VoucherDao;
 import org.example.projectweb.model.Order;
 import org.example.projectweb.model.OrderDetailView;
-import org.example.projectweb.model.Voucher;
 
 import java.util.List;
 
@@ -54,4 +52,11 @@ public class OrderService {
     }
 
 
+    public List<Order> getOrdersByUid(int uid) {
+        return od.getOrdersByUid(uid);
+    }
+
+    public List<Order> getOrdersByUidAndStatus(int uid, String status) {
+        return od.getOrdersByUidAndStatus(uid, status);
+    }
 }
