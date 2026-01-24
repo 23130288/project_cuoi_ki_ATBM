@@ -2,7 +2,7 @@ package org.example.projectweb.cart;
 
 import org.example.projectweb.model.Product;
 import org.example.projectweb.model.ProductVariant;
-import org.example.projectweb.model.Voucher;
+import org.example.projectweb.model.VoucherUser;
 
 import java.io.Serializable;
 import java.util.*;
@@ -11,14 +11,14 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class Cart implements Serializable {
     private Map<Integer, CartItem> data;
-    private Voucher voucher;
+    private VoucherUser voucher;
 
     public Cart() {
         data = new HashMap<>();
         voucher = null;
     }
 
-    public Voucher getVoucher() {
+    public VoucherUser getVoucher() {
         return voucher;
     }
 
@@ -101,7 +101,7 @@ public class Cart implements Serializable {
         return item.updateQuantity(delta);
     }
 
-    public void setVoucher(Voucher voucher) {
+    public void setVoucher(VoucherUser voucher) {
         this.voucher = voucher;
     }
 

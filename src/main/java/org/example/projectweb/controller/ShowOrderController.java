@@ -1,4 +1,4 @@
-package org.example.projectweb.controller.reviewController;
+package org.example.projectweb.controller;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;

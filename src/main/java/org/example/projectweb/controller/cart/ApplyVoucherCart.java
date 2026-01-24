@@ -4,7 +4,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import org.example.projectweb.cart.Cart;
-import org.example.projectweb.model.Voucher;
+import org.example.projectweb.model.VoucherUser;
 import org.example.projectweb.service.VoucherService;
 
 import java.io.IOException;
@@ -44,7 +44,7 @@ public class ApplyVoucherCart extends HttpServlet {
 
         VoucherService vs = new VoucherService();
         int uvid = Integer.parseInt(uvidStr);
-        Voucher v = vs.getVoucherByUvid(uvid);
+        VoucherUser v = vs.getVoucherUserByUvid(uvid);
 
         // check condition
         double totalPrice = c.getTotalPrice();
