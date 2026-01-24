@@ -21,22 +21,25 @@ function updateVariant(pid, newVariant, popup) {
             variantBox.querySelector(".variant-color").className = "variant-color " + newVariant.color;
             variantBox.querySelector(".variant-size").textContent = newVariant.size;
 
-            productItem.querySelector(".price").textContent = data.price + " đ";
-            productItem.querySelector(".total").textContent = data.itemTotalPrice + " đ";
-            document.getElementById("cart-total-price").textContent = data.cartTotalPrice + " đ";
-            document.getElementById("cart-final-price").textContent = data.cartTotalPrice + " đ";
+            productItem.querySelector(".price").textContent = formatPrice(data.price);
+            productItem.querySelector(".total").textContent = formatPrice(data.itemTotalPrice);
+            document.getElementById("cart-total-price").textContent = formatPrice(data.cartTotalPrice);
+            document.getElementById("cart-final-price").textContent = formatPrice(data.cartFinalPrice);
 
             variantBox.dataset.pvid = newVariant.pvid;
             popup.classList.add("hidden");
         });
 }
+function formatPrice(value) {
+    return Number(value).toLocaleString('vi-VN') + " đ";
+}
 
 
+
+// ====================================== OPEN ======================================
 let selectedColor = null;
 let selectedSize = null;
 let variant = null;
-
-// ====================================== OPEN ======================================
 document.querySelectorAll(".btn-edit-variant").forEach(btn => {
     btn.addEventListener("click", () => {
         const popup = btn.closest(".product-item").querySelector(".popup");

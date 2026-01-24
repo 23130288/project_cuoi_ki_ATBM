@@ -2,7 +2,7 @@ package org.example.projectweb.cart;
 
 import org.example.projectweb.model.Product;
 import org.example.projectweb.model.ProductVariant;
-import org.example.projectweb.model.Voucher;
+import org.example.projectweb.model.VoucherUser;
 
 import java.io.Serializable;
 import java.util.*;
@@ -11,23 +11,20 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class Cart implements Serializable {
     private Map<Integer, CartItem> data;
-    private Voucher voucher;
+    private VoucherUser voucher;
 
     public Cart() {
         data = new HashMap<>();
         voucher = null;
     }
 
-    public Voucher getVoucher() {
+    public VoucherUser getVoucher() {
         return voucher;
     }
 
-    public String getDiscountStr() {
-        if (voucher == null) return 0 + " đ";
-        double discount = voucher.getDiscount();
-        if (discount < 1 && discount > 0)
-            return discount * 100 + " %";
-        return discount * 100 + " đ";
+    public double getDiscount() {
+        if (voucher == null) return 0;
+        return voucher.getDiscount();
     }
 
     public CartItem getItemByPid(int pid) {
@@ -59,7 +56,7 @@ public class Cart implements Serializable {
 
     public int getTotalQuantity() {
         AtomicInteger total = new AtomicInteger();
-        data.values().stream().forEach(p -> {
+        data.values().forEach(p -> {
             total.addAndGet(p.getQuantity());
         });
         return total.get();
@@ -72,7 +69,7 @@ public class Cart implements Serializable {
 
     public double getTotalPrice() {
         AtomicReference<Double> total = new AtomicReference<>((double) 0);
-        data.values().stream().forEach(p -> total.updateAndGet(v -> (v + (p.getQuantity() * p.getPrice()))));
+        data.values().forEach(p -> total.updateAndGet(v -> (v + (p.getQuantity() * p.getPrice()))));
         return total.get();
     }
 
@@ -104,7 +101,7 @@ public class Cart implements Serializable {
         return item.updateQuantity(delta);
     }
 
-    public void setVoucher(Voucher voucher) {
+    public void setVoucher(VoucherUser voucher) {
         this.voucher = voucher;
     }
 

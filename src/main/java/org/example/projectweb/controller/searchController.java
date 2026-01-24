@@ -22,29 +22,28 @@ public class searchController extends HttpServlet {
         request.getRequestDispatcher("trang_tim_kiem/trang_tim_kiem.jsp")
                 .forward(request, response);
     }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String producer = request.getParameter("producer");
-        String category = request.getParameter("category");
-        String color    = request.getParameter("color");
-        String size     = request.getParameter("size");
-        String minPrice = request.getParameter("minPrice");
-        String maxPrice = request.getParameter("maxPrice");
-        String sort     = request.getParameter("sort");
+        throws ServletException, IOException {
 
-        List<Product> products = productService.searchInFilter(producer, category, color, size, minPrice, maxPrice, sort);
+    List<Product> products = productService.searchInFilter(
+            request.getParameter("producer"),
+            request.getParameter("category"),
+            request.getParameter("color"),
+            request.getParameter("size"),
+            request.getParameter("minPrice"),
+            request.getParameter("maxPrice"),
+            request.getParameter("sort")
+    );
 
-        request.setAttribute("producer", producer);
-        request.setAttribute("category", category);
-        request.setAttribute("color", color);
-        request.setAttribute("size", size);
-        request.setAttribute("minPrice", minPrice);
-        request.setAttribute("maxPrice", maxPrice);
-        request.setAttribute("sort", sort);
+    request.setAttribute("searchResults", products);
 
-        request.getRequestDispatcher("trang_tim_kiem/trang_tim_kiem.jsp")
-                .forward(request, response);
-    }
-    
+    request.getRequestDispatcher("trang_tim_kiem/trang_tim_kiem.jsp")
+            .forward(request, response);
+}
+
+
+
+
 }

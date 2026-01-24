@@ -16,13 +16,16 @@ function applyVoucher(uvid) {
         .then(res => res.json())
         .then(data => {
             if (data.success) {
-                document.getElementById("discount-ammount").textContent = data.discount + " đ";
-                document.getElementById("cart-final-price").textContent = data.cartFinalPrice + " đ";
+                document.getElementById("discount-ammount").textContent = formatPrice(data.discount);
+                document.getElementById("cart-final-price").textContent = formatPrice(data.cartFinalPrice);
             } else {
                 alert(data.message);
                 voucherSelect.value = "";
                 document.getElementById("discount-ammount").textContent = "0 đ";
-                document.getElementById("cart-final-price").textContent = data.cartTotalPrice + " đ";
+                document.getElementById("cart-final-price").textContent = formatPrice(data.cartTotalPrice);
             }
         });
+}
+function formatPrice(value) {
+    return Number(value).toLocaleString('vi-VN') + " đ";
 }

@@ -317,15 +317,18 @@ main #form-input-info .container-user-title .edit-btn {
 main #form-input-info .container-user-title .edit-btn:hover {
     transform: scale(1.05);
 }
+
 /* missing information */
 main #form-input-info .missing-information-container {
     margin-bottom: 30px;
     text-align: center;
 }
+
 main #form-input-info .missing-information-container p {
     font-size: 15px;
     text-transform: uppercase;
 }
+
 /* user information place */
 main #form-input-info .form-group {
     display: flex;
@@ -343,6 +346,11 @@ main #form-input-info .optional-information label,
 main #form-input-info .payment-container > label {
     font-weight: bold;
 }
+
+main #form-input-info .form-group p {
+    margin: 5px 0;
+}
+
 /* textarea */
 main #form-input-info .optional-information {
     display: flex;
@@ -356,7 +364,7 @@ main #form-input-info .optional-information textarea {
     outline: none;
     resize: none;
     padding: 10px;
-    border: 1px solid grey;
+    border: 1px solid lightgrey;
 }
 
 /* Radio button choosing your payment method*/
@@ -499,4 +507,37 @@ main #form-input-info .confirm-btn {
 .popup .popup-content .container-options .size-options .size-btn.active {
     background: #F2B035;
     border-color: #F2B035;
+}
+
+/* buttons for popup */
+.popup .popup-content .popup-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.popup .popup-content .popup-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.popup .popup-content .popup-actions .confirmVariant {
+    background: #F2C641;
+    font-weight: bold;
+}
+
+.popup .popup-content .popup-actions .confirmVariant:hover {
+    background: #F2B035;
+}
+
+.popup .popup-content .popup-actions .closePopup {
+    background: lightgray;
+}
+
+.popup .popup-content .popup-actions .closePopup:hover {
+    color: white;
+    background: red;
 }

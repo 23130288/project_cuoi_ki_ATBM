@@ -1,13 +1,13 @@
 package org.example.projectweb.dao;
 
-import org.example.projectweb.model.User;
 import org.example.projectweb.model.Voucher;
+import org.example.projectweb.model.VoucherUser;
 
 import java.util.List;
 
 public class VoucherDao extends BaseDao {
 
-    public void addVoucher(String name, double discount, double condition, String expiredDate,String image, boolean status) {
+    public void addVoucher(String name, double discount, double condition, String expiredDate, String image, boolean status) {
         get().useHandle(h -> h.createUpdate("INSERT INTO voucher (name, discount, `condition`, expired_date, image, status) VALUES (:name, :discount, :condition, :expiredDate, :image, :status)")
                 .bind("name", name).bind("discount", discount).bind("condition", condition).bind("expiredDate", java.sql.Date.valueOf(expiredDate)).bind("image", image).bind("status", status).execute()
         );
@@ -25,24 +25,24 @@ public class VoucherDao extends BaseDao {
         );
     }
 
-    public List<Voucher> getVouchersByUid(int uid) {
+    public List<VoucherUser> getVoucherUsersByUid(int uid) {
         return get().withHandle(h -> h.createQuery("""
-                select min(vu.uvid) as uvid, v.vid, v.name, v.discount, `condition`
+                select min(vu.uvid) as uvid, v.vid, v.name, v.discount, v.`condition`
                 from voucher v join voucher_user vu on v.vid = vu.vid
-                where vu.uid = :uid and v.status = 1
+                where vu.uid = :uid and v.status = 1 and vu.applicable = 1
                 group by v.vid, v.name, v.discount, v.condition
-                """).bind("uid", uid).mapToBean(Voucher.class).list());
+                """).bind("uid", uid).mapToBean(VoucherUser.class).list());
     }
 
-    public Voucher getVoucherByUvid(int uvid) {
+    public VoucherUser getVoucherUserByUvid(int uvid) {
         return get().withHandle(h -> h.createQuery("""
-                select vu.uvid, v.vid, v.name, v.discount, `condition`
+                select vu.uvid, v.vid, v.name, v.discount, v.`condition`, vu.applicable
                 from voucher v join voucher_user vu on v.vid = vu.vid
-                where vu.uvid = :uvid and v.status = 1
-                """).bind("uvid", uvid).mapToBean(Voucher.class).one());
+                where vu.uvid = :uvid and v.status = 1 and vu.applicable = 1
+                """).bind("uvid", uvid).mapToBean(VoucherUser.class).one());
     }
 
-    public void deleteUserVoucher(int uvid) {
+    public void deleteUserVoucherByUvid(int uvid) {
         get().useHandle(h -> h.createUpdate("""
                 delete from voucher_user
                 where uvid = :uvid
@@ -55,5 +55,13 @@ public class VoucherDao extends BaseDao {
                         .bind("vid", vid)
                         .execute()
         );
+    }
+
+    public void setApplicable(int uvid, int bool) {
+        get().useHandle(h -> {
+            h.createUpdate("update voucher_user set applicable = :bool where uvid = :uvid")
+                    .bind("bool", bool).bind("uvid", uvid)
+                    .execute();
+        });
     }
 }

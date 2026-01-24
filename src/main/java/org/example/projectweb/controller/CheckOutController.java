@@ -5,9 +5,10 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import org.example.projectweb.cart.Cart;
 import org.example.projectweb.model.User;
-import org.example.projectweb.model.Voucher;
+import org.example.projectweb.model.VoucherUser;
 import org.example.projectweb.service.OrderService;
 import org.example.projectweb.service.UserService;
+import org.example.projectweb.service.VoucherService;
 
 import java.io.IOException;
 
@@ -24,27 +25,31 @@ public class CheckOutController extends HttpServlet {
         Cart c = (Cart) session.getAttribute("cart");
 //        User user = (User) session.getAttribute("user");
 
-        int userId = 1;
         UserService us = new UserService();
-        User u = us.getUserById(userId);
+        User u = us.getUserById(1);
 
         if (c == null || c.isEmpty()) {
             response.sendRedirect("cart");
             return;
         }
         String description = request.getParameter("note");
-        Voucher v = c.getVoucher();
-        Integer uvid = null;
-        if (v != null)
-            uvid = v.getUvid();
 
+        VoucherService vs = new VoucherService();
         OrderService os = new OrderService();
+
+        VoucherUser v = c.getVoucher();
+        Integer uvid = null;
+        if (v != null) {
+            vs.setApplicable(v.getUvid(), 0);
+            uvid = v.getUvid();
+        }
+
         int oid = os.createOrder(u.getUid(), uvid, description);
         os.createOrderDetails(oid, c);
 
         c.removeAll();
         c.setVoucher(null);
-        response.sendRedirect("cart");
+        response.sendRedirect("show-order?oid=" + oid);
     }
 }
 

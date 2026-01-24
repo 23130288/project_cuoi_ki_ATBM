@@ -62,16 +62,14 @@
 
             <div class="product-grid">
                 <c:forEach var="p" items="${hotProducts}">
-                    <a href="productDetail?pid=${p.pid}" class="product-link">
                         <div class="product-card">
 
                             <c:choose>
                                 <c:when test="${not empty p.mainImage}">
-<%--                                    <img src="${p.images[0].image}" alt="${p.name}">--%>
-                                    <img src="${pageContext.request.contextPath}/${p.mainImage.image}" alt="">
+                                    <img src="${p.mainImage.image}" alt="">
                                 </c:when>
                                 <c:otherwise>
-                                    <img src="${pageContext.request.contextPath}/trang_chu/image/balo_leo_nui.png" alt="">
+                                    <img src="trang_chu/image/balo_leo_nui.png" alt="">
                                 </c:otherwise>
                             </c:choose>
 
@@ -86,14 +84,13 @@
                             </c:if>
 
                             <div class="product-actions">
-                                <button class="buy-btn">Mua Ngay</button>
+                                <button class="buy-btn">Xem Ngay</button>
                                 <div class="inner-circle1">
                                     <i class="fa fa-shopping-cart"></i>
                                 </div>
                             </div>
 
                         </div>
-                    </a>
                 </c:forEach>
             </div>
 
@@ -108,16 +105,14 @@
 
         <div class="product-grid">
             <c:forEach var="p" items="${valiProducts}">
-                <a href="productDetail?pid=${p.pid}" class="product-link">
                     <div class="product-card">
 
                         <c:choose>
                             <c:when test="${not empty p.mainImage}">
-<%--                                <img src="${p.images[0].image}" alt="${p.name}">--%>
-                                <img src="${pageContext.request.contextPath}/${p.mainImage.image}" alt="">
+                                <img src="${p.mainImage.image}" alt="">
                             </c:when>
                             <c:otherwise>
-                                <img src="${pageContext.request.contextPath}/trang_chu/image/vali_keo_chong_nuoc.png" alt="">
+                                <img src="trang_chu/image/vali_keo_chong_nuoc.png" alt="">
                             </c:otherwise>
                         </c:choose>
 
@@ -132,14 +127,13 @@
                         </c:if>
 
                         <div class="product-actions">
-                            <button class="buy-btn">Mua Ngay</button>
+                            <button class="buy-btn">Xem Ngay</button>
                             <div class="inner-circle1">
                                 <i class="fa fa-shopping-cart"></i>
                             </div>
                         </div>
 
                     </div>
-                </a>
             </c:forEach>
         </div>
 
@@ -153,16 +147,14 @@
 
         <div class="product-grid">
             <c:forEach var="p" items="${baloProducts}">
-                <a href="productDetail?pid=${p.pid}" class="product-link">
                     <div class="product-card">
 
                         <c:choose>
                             <c:when test="${not empty p.mainImage}">
-<%--                                <img src="${p.images[0].image}" alt="${p.name}">--%>
-                                <img src="${pageContext.request.contextPath}/${p.mainImage.image}" alt="">
+                                <img src="${p.mainImage.image}" alt="">
                             </c:when>
                             <c:otherwise>
-                                <img src="${pageContext.request.contextPath}/trang_chu/image/balo_giu_nhiet.png" alt="">
+                                <img src="trang_chu/image/balo_giu_nhiet.png" alt="">
                             </c:otherwise>
                         </c:choose>
 
@@ -177,14 +169,13 @@
                         </c:if>
 
                         <div class="product-actions">
-                            <button class="buy-btn">Mua Ngay</button>
+                            <button class="buy-btn">Xem Ngay</button>
                             <div class="inner-circle1">
                                 <i class="fa fa-shopping-cart"></i>
                             </div>
                         </div>
 
                     </div>
-                </a>
             </c:forEach>
         </div>
 

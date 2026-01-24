@@ -45,7 +45,8 @@ public class UpdateVaraintCart extends HttpServlet {
                 "\"success\":true," +
                 "\"price\":" + item.getPrice() + "," +
                 "\"itemTotalPrice\":" + c.getItemTotalPrice(pid) + "," +
-                "\"cartTotalPrice\":" + c.getTotalPrice() +
+                "\"cartTotalPrice\":" + c.getTotalPrice() + "," +
+                "\"cartFinalPrice\":" + c.getFinalPrice() +
                 "}");
     }
 }

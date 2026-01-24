@@ -2,6 +2,11 @@ package org.example.projectweb.dao;
 
 import org.example.projectweb.cart.Cart;
 import org.example.projectweb.cart.CartItem;
+import org.example.projectweb.model.Order;
+import org.example.projectweb.model.OrderDetailView;
+import org.example.projectweb.model.Voucher;
+
+import java.util.List;
 
 public class OrderDao extends BaseDao {
 
@@ -16,7 +21,7 @@ public class OrderDao extends BaseDao {
                 .mapTo(Boolean.class).first());
     }
 
-    public int createOrder(int uid, Integer  uvid, String description) {
+    public int createOrder(int uid, Integer uvid, String description) {
         return get().withHandle(h -> h.createUpdate("""
                         insert into `order` (uid, uvid, description, created_date, status)
                         values (:uid, :uvid, :description, now(), 'delivering')
@@ -35,6 +40,50 @@ public class OrderDao extends BaseDao {
                         .bind("pvid", item.getProductVariant().getPvid()).bind("quantity", item.getQuantity())
                         .execute();
             }
+        });
+    }
+
+    public Order getOrderByOid(int oid) {
+        return get().withHandle(h -> h.createQuery("""
+                        select oid, uid, uvid, description, created_date as createdDate, status
+                        from `order` where oid = :oid
+                        """).bind("oid", oid)
+                .mapToBean(Order.class).one());
+    }
+
+    public List<OrderDetailView> getOrderDetailViewByOid(int oid) {
+        return get().withHandle(h -> h.createQuery("""
+                select od.pvid, p.name, ip.image, pv.color, pv.size, pv.price, od.quantity
+                from `order` o join order_detail od on o.oid = od.oid
+                join product_variant pv on pv.pvid = od.pvid
+                join product p on p.pid = pv.pid
+                join image_product ip on ip.pid = p.pid and ip.is_main = 1
+                where od.oid = :oid
+                """).bind("oid", oid)
+                .mapToBean(OrderDetailView.class).list());
+    }
+
+    public double getTotalPrice(int oid) {
+        return  get().withHandle(h -> {
+            return h.createQuery("""
+                    select sum(pv.price * od.quantity)
+                    from order_detail od join product_variant pv on pv.pvid = od.pvid
+                    where od.oid = :oid
+                    """).bind("oid", oid)
+                    .mapTo(Double.class).one();
+        });
+    }
+
+    public double getDiscount(int oid) {
+        return  get().withHandle(h -> {
+            return h.createQuery("""
+                    select coalesce(v.discount, 0)
+                    from `order` o
+                    left join voucher_user vu on o.uvid = vu.uvid
+                    left join voucher v on vu.vid = v.vid
+                    where o.oid = :oid
+                    """).bind("oid", oid)
+                    .mapTo(Double.class).one();
         });
     }
 }

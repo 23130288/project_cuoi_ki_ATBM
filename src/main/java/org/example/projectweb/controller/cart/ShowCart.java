@@ -5,7 +5,7 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import org.example.projectweb.cart.Cart;
 import org.example.projectweb.model.User;
-import org.example.projectweb.model.Voucher;
+import org.example.projectweb.model.VoucherUser;
 import org.example.projectweb.service.UserService;
 import org.example.projectweb.service.VoucherService;
 
@@ -23,7 +23,7 @@ public class ShowCart extends HttpServlet {
         UserService us = new UserService();
         VoucherService vs = new VoucherService();
         User u = us.getUserById(1);
-        List<Voucher> vouchers = vs.getVouchersByUid(u.getUid());
+        List<VoucherUser> vouchers = vs.getVoucherUsersByUid(u.getUid());
 
         if (c == null) {
             c = new Cart();

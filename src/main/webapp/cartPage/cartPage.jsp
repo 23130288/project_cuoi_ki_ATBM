@@ -1,5 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="vi_VN"/>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -49,7 +51,8 @@
                             </div>
                         </div>
                         <div class="product-item-more">
-                            <p class="price">${item.price} đ</p>
+                            <p class="price"><fmt:formatNumber value="${item.price}" type="number" groupingUsed="true"/>
+                                đ</p>
                         </div>
                         <div class="product-item-quantity" data-pid="${item.product.pid}">
                             <button type="button" class="minus-quantity-button">-</button>
@@ -57,12 +60,10 @@
                             <button type="button" class="plus-quantity-button">+</button>
                         </div>
                         <div class="product-item-more">
-                            <p class="total" data-price="${item.price}">${item.price * item.quantity} đ</p>
+                            <p class="total" data-price="${item.price}"><fmt:formatNumber
+                                    value="${item.price * item.quantity}" type="number" groupingUsed="true"/> đ</p>
                         </div>
                         <div class="product-item-more">
-                            <label class="action-select-product">
-                                <input type="checkbox" name="select-checkbox">
-                            </label>
                             <a class="action-delete-product" href="remove-cart?pid=${item.product.pid}"><i
                                     class="fa-solid fa-x"></i></a>
                         </div>
@@ -134,15 +135,30 @@
             </div>
             <div class="container-price">
                 <label>Tổng tiền:</label>
-                <p id="cart-total-price" data-value="${cart.totalPrice}">${cart.totalPrice} đ</p>
+                <p id="cart-total-price" data-value="${cart.totalPrice}"><fmt:formatNumber value="${cart.totalPrice}"
+                                                                                           type="number"
+                                                                                           groupingUsed="true"/> đ</p>
             </div>
             <div class="container-price">
                 <label>Giảm giá:</label>
-                <p id="discount-ammount">${cart.discountStr}</p>
+                <p id="discount-ammount">
+                    <c:choose>
+                        <c:when test="${cart.discount == 0}">
+                            0 đ
+                        </c:when>
+                        <c:when test="${cart.discount > 1}">
+                            <fmt:formatNumber value="${cart.discount}" type="number" groupingUsed="true"/> đ
+                        </c:when>
+                        <c:otherwise>
+                            <fmt:formatNumber value="${cart.discount * 100}" maxFractionDigits="0"/> %
+                        </c:otherwise>
+                    </c:choose>
+                </p>
             </div>
             <div class="container-price" id="final-price">
                 <label class="title">Tổng thanh toán:</label>
-                <p class="price" id="cart-final-price">${cart.finalPrice} đ</p>
+                <p class="price" id="cart-final-price"><fmt:formatNumber value="${cart.finalPrice}" type="number"
+                                                                         groupingUsed="true"/> đ</p>
             </div>
         </div>
 

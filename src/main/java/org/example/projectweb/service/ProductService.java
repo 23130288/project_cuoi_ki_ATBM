@@ -146,41 +146,34 @@ public class ProductService {
     }
 
     public List<Product> searchInFilter(
-            String producer,
-            String category,
-            String color,
-            String size,
-            String minPrice,
-            String maxPrice,
-            String sort) {
+        String producer,
+        String category,
+        String color,
+        String size,
+        String minPrice,
+        String maxPrice,
+        String sort
+) {
 
-        List<Product> products = pDao.getAllProducts();
+    Double min = (minPrice == null || minPrice.isBlank())
+            ? null : Double.parseDouble(minPrice);
 
-        if (producer != null && !producer.isEmpty())
-            products = pDao.getProductByProducer(products, producer);
+    Double max = (maxPrice == null || maxPrice.isBlank())
+            ? null : Double.parseDouble(maxPrice);
 
-        if (category != null && !category.isEmpty())
-            products = pDao.getProductByCategory(products, category);
+    List<Product> products = pDao.searchByFilter(
+            producer, category, color, size, min, max, sort
+    );
 
-        if (color != null && !color.isEmpty())
-            products = pDao.getProductByColor(products, color);
-
-        if (size != null && !size.isEmpty())
-            products = pDao.getProductBySize(products, size);
-
-        if (minPrice != null && maxPrice != null && !minPrice.isEmpty() && !maxPrice.isEmpty()) {
-
-            double min = Double.parseDouble(minPrice);
-            double max = Double.parseDouble(maxPrice);
-
-            products = pDao.getProductByPrice(min, max);
-        }
-
-        if (sort != null && !sort.isEmpty())
-            products = pDao.getProductBySort(products, sort);
-
-        return products;
+    // LOAD VARIANT + IMAGE (CỰC KỲ QUAN TRỌNG)
+    for (Product p : products) {
+        p.setVariants(pvDao.getVariantsByProductId(p.getPid()));
+        p.setImages(ipDao.getImagesByProductId(p.getPid()));
     }
+
+    return products;
+}
+
 
     public List<Product> getHotProducts() {
         List<Product> list = pDao.getHotProducts();

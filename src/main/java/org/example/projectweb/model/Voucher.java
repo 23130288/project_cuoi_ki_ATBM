@@ -3,8 +3,6 @@ package org.example.projectweb.model;
 import java.io.Serializable;
 
 public class Voucher implements Serializable {
-    private int uvid;
-
     private int vid;
     private String name;
     private double discount;
@@ -27,14 +25,6 @@ public class Voucher implements Serializable {
     }
 
     // ===== getter / setter =====
-    public int getUvid() {
-        return uvid;
-    }
-
-    public void setUvid(int uvid) {
-        this.uvid = uvid;
-    }
-
     public int getVid() {
         return vid;
     }
