@@ -19,7 +19,7 @@ public class VoucherService {
 
         vDao.addVoucher( type, discount, condition, expiredDate, imagePath, status);
         // Tạo thông báo
-        ns.createGlobalNotification("All", "Voucher mới", "Mã giảm giá mới vừa xuất hiện vào săn ngay!", -1);
+        ns.createGlobalNotification("All", "Voucher mới", "Mã giảm giá mới vừa xuất hiện vào săn ngay!");
         return true;
     }
 
