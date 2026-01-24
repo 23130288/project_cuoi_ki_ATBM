@@ -52,7 +52,7 @@ public class ProductService {
             }
         }
         // Tạo thông báo
-        ns.createGlobalNotification("All", "Sản phẩm mới", "Sản phẩm \"" + name + "\" vừa ra mắt. Vào mua ngay thôi!", -1);
+        ns.createGlobalNotification("All", "Sản phẩm mới", "Sản phẩm \"" + name + "\" vừa ra mắt. Vào mua ngay thôi!");
 
         return true;
     }
@@ -78,7 +78,7 @@ public class ProductService {
         // Tạo ProductVariant mới
         pvDao.addProductVariant(pid, size, color, price, quantity);
         // Tạo thông báo
-        ns.createGlobalNotification("All", "Biến thể mới", "Sản phẩm \"" + pid + "\" vừa ra mắt biến thể mới. Vào mua ngay thôi!", -1);
+        ns.createGlobalNotification("All", "Biến thể mới", "Sản phẩm \"" + pid + "\" vừa ra mắt biến thể mới. Vào mua ngay thôi!");
         return true;
     }
 

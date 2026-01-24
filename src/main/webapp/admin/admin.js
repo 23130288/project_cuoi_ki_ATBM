@@ -108,21 +108,17 @@
 
         "Quản lý thông báo": `
             <h2>Quản lý đơn hàng</h2>
-            <div class="Menu-bar">
-                <button class="bt_menu" id="btn-them-tb">+ Thêm thông báo</button>
-                
+            <div class="Menu-bar">                
                 <div class="search-bar">
-                    <input type="text" name="query" placeholder="Tên sản phẩm..."/>
-                    <button class="btn-search"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <input type="text" name="query" id="searchNotificationInput"  placeholder="Tên sản phẩm..."/>
+                    <button class="btn-search" onclick="handleNotificationSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
             </div>
-            <div class="table-wrapper">     
-                <table class="table_data">
-                    <tr><th>Mã thông báo</th><th>người nhận thông báo</th><th>loại thông báo</th><th>nội dung</th><th>ngày thông báo</th></tr>
-                    <tr><td>tb001</td><td>0001</td><td>giảm giá</td><td>giảm 100k cho đơn hàng trên 500k</td><td>11/11/2025</td>
-                    <tr><td>tb002</td><td>all</td><td>giảm giá</td><td>giảm 100k cho đơn hàng trên 500k</td><td>11/11/2025</td>
+            <div class="table-wrapper">
+                <table class="table_data" id="NotificationTable">
+<!--                  load nội dung bằng hàm riêng-->
                 </table>
-            </div>
+            </div> 
         `,
 
         "Trả lời câu hỏi": `
@@ -510,39 +506,7 @@ Vali cao cấp x1 - 1.200.000₫</textarea>
             }
 
             if (text === "Quản lý thông báo") {
-                const btnThemTB = document.getElementById("btn-them-tb");
-                if (btnThemTB) btnThemTB.addEventListener("click", () => {
-                    openAdminPopup(
-                        "Tạo thông báo mới",
-                        `
-                <label>Đối tượng nhận thông báo:</label>
-                <select id="tb-target-type">
-                    <option value="all">Tất cả</option>
-                    <option value="specific">Cụ thể</option>
-                </select>
-                
-                <!-- Ô nhập UID chỉ hiện khi chọn "specific" -->
-                <div id="uid-box" style="display:none; margin-top: 5px;">
-                    <label>Nhập UID (hoặc danh sách UID, cách nhau bằng dấu phẩy):</label>
-                    <input type="text" id="tb-uid" placeholder="VD: 0001, 0002, 0003">
-                </div>
-
-                <label>Loại thông báo:</label>
-                <select id="tb-type">
-                    <option value="item">Có sản phẩm mới</option>
-                    <option value="voucher">Có voucher mới</option>
-                    <option value="policy">Có chính sách hoặc dich vụ mới</option>
-                    <option value="Order">Yêu cầu hủy đơn hàng</option>
-                </select>
-
-                <label>Nội dung:</label>
-                <textarea id="tb-content" placeholder="Nhập nội dung thông báo"></textarea>
-            `,
-                        () => {
-                            alert(`✔ Đã tạo thông báo cho UID: 12345`);
-                        }
-                    );
-                });
+                handleNotificationSearch();
             }
 
             if (text === "Quản lý dịch vụ, chính sách") {
@@ -1238,7 +1202,7 @@ function printproductVariantsTable(productVariants) {
             <td>${pv.productName}</td>
             <td>${pv.size}</td>
             <td>${pv.color}</td>
-            <td>${pv.price}</td>
+            <td>${pv.price.toLocaleString("vi-VN") + "đ"}</td>
             <td>${pv.quantity}</td>
             <td>
                 <button onclick="">Sửa</button>
@@ -1292,7 +1256,7 @@ function loadVoucherList() {
                     <td>${v.vid}</td>
                     <td>${v.name}</td>
                     <td>${formatDiscount(v)}</td>
-                    <td>${v.condition}</td>
+                    <td>${v.condition.toLocaleString("vi-VN") + "đ"}</td>
                     <td>${v.expiredDate}</td>
                     <td>${v.status ? "Đang áp dụng" : "Ngừng áp dụng"}</td>
                     <td>
@@ -1621,4 +1585,82 @@ function addService_Policy() {
             });
         });
     }, 0);
+}
+
+//================================= các phương thước phần notification =================================
+function handleNotificationSearch() {
+    const keyword = document.getElementById("searchNotificationInput").value.trim();
+    loadNotifications(keyword);
+}
+
+function loadNotifications(keyword = "") {
+    let url = '/projectWeb_war/admin/Notification_load';
+
+    if (keyword !== "") {
+        url = `/projectWeb_war/admin/Notification_Sreach?keyword=${encodeURIComponent(keyword)}`;
+    }
+
+    fetch(url)
+        .then(res => res.json())
+        .then(Notifications => {
+            //check rỗng
+            if (!Notifications || Notifications.length === 0) {
+                alert("Không tìm thông báo nào.");
+                loadNotifications("");
+                return;
+            }
+            printNotificationTable(Notifications);
+        })
+        .catch(err => console.error(err));
+}
+
+function printNotificationTable(notificatios) {
+    const table = document.getElementById("NotificationTable");
+
+    //xóa bảng cũ
+    table.innerHTML = `
+        <tr>
+            <th>ID</th>
+            <th>Đối tượng nhận</th>
+            <th>Tiêu đề</th>
+            <th>Nội dung</th>
+            <th>Ngày đăng</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+        </tr>
+    `;
+    notificatios.forEach(n => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${n.nid}</td>
+            <td>${n.type}</td>
+            <td>${n.title}</td>
+            <td>${n.content}</td>
+            <td>${n.createdDate}</td>
+            <td>${n.status ? "Còn hiệu lực" : "Hết hiệu lực"}</td>
+            <td>
+                <button onclick="toggleNotificationStatus(${n.nid})">${n.status ? "Khóa" : "Mở"}</button>
+            </td>
+        `;
+        table.appendChild(row);
+    });
+}
+
+function toggleNotificationStatus(nid) {
+    if (!confirm("Bạn có chắc muốn thay đổi trạng thái thông báo này?")) {
+        return;
+    }
+
+    fetch(`/projectWeb_war/admin/product/toggle_Notification_status?nid=${nid}`, {
+        method: "POST"
+    })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message);
+            handleNotificationSearch();
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Có lỗi xảy ra");
+        });
 }

@@ -8,16 +8,18 @@ public class Notification implements Serializable {
     private String title;
     private String content;
     private String createdDate;
+    private boolean status;
 
     public Notification() {
     }
 
-    public Notification(int nid, String type, String title, String content, String createdDate) {
+    public Notification(int nid, String type, String title, String content, String createdDate, boolean status) {
         this.nid = nid;
         this.type = type;
         this.title = title;
         this.content = content;
         this.createdDate = createdDate;
+        this.status = status;
     }
 
     // ===== Getter / Setter =====
@@ -60,5 +62,13 @@ public class Notification implements Serializable {
 
     public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

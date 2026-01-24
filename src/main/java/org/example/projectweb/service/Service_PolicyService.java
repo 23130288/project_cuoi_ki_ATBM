@@ -47,8 +47,8 @@ public class Service_PolicyService {
 
         spDao.addService_Policy(title, content, lastedUpdate, isService, status);
         // Tạo thông báo
-        if(isService) ns.createGlobalNotification("All", "Có dịch vụ mới", "Dịch vụ " + title + " vừa được thêm vào!", -1);
-        else         ns.createGlobalNotification("All", "Có chính sách mới", "Chính sách " + title + " vừa được thêm vào!", -1);
+        if (isService) ns.createGlobalNotification("All", "Có dịch vụ mới", "Dịch vụ " + title + " vừa được thêm vào!");
+        else ns.createGlobalNotification("All", "Có chính sách mới", "Chính sách " + title + " vừa được thêm vào!");
 
         return true;
     }

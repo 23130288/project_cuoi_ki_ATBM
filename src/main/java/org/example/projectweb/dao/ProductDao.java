@@ -17,30 +17,15 @@ public class ProductDao extends BaseDao {
         );
     }
 
-    public int insertProduct(
-            String name,
-            String type,
-            String style,
-            String material,
-            String producer,
-            String status,
-            String description
-    ) {
-        return get().withHandle(h ->
-                h.createUpdate("""
-                INSERT INTO product (name, type, style, material, producer, status, description)
-                VALUES (:name, :type, :style, :material, :producer, :status, :description)
-            """)
-                        .bind("name", name)
-                        .bind("type", type)
-                        .bind("style", style)
-                        .bind("material", material)
-                        .bind("producer", producer)
-                        .bind("status", status)
-                        .bind("description", description)
-                        .executeAndReturnGeneratedKeys("pid")
-                        .mapTo(Integer.class)
-                        .one()
+    public int insertProduct(String name, String type, String style, String material, String producer, String status, String description) {
+        return get().withHandle(h -> h.createUpdate("""
+                            INSERT INTO product (name, type, style, material, producer, status, description)
+                            VALUES (:name, :type, :style, :material, :producer, :status, :description)
+                        """)
+                .bind("name", name).bind("type", type).bind("style", style).bind("material", material)
+                .bind("producer", producer).bind("status", status).bind("description", description)
+                .executeAndReturnGeneratedKeys("pid")
+                .mapTo(Integer.class).one()
         );
     }
 
@@ -174,6 +159,7 @@ public class ProductDao extends BaseDao {
                         .list()
         );
     }
+
     public List<Product> getValiProducts() {
         return get().withHandle(h ->
                 h.createQuery("SELECT pid, name, producer, type, material, style, description, status FROM product WHERE LOWER(type) = 'vali' LIMIT 12")
@@ -181,6 +167,7 @@ public class ProductDao extends BaseDao {
                         .list()
         );
     }
+
     public List<Product> getBaloProducts() {
         return get().withHandle(h ->
                 h.createQuery("SELECT pid, name, producer, type, material, style, description, status FROM product WHERE LOWER(type) = 'balo' LIMIT 12")
@@ -205,6 +192,7 @@ public class ProductDao extends BaseDao {
                 .bind("uid", userId)
                 .mapToBean(Product.class).list());
     }
+
     public List<Integer> getQuantitesForWishlist(int userId) {
         return get().withHandle(h -> h.createQuery("""
                         select SUM(pv.quantity)
