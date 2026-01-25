@@ -1,38 +1,36 @@
-package org.example.projectweb.controller.admincontroller.user;
+package org.example.projectweb.controller.admincontroller.Notification;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.projectweb.dao.UserDao;
-import org.example.projectweb.model.User;
-
+import org.example.projectweb.dao.NotificationDao;
+import org.example.projectweb.model.Notification;
 import java.io.IOException;
 
-@WebServlet(name = "UserStatus", value = "/admin/user/toggle_user_status")
-public class UserStatus extends HttpServlet {
+@WebServlet(name = "NotificationStatus", value = "/admin/product/toggle_Notification_status")
+public class NotificationStatus extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
 
-    final UserDao userDao = new UserDao();
+    final NotificationDao nDao = new NotificationDao();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
+        int nid = Integer.parseInt(req.getParameter("nid"));
 
-        int uid = Integer.parseInt(req.getParameter("uid"));
-
-        User user = userDao.getUserById(uid);
-        if (user == null) {
+        Notification notification = nDao.getNotificationById(nid);
+        if (notification == null) {
             resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
         // Đảo trạng thái
-        userDao.updateStatus(user.getUid());
+        nDao.updateStatus(notification.getNid());
 
         resp.setContentType("application/json");
         resp.getWriter().write(
