@@ -27,10 +27,10 @@ public class VoucherDao extends BaseDao {
 
     public List<VoucherUser> getVoucherUsersByUid(int uid) {
         return get().withHandle(h -> h.createQuery("""
-                select min(vu.uvid) as uvid, v.vid, v.name, v.discount, v.`condition`
+                select min(vu.uvid) as uvid, v.vid, v.name, v.discount, v.`condition`, v.expired_date as expiredDate, v.image
                 from voucher v join voucher_user vu on v.vid = vu.vid
                 where vu.uid = :uid and v.status = 1 and vu.applicable = 1
-                group by v.vid, v.name, v.discount, v.condition
+                group by v.vid, v.name, v.discount, v.condition, v.expired_date, v.image
                 """).bind("uid", uid).mapToBean(VoucherUser.class).list());
     }
 
@@ -58,10 +58,28 @@ public class VoucherDao extends BaseDao {
     }
 
     public void setApplicable(int uvid, int bool) {
-        get().useHandle(h -> {
-            h.createUpdate("update voucher_user set applicable = :bool where uvid = :uvid")
-                    .bind("bool", bool).bind("uvid", uvid)
-                    .execute();
-        });
+        get().useHandle(h -> h.createUpdate("update voucher_user set applicable = :bool where uvid = :uvid")
+                .bind("bool", bool).bind("uvid", uvid)
+                .execute());
+    }
+
+    public Voucher getVoucherByOid(int oid) {
+        return get().withHandle(h -> h.createQuery("""
+                        select v.name, v.discount
+                        from `order` o
+                        left join voucher_user vu on o.uvid = vu.uvid
+                        left join voucher v on vu.vid = v.vid
+                        where o.oid = :oid
+                        """).bind("oid", oid)
+                .mapToBean(Voucher.class).one());
+    }
+
+    public List<VoucherUser> getVoucherUsersByUidAndName(int uid, String name) {
+        return get().withHandle(h -> h.createQuery("""
+                select v.name, v.discount, v.condition, v.expired_date as expiredDate, v.image
+                from voucher v join voucher_user vu on v.vid = vu.vid
+                where vu.uid = :uid and v.name = :name and vu.applicable = 1
+                """).bind("uid", uid).bind("name", name)
+                .mapToBean(VoucherUser.class).list());
     }
 }
