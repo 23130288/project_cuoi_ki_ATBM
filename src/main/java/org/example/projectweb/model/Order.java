@@ -14,6 +14,7 @@ public class Order implements Serializable {
     private double totalPrice;
     private double discount;
     private double finalPrice;
+    private Voucher voucher;
 
     public Order() {
     }
@@ -73,6 +74,10 @@ public class Order implements Serializable {
         return finalPrice;
     }
 
+    public Voucher getVoucher() {
+        return voucher;
+    }
+
     /**
      * SETTERS
      */
@@ -113,5 +118,9 @@ public class Order implements Serializable {
 
     public void setFinalPrice(double finalPrice) {
         this.finalPrice = finalPrice;
+    }
+
+    public void setVoucher(Voucher voucher) {
+        this.voucher = voucher;
     }
 }
