@@ -2,13 +2,16 @@ package org.example.projectweb.service;
 
 import org.example.projectweb.cart.Cart;
 import org.example.projectweb.dao.OrderDao;
+import org.example.projectweb.dao.VoucherDao;
 import org.example.projectweb.model.Order;
 import org.example.projectweb.model.OrderDetailView;
+import org.example.projectweb.model.Voucher;
 
 import java.util.List;
 
 public class OrderService {
     private final OrderDao od = new OrderDao();
+    private final VoucherDao vd = new VoucherDao();
 
     public boolean hasPurchased(int userId, int productId) {
         return od.hasPurchased(userId, productId);
@@ -24,10 +27,14 @@ public class OrderService {
 
     public Order getOrderByOid(int oid) {
         Order order = od.getOrderByOid(oid);
-        order.setTotalPrice(getTotalPrice(order.getOid()));
-        order.setDiscount(getDiscount(order.getOid()));
-        order.setFinalPrice(getFinalPrice(order.getOid()));
+        order.setTotalPrice(getTotalPrice(oid));
+        order.setVoucher(getVoucherByOid(oid));
+        order.setFinalPrice(getFinalPrice(oid));
         return order;
+    }
+
+    private Voucher getVoucherByOid(int oid) {
+        return vd.getVoucherByOid(oid);
     }
 
     public List<OrderDetailView> getOrderDetailViewByOid(int oid) {
@@ -43,12 +50,7 @@ public class OrderService {
     }
 
     public double getFinalPrice(int oid) {
-        double discount = getDiscount(oid);
-        if (discount == 0)
-            return getTotalPrice(oid);
-        if (discount < 1 && discount > 0)
-            return getTotalPrice(oid) * (1-discount);
-        return getTotalPrice(oid) - discount;
+        return od.getFinalPriceByOid(oid);
     }
 
 

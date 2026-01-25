@@ -41,13 +41,15 @@
                             </div>
                         </div>
                         <div class="product-item-more">
-                            <span class="price"><fmt:formatNumber value="${od.price}" type="number" groupingUsed="true"/> đ</span>
+                            <span class="price"><fmt:formatNumber value="${od.price}" type="number"
+                                                                  groupingUsed="true"/> đ</span>
                         </div>
                         <div class="product-item-quantity">
                             <span class="quantity">${od.quantity}</span>
                         </div>
                         <div class="product-item-more">
-                            <span class="total"><fmt:formatNumber value="${od.totalPrice}" type="number" groupingUsed="true"/> đ</span>
+                            <span class="total"><fmt:formatNumber value="${od.totalPrice}" type="number"
+                                                                  groupingUsed="true"/> đ</span>
                         </div>
                     </div>
                 </c:forEach>
@@ -62,21 +64,27 @@
                     <label>Giảm giá:</label>
                     <label>
                         <c:choose>
-                            <c:when test="${order.discount == 0}">
+                            <c:when test="${order.voucher == null}">
                                 0 đ
                             </c:when>
-                            <c:when test="${order.discount > 1}">
-                                <fmt:formatNumber value="${order.discount}" type="number" groupingUsed="true"/> đ
+                            <c:when test="${order.voucher.name == 'giam_gia'}">
+                                <fmt:formatNumber value="${order.voucher.discount}" type="number"
+                                                  groupingUsed="true"/> đ
                             </c:when>
-                            <c:otherwise>
-                                <fmt:formatNumber value="${order.discount * 100}" maxFractionDigits="0"/> %
-                            </c:otherwise>
+                            <c:when test="${order.voucher.name == 'phan_tram'}">
+                                <fmt:formatNumber value="${order.voucher.discount * 100}" maxFractionDigits="0"/> %
+                            </c:when>
+                            <c:when test="${order.voucher.name == 'mien_phi_van_chuyen'}">
+                                Miễn phí vận chuyển
+                            </c:when>
+                            <c:otherwise>0 đ</c:otherwise>
                         </c:choose>
                     </label>
                 </div>
                 <div class="container-price" id="final-price">
                     <label class="title">Tổng thanh toán:</label>
-                    <label class="price"><fmt:formatNumber value="${order.finalPrice}" type="number" groupingUsed="true"/> đ</label>
+                    <label class="price"><fmt:formatNumber value="${order.finalPrice}" type="number"
+                                                           groupingUsed="true"/> đ</label>
                 </div>
                 <div class="container-status">
                     <label class="title">Trạng thái đơn hàng: ${order.status}</label>

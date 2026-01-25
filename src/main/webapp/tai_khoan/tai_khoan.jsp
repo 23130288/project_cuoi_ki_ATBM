@@ -25,6 +25,7 @@
             <a class="item" data-target="notification" href="#">Thông báo</a>
             <a class="item" data-target="order" href="#">Đơn hàng</a>
             <a class="item" data-target="voucher" href="#">Voucher</a>
+            <a class="item" data-target="support" href="#">Hỗ trợ</a>
             <a class="item" data-target="change-password" href="#">Đổi mật khẩu</a>
             <a class="item" data-target="log-out" id="dang_xuat" href="#">Đăng xuất</a>
         </div>
@@ -95,11 +96,10 @@
                         <c:forEach var="order" items="${orders}">
                             <div class="product">
                                 <div class="product-title">
-                                    <div class="product-info">
-                                        <a href="show-order?oid=${order.oid}"><label>Đơn hàng ${order.oid}</label></a>
-                                    </div>
+                                    <a href="show-order?oid=${order.oid}"><label>Đơn hàng ${order.oid}</label></a>
                                 </div>
-                                <div class="product-price"><fmt:formatNumber value="${order.finalPrice}" type="number"
+                                <div class="product-price"><fmt:formatNumber value="${order.finalPrice}"
+                                                                             type="number"
                                                                              groupingUsed="true"/> đ
                                 </div>
                                 <div class="product-status-${order.status}">${order.status}</div>
@@ -139,8 +139,9 @@
                             <div class="product-header-date">Ngày tạo</div>
                         </div>
                         <!--content-->
-                        <div class="product">
-                            <c:forEach var="order" items="${deliveringOrder}">
+
+                        <c:forEach var="order" items="${deliveringOrder}">
+                            <div class="product">
                                 <div class="product-title">
                                     <div class="product-info">
                                         <a href="show-order?oid=${order.oid}"><label>Đơn hàng ${order.oid}</label></a>
@@ -150,8 +151,8 @@
                                                                              groupingUsed="true"/> đ
                                 </div>
                                 <div class="product-date">${order.createdDate}</div>
-                            </c:forEach>
-                        </div>
+                            </div>
+                        </c:forEach>
                     </div>
                     <div class="product-content cancelled">
                         <!--header-->
@@ -161,8 +162,8 @@
                             <div class="product-header-date">Ngày tạo</div>
                         </div>
                         <!--content-->
-                        <div class="product">
-                            <c:forEach var="order" items="${canceledOrder}">
+                        <c:forEach var="order" items="${canceledOrder}">
+                            <div class="product">
                                 <div class="product-title">
                                     <div class="product-info">
                                         <a href="show-order?oid=${order.oid}"><label>Đơn hàng ${order.oid}</label></a>
@@ -172,8 +173,8 @@
                                                                              groupingUsed="true"/> đ
                                 </div>
                                 <div class="product-date">${order.createdDate}</div>
-                            </c:forEach>
-                        </div>
+                            </div>
+                        </c:forEach>
                     </div>
                 </div>
             </div>
@@ -198,14 +199,28 @@
                             <div class="product-header-date">Hạn sử dụng</div>
                         </div>
 
-                        <div class="product">
-                            <div class="product-title">
-                                <img src="image/vpucher_free_ship.png" alt="">
+                        <c:forEach var="v" items="${vouchers}">
+                            <div class="product">
+                                <div class="product-title">
+                                    <img src="${v.image}" alt="${v.name}">
+                                </div>
+                                <div class="product-price">
+                                    <c:choose>
+                                        <c:when test="${v.name == 'phan_tram'}">
+                                            Giảm <fmt:formatNumber value="${v.discount * 100}" maxFractionDigits="0"/> %
+                                        </c:when>
+                                        <c:when test="${v.name == 'giam_gia'}">
+                                            Giảm <fmt:formatNumber value="${v.discount}" type="number"
+                                                                   groupingUsed="true"/> đ
+                                        </c:when>
+                                        <c:otherwise>
+                                            Miễn phí vận chuyển
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                                <div class="product-date">${v.expiredDate}</div>
                             </div>
-                            <div class="product-price">Miễn phí vận chuyển</div>
-                            <div class="product-date">01/12/2025</div>
-                        </div>
-
+                        </c:forEach>
                     </div>
 
                     <!-- Miễn phí vận chuyển -->
@@ -216,13 +231,19 @@
                             <div class="product-header-date">Hạn sử dụng</div>
                         </div>
 
-                        <div class="product">
-                            <div class="product-title">
-                                <img src="image/vpucher_free_ship.png" alt="">
-                            </div>
-                            <div class="product-price">Miễn phí vận chuyển đơn từ 0đ</div>
-                            <div class="product-date">01/12/2025</div>
-                        </div>
+                        <c:forEach var="v" items="${vouchers}">
+                            <c:if test="${v.name == 'mien_phi_van_chuyen'}">
+                                <div class="product">
+                                    <div class="product-title">
+                                        <img src="${v.image}" alt="${v.name}">
+                                    </div>
+                                    <div class="product-price">
+                                        Miễn phí vận chuyển
+                                    </div>
+                                    <div class="product-date">${v.expiredDate}</div>
+                                </div>
+                            </c:if>
+                        </c:forEach>
                     </div>
 
                     <!-- Giảm theo % -->
@@ -233,13 +254,19 @@
                             <div class="product-header-date">Hạn sử dụng</div>
                         </div>
 
-                        <div class="product">
-                            <div class="product-title">
-                                <img src="image/voucer_percent.png" alt="">
-                            </div>
-                            <div class="product-price">Giảm 5% cho đơn trên 100k</div>
-                            <div class="product-date">01/12/2025</div>
-                        </div>
+                        <c:forEach var="v" items="${vouchers}">
+                            <c:if test="${v.name == 'phan_tram'}">
+                                <div class="product">
+                                    <div class="product-title">
+                                        <img src="${v.image}" alt="${v.name}">
+                                    </div>
+                                    <div class="product-price">
+                                        Giảm <fmt:formatNumber value="${v.discount * 100}" maxFractionDigits="0"/> %
+                                    </div>
+                                    <div class="product-date">${v.expiredDate}</div>
+                                </div>
+                            </c:if>
+                        </c:forEach>
                     </div>
 
                     <!-- Giảm theo giá trị -->
@@ -250,18 +277,78 @@
                             <div class="product-header-date">Hạn sử dụng</div>
                         </div>
 
-                        <div class="product">
-                            <div class="product-title">
-                                <img src="image/voucher_50k.png" alt="">
-                            </div>
-                            <div class="product-price">Giảm 20.000đ cho đơn từ 150k</div>
-                            <div class="product-date">01/12/2025</div>
-                        </div>
+                        <c:forEach var="v" items="${vouchers}">
+                            <c:if test="${v.name == 'giam_gia'}">
+                                <div class="product">
+                                    <div class="product-title">
+                                        <img src="${v.image}" alt="${v.name}">
+                                    </div>
+                                    <div class="product-price">
+                                        Giảm <fmt:formatNumber value="${v.discount}" type="number"
+                                                               groupingUsed="true"/> đ
+                                    </div>
+                                    <div class="product-date">${v.expiredDate}</div>
+                                </div>
+                            </c:if>
+                        </c:forEach>
                     </div>
                 </div>
             </div>
         </div>
+        <%-- -===============================- SUPPORT -===============================- --%>
+        <div class="information-container" id="support">
+            <div class="container" id="Order">
+                <div class="tab-nav-menu">
+                    <a href="#" class="tab-menu active" data-tab="all">Tất cả</a>
+                    <a href="#" class="tab-menu" data-tab="processing">Đang chờ xử lý</a>
+                    <a href="#" class="tab-menu" data-tab="done">Xử lý xong</a>
+                </div>
+                <div class="container-contents">
+                    <h2>Hỗ trợ</h2>
+                    <div class="product-content all active">
+                        <!--content-->
+                        <c:forEach var="support" items="${supports}">
+                            <a href="show-support?spid=${support.spid}" class="notification_item">
+                                <div class="info">
+                                    <h4>${support.title}</h4>
+                                    <p>${support.topic}</p>
+                                    <span>${support.createdDate} - ${support.status}</span>
+                                </div>
+                            </a>
+                        </c:forEach>
+                    </div>
+                    <div class="product-content processing">
+                        <!--content-->
+                        <c:forEach var="support" items="${supports}">
+                            <c:if test="${support.status == 'processing'}">
+                                <a href="show-support?spid=${support.spid}" class="notification_item">
+                                    <div class="info">
+                                        <h4>${support.title}</h4>
+                                        <p>${support.topic}</p>
+                                        <span>${support.createdDate} - ${support.status}</span>
+                                    </div>
+                                </a>
+                            </c:if>
+                        </c:forEach>
+                    </div>
 
+                    <div class="product-content done">
+                        <!--content-->
+                        <c:forEach var="support" items="${supports}">
+                            <c:if test="${support.status == 'done'}">
+                                <a href="show-support?spid=${support.spid}" class="notification_item">
+                                    <div class="info">
+                                        <h4>${support.title}</h4>
+                                        <p>${support.topic}</p>
+                                        <span>${support.createdDate} - ${support.status}</span>
+                                    </div>
+                                </a>
+                            </c:if>
+                        </c:forEach>
+                    </div>
+                </div>
+            </div>
+        </div>
         <%-- -===============================- CHANGE PASSWORD -===============================- --%>
         <div class="information-container" id="change-password">
             <h2>Đổi mật khẩu</h2>
@@ -294,6 +381,7 @@
                 </div>
             </div>
         </div>
+
         <%-- -===============================- LOG OUT -===============================- --%>
         <div class="information-container" id="log-out">
             <h2>Đăng xuất</h2>

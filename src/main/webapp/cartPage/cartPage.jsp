@@ -125,7 +125,30 @@
                                 <option value="">-- Chưa chọn voucher --</option>
                                 <c:forEach var="v" items="${vouchers}">
                                     <option value="${v.uvid}">
-                                            ${v.name}: -${v.discount} ~ Áp dụng cho đơn từ ${v.condition}
+                                        <c:choose>
+                                            <c:when test="${v.name == 'giam_gia'}">
+                                                Giảm <fmt:formatNumber value="${v.discount}" type="number"
+                                                                       groupingUsed="true"/> đ
+                                                ~ Áp dụng cho đơn từ <fmt:formatNumber value="${v.condition}"
+                                                                                       type="number"
+                                                                                       groupingUsed="true"/> đ
+                                            </c:when>
+                                            <c:when test="${v.name == 'phan_tram'}">
+                                                Giảm <fmt:formatNumber value="${v.discount * 100}"
+                                                                       maxFractionDigits="0"/> %
+                                                ~ Áp dụng cho đơn từ <fmt:formatNumber value="${v.condition}"
+                                                                                       type="number"
+                                                                                       groupingUsed="true"/> đ
+                                            </c:when>
+                                            <c:when test="${v.name == 'mien_phi_van_chuyen'}">
+                                                Miễn phí vận chuyển ~ Áp dụng cho đơn từ <fmt:formatNumber
+                                                    value="${v.condition}" type="number" groupingUsed="true"/> đ
+                                            </c:when>
+                                            <c:otherwise>
+                                                ${v.name}
+                                            </c:otherwise>
+
+                                        </c:choose>
                                     </option>
                                 </c:forEach>
                             </select>
@@ -143,15 +166,22 @@
                 <label>Giảm giá:</label>
                 <p id="discount-ammount">
                     <c:choose>
-                        <c:when test="${cart.discount == 0}">
+                        <c:when test="${cart.voucher == null}">
                             0 đ
                         </c:when>
-                        <c:when test="${cart.discount > 1}">
-                            <fmt:formatNumber value="${cart.discount}" type="number" groupingUsed="true"/> đ
+                        <c:when test="${cart.voucher.name == 'giam_gia'}">
+                            <fmt:formatNumber value="${cart.voucher.discount}"
+                                              type="number"
+                                              groupingUsed="true"/> đ
                         </c:when>
-                        <c:otherwise>
-                            <fmt:formatNumber value="${cart.discount * 100}" maxFractionDigits="0"/> %
-                        </c:otherwise>
+                        <c:when test="${cart.voucher.name == 'phan_tram'}">
+                            <fmt:formatNumber value="${cart.voucher.discount * 100}"
+                                              maxFractionDigits="0"/> %
+                        </c:when>
+                        <c:when test="${cart.voucher.name == 'mien_phi_van_chuyen'}">
+                            Miễn phí vận chuyển
+                        </c:when>
+                        <c:otherwise>0 đ</c:otherwise>
                     </c:choose>
                 </p>
             </div>
