@@ -3,11 +3,38 @@ package org.example.projectweb.dao;
 import org.example.projectweb.cart.Cart;
 import org.example.projectweb.cart.CartItem;
 import org.example.projectweb.model.Order;
+import org.example.projectweb.model.OrderDetail;
 import org.example.projectweb.model.OrderDetailView;
 
 import java.util.List;
 
 public class OrderDao extends BaseDao {
+
+    public List<Order> getListOrderAdmin() {
+        return get().withHandle(h -> h.createQuery("SELECT o.oid,u.name AS customer,SUM(od.quantity*pv.price) AS totalPrice,o.created_date AS createdDate,o.status " +
+                        "FROM `order` o JOIN user u ON o.uid=u.uid " +
+                        "JOIN order_detail od ON o.oid=od.oid JOIN product_variant pv ON od.pvid=pv.pvid " +
+                        "GROUP BY o.oid,u.name,o.created_date,o.status ORDER BY o.created_date DESC")
+                .mapToBean(Order.class).list());
+    }
+
+    public List<Order> getListOrderByCostomerAdmin(String name) {
+        return get().withHandle(h -> h.createQuery("SELECT o.oid,u.name AS customer,SUM(od.quantity*pv.price) AS totalPrice,o.created_date AS createdDate,o.status " +
+                        "FROM `order` o JOIN user u ON o.uid=u.uid " +
+                        "JOIN order_detail od ON o.oid=od.oid JOIN product_variant pv ON od.pvid=pv.pvid " +
+                        "Where LOWER(u.name) LIKE LOWER(:name) " +
+                        "GROUP BY o.oid,u.name,o.created_date,o.status ORDER BY o.created_date DESC")
+                .bind("name", "%" + name + "%")
+                .mapToBean(Order.class).list());
+    }
+
+    public List<OrderDetail> getOrderDetailsByOid(int oid) {
+        return get().withHandle(h -> h.createQuery("SELECT p.name AS productName,od.quantity,pv.price AS unitPrice " +
+                        "FROM order_detail od JOIN product_variant pv ON od.pvid = pv.pvid JOIN product p ON pv.pid = p.pid " +
+                        "WHERE od.oid = :oid")
+                .bind("oid", oid)
+                .mapToBean(OrderDetail.class).list());
+    }
 
     public boolean hasPurchased(int userId, int productId) {
         return get().withHandle(h -> h.createQuery("""
