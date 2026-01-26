@@ -8,9 +8,16 @@ import java.util.List;
 
 public class SupportService {
     private SupportDao spDao = new SupportDao();
+    final NotificationService ns = new NotificationService();
 
     public void createSupport(int userId, String topic, String title, String message) {
         spDao.createSupport(userId, topic, title, message);
+    }
+
+    public List<Support> getSupports(String filter) {
+        if ("all".equalsIgnoreCase(filter))
+            return spDao.getSupports();
+        else return spDao.getSupportsprocessing();
     }
 
     public List<Support> getSupportsByUid(int uid) {
@@ -28,4 +35,12 @@ public class SupportService {
     public void createMessage(int spid, int uid, String message) {
         spDao.createMessage(spid, uid, message);
     }
+
+    public void createreply(int spid, int aid, String uid, String message) {
+        // Tạo thông báo
+        ns.createGlobalNotification(uid, "Admin đã trả lời bạn", message);
+        spDao.createMessage(spid, aid, message);
+        spDao.SupportDone(spid);
+    }
+
 }

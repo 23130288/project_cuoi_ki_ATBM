@@ -11,6 +11,7 @@ public class Support implements Serializable {
     private int adminUid;
     private String status;
 
+    private String message;
     public Support() {
     }
 
@@ -55,6 +56,9 @@ public class Support implements Serializable {
         return status;
     }
 
+    public String getMessage() {
+        return message;
+    }
     /**
      * SETTERS
      */
@@ -84,5 +88,9 @@ public class Support implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

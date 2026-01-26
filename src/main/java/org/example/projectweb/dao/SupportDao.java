@@ -7,6 +7,23 @@ import java.util.List;
 
 public class SupportDao extends BaseDao {
 
+    public List<Support> getSupports() {
+        return get().withHandle(h -> h.createQuery("""
+                select s.spid, s.uid, mess.message, s.topic, s.title, s.created_date as createdDate, s.status
+                from support s
+                join support_message mess on s.spid=mess.spid
+                group by s.spid""").mapToBean(Support.class).list());
+    }
+
+    public List<Support> getSupportsprocessing() {
+        return get().withHandle(h -> h.createQuery("""
+                select s.spid, s.uid, mess.message, s.topic, s.title, s.created_date as createdDate, s.status
+                from support s
+                join support_message mess on s.spid=mess.spid
+                where status = 'processing'
+                group by s.spid""").mapToBean(Support.class).list());
+    }
+
     public void createSupport(int userId, String topic, String title, String message) {
         get().useHandle(h -> {
             int spid = h.createUpdate("""
@@ -25,6 +42,15 @@ public class SupportDao extends BaseDao {
                         values (:spid, :sender_id, :message, NOW())
                         """).bind("spid", spid).bind("sender_id", senderId).bind("message", message)
                 .execute());
+    }
+
+    public void SupportDone(int spid) {
+        get().useHandle(h ->
+                h.createUpdate("""
+                                update support set status = 'done' where spid = :spid""")
+                        .bind("spid", spid)
+                        .execute()
+        );
     }
 
     public List<Support> getSupportsByUid(int uid) {

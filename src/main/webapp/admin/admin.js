@@ -88,11 +88,6 @@
             <h2>Quản lý dịch vụ, chính sách</h2>
             <div class="Menu-bar">
                 <button class="bt_menu" id="btn_them_sp">+ Thêm dịch vụ, chính sách</button>
-                
-                <div class="search-bar">
-                    <input type="text" name="query" placeholder="Tên chính sách, dịch vụ..."/>
-                    <button class="btn-search"><i class="fa-solid fa-magnifying-glass"></i></button>
-                </div>
             </div>
                
             <div class="table-wrapper">
@@ -118,40 +113,20 @@
         `,
 
         "Trả lời câu hỏi": `
-          <h2>Thông báo</h2>
-         
-          <div class="notification_item" id="selection_shop">
-            <div class="info">
-              <h4>Kiểm tra, hủy hoặc thay đổi đơn hàng</h4>
-              <p>Mã câu hỏi:đueihoeoi. | người gửi: u0001.</p>
-              <span>10/11/2025</span>
-            </div>
-          </div>
-          
-          <div class="notification_item">
-            <div class="info">
-              <h4>Đăng nhập/Đăng ký</h4>
-              <p>Mã câu hỏi:đueihoeoi. | người gửi: u0002.</p>
-    
-              <span>10/04/2025</span>
-            </div>
-          </div>
-          
-          <div class="notification_item">
-            <div class="info">
-              <h4>Phương thức trả tiền</h4>
-              <p>Mã câu hỏi:12345678. | người gửi: u0003.</p>
-              <span>10/10/2025</span>
-            </div>
-          </div>
-          
-          <div class="notification_item" id="selection_shop">
-            <div class="info">
-              <h4>Câu hỏi khác</h4>
-              <p>Mã đơn hàng:akwkofnv. | người gửi: u0001.</p>
-              <span>10/11/2025</span>
-            </div>
-          </div>
+            <h2>Các câu hỏi</h2>
+                <div class="support-filter">
+                    <label>
+                        <input type="radio" name="supportFilter" checked onchange="loadSupportList('all')">Tất cả
+                    </label>
+                    
+                    <label style="margin-left:20px">
+                        <input type="radio" name="supportFilter" onchange="loadSupportList('processing')">Chưa trả lời
+                    </label>
+                </div>
+
+                <div id="supportList">
+                      <!-- notification_item sẽ được JS đổ vào đây -->
+                </div>
         `,
 
         "Thống kê báo cáo": `
@@ -168,171 +143,9 @@
      `
     };
 
-    // Gắn sự kiện cho nút Xóa, Hủy, Sửa, Xem
-    function attachEvents() {
-        document.querySelectorAll("#sua_sp").forEach(btn => {
-            btn.addEventListener("click", () => {
-                openAdminPopup(
-                    "Sửa sản phẩm",
-                    `
-            <div class="popup_item">
-                <label>Tên sản phẩm:</label>
-                <input type="text" id="sp-name" value="Balo du lịch">
-            </div>
-            
-            <div class="popup_item">
-                <label>Loại:</label>
-                <select id="sp-Tyoe">
-                    <option value="Balo">Balo</option>
-                    <option value="Vali">Vali</option>
-                </select>            
-            </div>
-                
-            <div class="popup_item">
-                <label>Kiểu dáng:</label>
-                <select id="sp-size">
-                    <option value="túi đeo chéo">túi đeo chéo</option>
-                    <option value="túi đeo bụng">túi đeo bụng</option>
-                    <option value="túi sách">túi sách</option>
-                </select> 
-            </div>
-          
-            <div class="popup_item">
-                <label>Chất liệu:</label>
-                <select id="sp-Tyoe">
-                    <option value="Balo">hợp kim</option>
-                    <option value="Vali">coston</option>
-                </select>            
-            </div>
-                
-            <div class="popup_item">
-                <label>Tên nhà cung cấp:</label>
-                <input type="text" id="sp-name" placeholder="Nhập nhà cung cấp">
-            </div>
-                
-            <div class="popup_item">
-                <label>Trạng thái:</label>
-                <select id="sp-Status">
-                    <option value="normal">Đang bán</option>
-                    <option value="hot">Bán chạy</option>
-                    <option value="canceled">Dừng bán</option>
-                </select>
-            </div>
-
-            
-            <div class="popup_item">
-                <label>Ảnh sản phẩm:</label>
-                <div class="img-upload-box" id="drop-zone">
-                    <span>+</span>
-                    <p>Kéo hoặc click để thêm ảnh</p>
-                </div>
-                
-                <div class="preview-list" id="preview-list">
-                    <div class="preview-item">
-                        <img src="image/balo1.jpg" alt="Balo 1">
-                    </div>
-                    <div class="preview-item">
-                        <img src="image/balo2.jpg" alt="Balo 2">
-                    </div>
-                </div>
-            </div>
-            `,
-                    () => {
-                        alert("✔ Sửa sản phẩm xong!");
-                    }
-                );
-            });
-        });
-
-        document.querySelectorAll("#sua_bt").forEach(btn => {
-            btn.addEventListener("click", () => {
-                openAdminPopup(
-                    "Sửa biến thể sản phẩm",
-                    `
-            <div class="popup_item">
-                <label>Màu:</label>
-                <select id="sp-color">
-                    <option value="red">đỏ</option>
-                    <option value="yellow">vàng</option>
-                </select>            
-            </div>
-            
-            <div class="popup_item">
-                <label>Size:</label>
-                <select id="sp-size">
-                    <option value="M">M</option>
-                    <option value="L">L</option>
-                    <option value="XL">XL</option>
-                </select> 
-            </div>
-            
-            <div class="popup_item">
-                <label>Giá:</label>
-                <input type="number" id="sp-price" value="500000">
-            </div>
-            
-            <div class="popup_item">
-                <label>Số lượng:</label>
-                <input type="number" id="sp-quantity" value="5">
-            </div>
-            
-            <div class="popup_item">
-                <label>Trạng thái:</label>
-                <select id="sp-Status">
-                    <option value="normal">Đang bán</option>
-                    <option value="hot">Bán chạy</option>
-                    <option value="canceled">Dừng bán</option>
-                </select>
-            </div>
-            `,
-                    () => {
-                        alert("✔ Sửa sản phẩm xong!");
-                    }
-                );
-            });
-        });
-
-        document.querySelectorAll("#sua_cs_dv").forEach(btn => {
-            btn.addEventListener("click", () => {
-                openAdminPopup(
-                    "Sửa chính sách, dịch vụ",
-                    `
-            <div class="popup_item">
-                <label>Tên chính sách, dịch vụ:</label>
-                <input type="text" id="cs_dv-name" value="chính sách mua hàng" readonly>
-            </div>
-            
-            <div class="popup_item">
-                <label>Loại:</label>
-                <input type="text" id="cs_dv-type" value="chính sách" readonly>
-            </div>
-            
-            <div class="popup_item">
-                <label>Trạng thái:</label>
-                <select id="sp-Status">
-                    <option value="đang bán">Đang áp dụng</option>
-                    <option value="dừng bán">Dừng áp dụng</option>
-                </select>
-            </div>
-            
-             <div class="popup_item">
-                <label>Nội dung:</label>
-                <textarea id="tb-content">đây là nội dung chính sách</textarea>
-            </div>
-            `,
-                    () => {
-                        alert("✔ Sửa sản phẩm xong!");
-                    }
-                );
-            });
-        });
-
-    }
-
     // Hiển thị mặc định
     infoBox.innerHTML = contents["Quản lý sản phẩm"];
     handleProductSearch();
-    attachEvents();
 
     // Xử lý menu click
     items.forEach(item => {
@@ -397,15 +210,8 @@
             }
 
             if (text === "Trả lời câu hỏi") {
-                const notiItems = document.querySelectorAll(".notification_item");
-                notiItems.forEach(item => {
-                    item.addEventListener("click", () => {
-                        window.location.href = "../helpPage_admin/helpPage.html";
-                    });
-                });
+                loadSupportList("all");
             }
-
-            attachEvents(); // gắn lại cho nút trong nội dung mới
         });
     });
 });
@@ -1247,7 +1053,7 @@ function editProduct(pid) {
             data.images.forEach(img => {
                 const div = document.createElement("div");
                 div.className = "preview-item";
-                div.innerHTML = `<img src="${img.image}">`;
+                div.innerHTML = `<img src="${img.image}" alt="Đây là ảnh">`;
                 preview.appendChild(div);
             });
 
@@ -1257,7 +1063,7 @@ function editProduct(pid) {
                 Array.from(e.target.files).forEach(file => {
                     const div = document.createElement("div");
                     div.className = "preview-item";
-                    div.innerHTML = `<img src="${URL.createObjectURL(file)}">`;
+                    div.innerHTML = `<img src="${URL.createObjectURL(file)}" alt="Đây là ảnh">`;
                     preview.appendChild(div);
                 });
             });
@@ -1830,7 +1636,7 @@ function loadOrderProducts(oid) {
 
             textarea.value = content || "Không có sản phẩm";
         })
-        .catch(err => {
+        .catch(() => {
             document.getElementById("order-products").value = "Lỗi tải dữ liệu";
         });
 }
@@ -1839,4 +1645,81 @@ function formatVND(value) {
     if (!value) value = 0;
     value = value.toString().replace(/[^\d]/g, "");
     return new Intl.NumberFormat("vi-VN").format(value) + " ₫";
+}
+
+//hàm hỗ trợ ajax-json
+//load user
+function loadSupportList(filter) {
+    fetch(`/projectWeb_war/admin/Supports?filter=${filter}`)
+        .then(res => res.json())
+        .then(list => {
+            const container = document.getElementById("supportList");
+            container.innerHTML = ""; // xóa dữ liệu cũ
+
+            list.forEach(s => {
+                const div = document.createElement("div");
+                div.className = "notification_item";
+                div.dataset.spid = s.spid;
+
+                div.onclick = () => openAdminPopup(
+                    "Trả lời câu hỏi",
+                    `
+                        <div class="popup_item">
+                            <label>chủ đề:</label>
+                            <input type="text" value="${s.topic}" readonly>
+                        </div>
+                        
+                        <div class="popup_item">
+                            <label>Nội dung:</label>
+                            <input type="text" value="${s.message}" readonly>
+                        </div>
+                
+                         <div class="popup_item">
+                            <label>Phần nhập câu trả lời:</label>
+                            <textarea id="answerContent"></textarea>
+                        </div>
+                    `,
+                    () => {
+                        const content = document.getElementById("answerContent").value;
+
+                        if (!content.trim()) {
+                            alert("Vui lòng nhập nội dung trả lời");
+                            return;
+                        }
+
+                        const form = new URLSearchParams();
+                        form.append("spid", s.spid);
+                        form.append("uid", s.uid);
+                        form.append("message", content);
+
+                        fetch("/projectWeb_war/admin/Supports", {
+                            method: "POST",
+                            body: form
+                        })
+                            .then(res => {
+                                if (!res.ok) throw new Error("Gửi thất bại");
+                                return res.json();
+                            })
+                            .then(() => {
+                                alert("Đã gửi câu trả lời");
+                                loadSupportList("all");
+                            })
+                            .catch(err => {
+                                console.error(err);
+                                alert("Có lỗi xảy ra");
+                            });
+                    }
+                );
+
+                div.innerHTML = `
+                <div class="info">
+                    <h4>${s.topic} | ${s.title}</h4>
+                    <p>Mã câu hỏi: ${s.spid} | Người gửi: ${s.uid} | Trạng thái: ${s.status}</p>
+                    <span>${s.createdDate}</span>
+                </div>
+                `;
+
+                container.appendChild(div);
+            });
+        });
 }
