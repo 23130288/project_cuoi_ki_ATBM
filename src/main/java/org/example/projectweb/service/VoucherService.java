@@ -61,9 +61,5 @@ public class VoucherService {
     public void setApplicable(int uvid, int bool) {
         vDao.setApplicable(uvid, bool);
     }
-
-    public List<VoucherUser> getVoucherUsersByUidAndName(int uid, String name) {
-        return vDao.getVoucherUsersByUidAndName(uid, name);
-    }
 }
 

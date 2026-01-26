@@ -202,30 +202,28 @@ public class ProductService {
     }
 
     public List<Product> searchInFilter(
-            String producer,
-            String category,
-            String color,
-            String size,
-            String minPrice,
-            String maxPrice,
-            String sort
-    ) {
+        String producer,
+        String category,
+        String color,
+        String size,
+        String minPrice,
+        String maxPrice,
+        String sort
+) {
 
-        Double min = (minPrice == null || minPrice.isBlank())
-                ? null : Double.parseDouble(minPrice);
+    Double min = (minPrice == null || minPrice.isBlank())
+            ? null : Double.parseDouble(minPrice);
 
-        Double max = (maxPrice == null || maxPrice.isBlank())
-                ? null : Double.parseDouble(maxPrice);
+    Double max = (maxPrice == null || maxPrice.isBlank())
+            ? null : Double.parseDouble(maxPrice);
 
-        List<Product> products = pDao.searchByFilter(
-                producer, category, color, size, min, max, sort
-        );
+    List<Product> products = pDao.searchByFilter(producer, category, color, size, min, max, sort );
 
-        // LOAD VARIANT + IMAGE (CỰC KỲ QUAN TRỌNG)
-        for (Product p : products) {
-            p.setVariants(pvDao.getVariantsByProductId(p.getPid()));
-            p.setImages(ipDao.getImagesByProductId(p.getPid()));
-        }
+    // LOAD VARIANT + IMAGE (CỰC KỲ QUAN TRỌNG)
+    for (Product p : products) {
+        p.setVariants(pvDao.getVariantsByProductId(p.getPid()));
+        p.setImages(ipDao.getImagesByProductId(p.getPid()));
+    }
 
         return products;
     }
