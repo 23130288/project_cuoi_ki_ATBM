@@ -10,9 +10,11 @@ public class Order implements Serializable {
     private String createdDate;
     private String status;
 
+    private String customer;
     private double totalPrice;
     private double discount;
     private double finalPrice;
+    private Voucher voucher;
 
     public Order() {
     }
@@ -50,6 +52,12 @@ public class Order implements Serializable {
         return uvid;
     }
 
+    public String getCustomer() {
+        return customer;
+    }
+
+
+
     public String getCreatedDate() {
         return createdDate;
     }
@@ -64,6 +72,10 @@ public class Order implements Serializable {
 
     public double getFinalPrice() {
         return finalPrice;
+    }
+
+    public Voucher getVoucher() {
+        return voucher;
     }
 
     /**
@@ -81,6 +93,9 @@ public class Order implements Serializable {
         this.uvid = uvid;
     }
 
+    public void setCustomer(String customer) {
+        this.customer = customer;
+    }
     public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
@@ -103,5 +118,9 @@ public class Order implements Serializable {
 
     public void setFinalPrice(double finalPrice) {
         this.finalPrice = finalPrice;
+    }
+
+    public void setVoucher(Voucher voucher) {
+        this.voucher = voucher;
     }
 }

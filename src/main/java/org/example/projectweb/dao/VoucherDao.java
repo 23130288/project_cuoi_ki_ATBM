@@ -62,40 +62,6 @@ public class VoucherDao extends BaseDao {
             h.createUpdate("update voucher_user set applicable = :bool where uvid = :uvid")
                     .bind("bool", bool).bind("uvid", uvid)
                     .execute();
-
         });
     }
-    public List<Voucher> getLoadVouchers() {
-        return get().withHandle(h ->
-                h.createQuery(" SELECT vid, name, discount, `condition`, expired_date, image, status FROM voucher WHERE status = 1 AND expired_date >= NOW() ")
-                        .mapToBean(Voucher.class)
-                        .list()
-        );
-    }
-
-    public boolean isVoucherReceived(int uid, int vid) {
-        String sql = " SELECT uvid FROM voucher_user WHERE uid = :uid AND vid = :vid ";
-
-    return get().withHandle(h ->
-            h.createQuery(sql)
-                    .bind("uid", uid)
-                    .bind("vid", vid)
-                    .mapTo(Integer.class)
-                    .findOne()
-                    .isPresent()
-    );
-}
-
-
-    public void receiveVoucher(int uid, int vid) {
-        String sql = " INSERT INTO voucher_user(uid, vid, applicable) VALUES (:uid, :vid, 1) ";
-
-        get().useHandle(h ->
-                h.createUpdate(sql)
-                        .bind("uid", uid)
-                        .bind("vid", vid)
-                        .execute()
-        );
-    }
-
 }

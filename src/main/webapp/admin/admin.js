@@ -59,20 +59,16 @@
             <h2>Quản lý đơn hàng</h2>
             <div class="Menu-bar">
                 <div class="search-bar">
-                    <input type="text" name="query" placeholder="Mã đơn hàng..."/>
-                    <button class="btn-search"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <input type="text" name="query" id="searchOrderInput" placeholder="Mã đơn hàng..."/>
+                    <button class="btn-search" onclick="handleOrderSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
             </div>
             
             <div class="table-wrapper">
-                <table class="table_data">
-                    <tr><th>Mã đơn</th><th>Khách hàng</th><th>Tổng tiền</th><th>Trạng thái</th><th>Thao tác</th></tr>
-                    <tr><td>DH001</td><td>Nguyễn Văn A</td><td>750.000₫</td><td>Đang giao</td>
-                    <td><button class="btn-xem">Xem</button><button class="btn-huy">Hủy</button></td></tr>
-                    <tr><td>DH002</td><td>Trần Thị B</td><td>1.500.000₫</td><td>Hoàn thành</td>
-                    <td><button class="btn-xem">Xem</button></td></tr>
-                </table>    
-            </div>    
+                <table class="table_data" id="OrderTable">
+<!--                  load nội dung bằng hàm riêng-->
+                </table>
+            </div>     
         `,
 
         "Quản lý voucher": `
@@ -174,85 +170,6 @@
 
     // Gắn sự kiện cho nút Xóa, Hủy, Sửa, Xem
     function attachEvents() {
-        document.querySelectorAll(".btn-xoa, .btn-huy").forEach(btn => {
-            btn.addEventListener("click", () => {
-                if (confirm("Bạn có chắc muốn xóa mục này không?")) {
-                    alert("Đã xóa thành công!");
-                }
-            });
-        });
-
-        document.querySelectorAll("#them_sp").forEach(btn => {
-            btn.addEventListener("click", () => {
-                openAdminPopup(
-                    "Thêm biến thể",
-                    `
-            <div class="popup_item">
-                <label>Tên sản phẩm:</label>
-                <input type="text" id="sp-name" value="Balo du lịch">
-            </div>
-            
-            <div class="popup_item">
-                <label>Màu:</label>
-                <select id="sp-color">
-                    <option value="red">đỏ</option>
-                    <option value="yellow">vàng</option>
-                </select>            
-            </div>
-            
-            <div class="popup_item">
-                <label>Size:</label>
-                <select id="sp-size">
-                    <option value="M">M</option>
-                    <option value="L">L</option>
-                    <option value="XL">XL</option>
-                </select> 
-            </div>
-            
-            <div class="popup_item">
-                <label>Giá:</label>
-                <input type="number" id="sp-price" value="500000">
-            </div>
-            
-            <div class="popup_item">
-                <label>Số lượng:</label>
-                <input type="number" id="sp-quantity" value="5">
-            </div>
-            
-            <div class="popup_item">
-                <label>Trạng thái:</label>
-                <select id="sp-Status">
-                    <option value="đang bán">Đang bán</option>
-                    <option value="bán chạy">Bán chạy</option>
-                    <option value="dừng bán">Dừng bán</option>
-                </select>
-            </div>
-
-            
-            <div class="popup_item">
-                <label>Ảnh sản phẩm:</label>
-                <div class="img-upload-box" id="drop-zone">
-                    <span>+</span>
-                    <p>Kéo hoặc click để thêm ảnh</p>
-                </div>
-                
-                <div class="preview-list" id="preview-list">
-                    <div class="preview-item">
-                        <img src="image/balo1.jpg" alt="Balo 1">
-                    </div>
-                    <div class="preview-item">
-                        <img src="image/balo2.jpg" alt="Balo 2">
-                    </div>
-                </div>
-            </div>
-            `,
-                    () => {
-                        alert("✔ Sửa sản phẩm xong!");
-                    }
-                );
-            });
-        });
-
         document.querySelectorAll("#sua_sp").forEach(btn => {
             btn.addEventListener("click", () => {
                 openAdminPopup(
@@ -410,49 +327,6 @@
             });
         });
 
-        document.querySelectorAll(".btn-xem").forEach(btn => {
-            btn.addEventListener("click", () => {
-                openAdminPopup(
-                    "Chi tiết đơn hàng",
-                    `
-            <div class="popup_item">
-                <label>Mã đơn:</label>
-                <input type="text" value="DH001" readonly>
-            </div>
-            
-            <div class="popup_item">
-                <label>Khách hàng:</label>
-                <input type="text" value="Nguyễn Văn A" readonly>
-            </div>
-            
-            <div class="popup_item">
-                <label>Tổng tiền:</label>
-                <input type="text" value="750.000₫" readonly>
-            </div>
-            
-            <div class="popup_item">
-                <label>Trạng thái:</label>
-                <input type="text" value="Đang giao" readonly>
-            </div>
-            
-            <div class="popup_item">
-                <label>Sản phẩm trong đơn:</label>
-                <textarea readonly>Balo du lịch x2 - 500.000₫
-Vali cao cấp x1 - 1.200.000₫</textarea>
-            </div>
-            
-            <div class="popup_item">
-                <label>Ghi chú:</label>
-                <input type="text" value="Không có" readonly>
-            </div>
-            `,
-                    () => {
-                        alert("✔ Đóng popup chi tiết đơn hàng");
-                    }
-                );
-            });
-        });
-
     }
 
     // Hiển thị mặc định
@@ -494,6 +368,10 @@ Vali cao cấp x1 - 1.200.000₫</textarea>
 
             if (text === "Quản lý người dùng") {
                 loadUserList();
+            }
+
+            if (text === "Quản lý đơn hàng") {
+                handleOrderSearch();
             }
 
             if (text === "Quản lý voucher") {
@@ -1070,13 +948,13 @@ function addProductVariant(pid, name, type) {
 function loadSizeByType(type) {
     const sizeSelect = document.getElementById("p_size");
 
-    if (type === "balo") {
+    if ("baLo".toLowerCase() === type.toLowerCase()) {
         sizeSelect.innerHTML = `
             <option value="S">S (Nhỏ)</option>
             <option value="M">M (Trung)</option>
             <option value="L">L (Lớn)</option>
         `;
-    } else if (type === "vali") {
+    } else if ("vali".toLowerCase() === type.toLowerCase()) {
         sizeSelect.innerHTML = `
             <option value="20">20 inch (Xách tay)</option>
             <option value="24">24 inch (Trung)</option>
@@ -1202,7 +1080,7 @@ function printproductVariantsTable(productVariants) {
             <td>${pv.productName}</td>
             <td>${pv.size}</td>
             <td>${pv.color}</td>
-            <td>${pv.price.toLocaleString("vi-VN") + "đ"}</td>
+            <td>${formatVND(pv.price)}</td>
             <td>${pv.quantity}</td>
             <td>
                 <button onclick="">Sửa</button>
@@ -1256,7 +1134,7 @@ function loadVoucherList() {
                     <td>${v.vid}</td>
                     <td>${v.name}</td>
                     <td>${formatDiscount(v)}</td>
-                    <td>${v.condition.toLocaleString("vi-VN") + "đ"}</td>
+                    <td>${formatVND(v.condition)}</td>
                     <td>${v.expiredDate}</td>
                     <td>${v.status ? "Đang áp dụng" : "Ngừng áp dụng"}</td>
                     <td>
@@ -1277,7 +1155,7 @@ function formatDiscount(v) {
     if (v.name === "mien_phi_van_chuyen") {
         return "Miễn phí";
     }
-    return v.discount.toLocaleString("vi-VN") + "đ";
+    return formatVND(v.discount);
 }
 
 function addVoucher() {
@@ -1663,4 +1541,128 @@ function toggleNotificationStatus(nid) {
             console.error(err);
             alert("Có lỗi xảy ra");
         });
+}
+
+//================================= các phương thước phần order =================================
+function handleOrderSearch() {
+    const keyword = document.getElementById("searchOrderInput").value.trim();
+    loadOrders(keyword);
+}
+
+function loadOrders(keyword = "") {
+    let url = '/projectWeb_war/admin/Order_load';
+
+    if (keyword !== "") {
+        url = `/projectWeb_war/admin/Order_Sreach?keyword=${encodeURIComponent(keyword)}`;
+    }
+
+    fetch(url)
+        .then(res => res.json())
+        .then(Orders => {
+            //check rỗng
+            if (!Orders || Orders.length === 0) {
+
+                alert("Không tìm thông báo nào.");
+                loadOrders("");
+                return;
+            }
+            printOrderTable(Orders);
+        })
+        .catch(err => console.error(err));
+}
+
+function printOrderTable(orders) {
+    const table = document.getElementById("OrderTable");
+
+    //xóa bảng cũ
+    table.innerHTML = `
+        <tr>
+            <th>ID</th>
+            <th>Khách hàng</th>
+            <th>Tổng tiền</th>
+            <th>Ngày tạo đơn</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+        </tr>
+    `;
+    orders.forEach(o => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${o.oid}</td>
+            <td>${o.customer}</td>
+            <td>${formatVND(o.totalPrice)}</td>
+            <td>${o.createdDate}</td>
+            <td>${o.status}</td>
+            <td>
+                <button onclick="viewOrder(${o.oid},'${o.customer}',${o.totalPrice},'${o.createdDate}','${o.status}')">Xem</button>
+            </td>
+`;
+        table.appendChild(row);
+    });
+}
+
+function viewOrder(oid, customer, totalPrice, createdDate, status) {
+    // Tạm thời demo – sau sẽ fetch chi tiết theo oid
+    openAdminPopup(
+        "Chi tiết đơn hàng",
+        `
+        <div class="popup_item">
+            <label>Mã đơn:</label>
+            <input type="text" value="${oid}" readonly>
+        </div>
+
+        <div class="popup_item">
+            <label>Khách hàng:</label>
+            <input type="text" value="${customer}" readonly>
+        </div>
+
+        <div class="popup_item">
+            <label>Tổng tiền:</label>
+            <input type="text" value="${formatVND(totalPrice)}" readonly>
+        </div>
+        
+        <div class="popup_item">
+            <label>Ngày tạo đơn:</label>
+            <input type="text" value="${createdDate}" readonly>
+        </div>
+        
+        <div class="popup_item">
+            <label>Trạng thái:</label>
+            <input type="text" value="${status}" readonly>
+        </div>
+
+         <div class="popup_item">
+            <label>Sản phẩm trong đơn:</label>
+            <textarea id="order-products" readonly>Đang tải...</textarea>
+        </div>
+        `,
+        () => {
+        }
+    );
+
+    loadOrderProducts(oid);
+}
+
+function loadOrderProducts(oid) {
+    fetch(`/projectWeb_war/admin/Product_Order_load?oid=${oid}`)
+        .then(res => res.json())
+        .then(products => {
+            const textarea = document.getElementById("order-products");
+
+            let content = "";
+            products.forEach(p => {
+                content += p.productName + " x" + p.quantity + " - " + formatVND(p.unitPrice * p.quantity) + "\n";
+            });
+
+            textarea.value = content || "Không có sản phẩm";
+        })
+        .catch(err => {
+            document.getElementById("order-products").value = "Lỗi tải dữ liệu";
+        });
+}
+
+function formatVND(value) {
+    if (!value) value = 0;
+    value = value.toString().replace(/[^\d]/g, "");
+    return new Intl.NumberFormat("vi-VN").format(value) + " ₫";
 }

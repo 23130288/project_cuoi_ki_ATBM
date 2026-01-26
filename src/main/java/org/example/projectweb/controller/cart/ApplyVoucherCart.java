@@ -65,6 +65,7 @@ public class ApplyVoucherCart extends HttpServlet {
         double finalPrice = c.getFinalPrice();
         response.getWriter().print("{" +
                 "\"success\":true," +
+                "\"voucherName\":\"" + c.getVoucher().getName() + "\"," +
                 "\"discount\":" + c.getVoucher().getDiscount() + "," +
                 "\"cartFinalPrice\":" + finalPrice +
                 "}");

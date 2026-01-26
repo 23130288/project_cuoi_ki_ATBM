@@ -375,7 +375,8 @@ body {
 
 .container .container-contents .product .product-price,
 .container .container-contents .product .product-status-delivered,
-.container .container-contents .product .product-status-shipping,
+.container .container-contents .product .product-status-delivering,
+.container .container-contents .product .product-status,
 .container .container-contents .product .product-date {
     text-align: center;
     padding: 5px;
@@ -387,7 +388,7 @@ body {
     color: green;
 }
 
-.container .product .product-status-shipping {
+.container .product .product-status-delivering {
     font-weight: bold;
     color: #F0AF35;
 }
