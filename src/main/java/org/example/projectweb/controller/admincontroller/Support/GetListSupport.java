@@ -1,0 +1,44 @@
+package org.example.projectweb.controller.admincontroller.Support;
+
+import com.google.gson.Gson;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.example.projectweb.model.Support;
+import org.example.projectweb.model.User;
+import org.example.projectweb.service.SupportService;
+
+import java.io.IOException;
+import java.util.List;
+
+@WebServlet(value = "/admin/Supports")
+public class GetListSupport extends HttpServlet {
+
+    final SupportService sups = new SupportService();
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        String filter = request.getParameter("filter");
+        List<Support> supports = sups.getSupports(filter);
+
+        String json = new Gson().toJson(supports);
+        response.getWriter().write(json);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        int spid = Integer.parseInt(request.getParameter("spid"));
+        int uid = Integer.parseInt(request.getParameter("uid"));
+        String message = request.getParameter("message");
+        String uidStr = String.valueOf(uid);
+
+        sups.createreply(spid, 2, uidStr, message);
+
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().write("{\"success\":true}");
+    }
+}

@@ -66,6 +66,16 @@ public class VoucherDao extends BaseDao {
         );
     }
 
+    public Voucher getVoucherByOid(int oid) {
+        return get().withHandle(h -> h.createQuery("""
+                        select v.name, v.discount
+                        from `order` o
+                        left join voucher_user vu on o.uvid = vu.uvid
+                        left join voucher v on vu.vid = v.vid
+                        where o.oid = :oid
+                        """).bind("oid", oid)
+                .mapToBean(Voucher.class).one());
+    }
 
     public void setApplicable(int uvid, int bool) {
         get().useHandle(h -> {
