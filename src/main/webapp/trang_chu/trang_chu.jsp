@@ -21,39 +21,41 @@
         <h1>TRANG CHỦ</h1>
     </div>
     <div class="voucher_section">
-        <div class="voucher-container">
-            <div class="voucher-avata">
-                <img src="trang_chu/image/voucer_percent.png" alt="">
-            </div>
-            <div class="voucher-conten">
-               <h3>Giảm giá 5%</h3>
-                <h3>Áp dụng cho đơn từ 200k</h3>
-                <button type="button" class="getBtn">nhận</button>
-            </div>
-        </div>
 
-        <div class="voucher-container">
-            <div class="voucher-avata">
-                <img src="trang_chu/image/vpucher_free_ship.png" alt="">
-            </div>
-            <div class="voucher-conten">
-                <h3>Miễn phí vận chuyển</h3>
-                <h3>Áp dụng cho đơn từ 0đ</h3>
-                <button type="button" class="getBtn">nhận</button>
-            </div>
-        </div>
+            <c:forEach var="v" items="${vouchers}">
+                <div class="voucher-container">
+                    <div class="voucher-avata">
+                        <img src="${v.image}" alt="voucher">
+                    </div>
 
-        <div class="voucher-container">
-            <div class="voucher-avata">
-                <img src="trang_chu/image/voucher_50k.png" alt="">
-            </div>
-            <div class="voucher-conten">
-                <h3>Giảm 50k</h3>
-                <h3>Áp dụng cho đơn từ 200k</h3>
-                <button type="button" class="getBtn">nhận</button>
-            </div>
-        </div>
+                    <div class="voucher-conten">
+                        <h3>Giảm <fmt:formatNumber value="${v.discount}" pattern="#,###"/>đ</h3>
+                        <h3>Áp dụng cho đơn từ <fmt:formatNumber value="${v.condition}" pattern="#,###"/>đ</h3>
+<%--                        <button type="button" class="getBtn">Nhận</button>--%>
+                        <a href="trangChu?vid=${v.vid}">
+                            <button type="button" class="getBtn">Nhận</button>
+                        </a>
+
+                    </div>
+                </div>
+            </c:forEach>
+
     </div>
+
+<%--                        <c:choose>--%>
+<%--                            <c:when test="${sessionScope.user != null}">--%>
+<%--                                <a href="receiveVoucher?vid=${v.vid}" class="getBtn">--%>
+<%--                                    Nhận--%>
+<%--                                </a>--%>
+<%--                            </c:when>--%>
+<%--                            <c:otherwise>--%>
+<%--                                <a href="login.jsp" class="getBtn">--%>
+<%--                                    Đăng nhập để nhận--%>
+<%--                                </a>--%>
+<%--                            </c:otherwise>--%>
+<%--                        </c:choose>--%>
+
+
 
     <h2>SẢN PHẨM HOT</h2>
     <div class="slider-container">
