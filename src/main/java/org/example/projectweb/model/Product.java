@@ -14,6 +14,7 @@ public class Product implements Serializable {
     private String description;
     private String status;
 
+    private int TotlaProduct;
     private List<ProductVariant> variants;
     private List<ImageProduct> images;
 
@@ -38,6 +39,7 @@ public class Product implements Serializable {
 
     /**
      * Getters
+     *
      * @return
      */
     public int getPid() {
@@ -72,6 +74,10 @@ public class Product implements Serializable {
         return status;
     }
 
+    public int getTotlaProduct() {
+        return this.TotlaProduct;
+    }
+
     public List<ProductVariant> getVariants() {
         return variants;
     }
@@ -82,6 +88,7 @@ public class Product implements Serializable {
 
     /**
      * Setters
+     *
      * @param
      */
     public void setPid(int pid) {
@@ -116,6 +123,10 @@ public class Product implements Serializable {
         this.status = status;
     }
 
+    public void setTotlaProduct(int TotlaProduct) {
+        this.TotlaProduct = TotlaProduct;
+    }
+
     public void setVariants(List<ProductVariant> variants) {
         this.variants = variants;
     }
@@ -137,6 +148,7 @@ public class Product implements Serializable {
                 ", status='" + status + '\'' +
                 '}';
     }
+
     public ImageProduct getMainImage() {
         if (images == null || images.isEmpty()) {
             return null;
@@ -148,7 +160,6 @@ public class Product implements Serializable {
         }
         return images.get(0);
     }
-
 
 
 }
