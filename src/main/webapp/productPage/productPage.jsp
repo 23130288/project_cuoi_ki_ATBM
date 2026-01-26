@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
 <body>
+<jsp:include page="../shareStuff/header/header.jsp" />
 <main>
     <div class="section-product">
         <div class="container-images">
@@ -212,6 +213,7 @@
         </div>
     </div>
 </main>
+<jsp:include page="../shareStuff/footer/footer.jsp" />
 <script src="productPage/productPageJS/changeImage.js"></script>
 <script src="productPage/productPageJS/buttonHandler.js"></script>
 <script>

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
 <body>
+<jsp:include page="../shareStuff/header/header.jsp" />
 <main>
     <h1>Sản phẩm yêu thích</h1>
     <div class="container">
@@ -73,5 +74,6 @@
         </div>
     </div>
 </main>
+<jsp:include page="../shareStuff/footer/footer.jsp" />
 </body>
 </html>

@@ -19,6 +19,11 @@ public class TaiKhoanController extends HttpServlet {
         UserService us = new UserService();
         User user = us.getUserById(1);
 
+        if (user == null) {
+            request.getRequestDispatcher("dang_nhap").forward(request, response);
+            return;
+        }
+
         request.setAttribute("user", user);
 
         // Notifications

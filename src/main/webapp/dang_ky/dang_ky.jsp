@@ -9,7 +9,7 @@
 </head>
 <body>
 <div class="section_2" id="section_2">
-    <a href="../trang_chu/trang_chu.jsp">
+    <a href="trangChu">
         <img src="dang_ky/image/logo_white.png" alt="Logo" class="logo">
     </a>
 </div>
