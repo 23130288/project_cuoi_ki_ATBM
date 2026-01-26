@@ -213,9 +213,9 @@
             <div class="popup_item">
                 <label>Trạng thái:</label>
                 <select id="sp-Status">
-                    <option value="đang bán">Đang bán</option>
-                    <option value="bán chạy">Bán chạy</option>
-                    <option value="dừng bán">Dừng bán</option>
+                    <option value="normal">Đang bán</option>
+                    <option value="hot">Bán chạy</option>
+                    <option value="canceled">Dừng bán</option>
                 </select>
             </div>
 
@@ -279,9 +279,9 @@
             <div class="popup_item">
                 <label>Trạng thái:</label>
                 <select id="sp-Status">
-                    <option value="đang bán">Đang bán</option>
-                    <option value="bán chạy">Bán chạy</option>
-                    <option value="dừng bán">Dừng bán</option>
+                    <option value="normal">Đang bán</option>
+                    <option value="hot">Bán chạy</option>
+                    <option value="canceled">Dừng bán</option>
                 </select>
             </div>
             `,
@@ -581,9 +581,9 @@ function addProduct() {
                     <div class="popup_item">
                         <label>Trạng thái:</label>
                         <select id="p_status">
-                            <option value="đang bán">Đang bán</option>
-                            <option value="bán chạy">Bán chạy</option>
-                            <option value="dừng bán">Dừng bán</option>
+                            <option value="normal">Đang bán</option>
+                            <option value="hot">Bán chạy</option>
+                            <option value="canceled">Dừng bán</option>
                         </select>
                     </div>
                 
@@ -1041,12 +1041,12 @@ function printProductTable(products) {
             <td>${p.type}</td>
             <td>${p.style}</td>
             <td>${p.material}</td>
-            <td>0</td>
+            <td>${p.TotlaProduct}</td>
             <td>${p.producer}</td>
             <td>${p.status}</td>
             <td>
                 <button onclick="addProductVariant(${p.pid}, '${p.name}', '${p.type}')">+</button>
-                <button>Sửa</button>
+                <button onclick="editProduct(${p.pid})">Sửa</button>
                 <button onclick="toggleProductStatus(${p.pid})">${p.status}</button>
             </td>
         `;
@@ -1088,6 +1088,180 @@ function printproductVariantsTable(productVariants) {
         `;
         table.appendChild(row);
     });
+}
+
+function editProduct(pid) {
+    fetch(`/projectWeb_war/admin/product_edit?pid=${pid}`)
+        .then(res => res.json())
+        .then(data => {
+            openAdminPopup(
+                "Cập nhật sản phẩm",
+                `
+                <div class="popup_item">
+                    <label>Chế độ nhập:</label>
+                    <div style="display:flex; gap:20px;">
+                        <label>
+                            <input type="radio" name="import_mode" value="manual" checked>
+                            Nhập thủ công
+                        </label>
+                        <label>
+                            <input type="radio" name="import_mode" value="excel">
+                            Nhập từ Excel
+                        </label>
+                    </div>
+                </div>
+
+                <div id="manual_mode">
+                    <div class="popup_item">
+                        <label>Tên sản phẩm:</label>
+                        <input type="text" id="p_name">
+                    </div>
+
+                    <div class="popup_item">
+                        <label>Loại:</label>
+                        <select id="p_type">
+                            <option value="Balo">Balo</option>
+                            <option value="Vali">Vali</option>
+                        </select>
+                    </div>
+
+                    <div class="popup_item">
+                        <label>Kiểu dáng:</label>
+                        <select id="p_style">
+                            <option value="túi đeo chéo">túi đeo chéo</option>
+                            <option value="túi đeo bụng">túi đeo bụng</option>
+                            <option value="túi sách">túi sách</option>
+                        </select>
+                    </div>
+
+                    <div class="popup_item">
+                        <label>Chất liệu:</label>
+                        <select id="p_material">
+                            <option value="hợp kim">hợp kim</option>
+                            <option value="coston">coston</option>
+                        </select>
+                    </div>
+
+                    <div class="popup_item">
+                        <label>Nhà cung cấp:</label>
+                        <input type="text" id="p_producer">
+                    </div>
+
+                    <div class="popup_item">
+                        <label>Trạng thái:</label>
+                        <select id="p_status">
+                            <option value="normal">Đang bán</option>
+                            <option value="hot">Bán chạy</option>
+                            <option value="canceled">Dừng bán</option>
+                        </select>
+                    </div>
+                    
+                    <div class="popup_item">
+                        <label>Mô tả:</label>
+                        <textarea id="p_description"></textarea>
+                    </div>
+
+                    <div class="popup_item">
+                        <label>Ảnh sản phẩm:</label>
+
+                        <div class="img-upload-box">
+                            <span>+</span>
+                            <p>Chọn ảnh mới nếu muốn thay thế</p>
+                            <input type="file" id="sp-img" accept="image/*" multiple>
+                        </div>
+
+                        <div class="preview-list" id="preview-list"></div>
+                    </div>
+                </div>
+                `,
+                function () {
+                    const name = document.getElementById("p_name").value.trim();
+                    const type = document.getElementById("p_type").value;
+                    const style = document.getElementById("p_style").value;
+                    const material = document.getElementById("p_material").value;
+                    const producer = document.getElementById("p_producer").value.trim();
+                    const status = document.getElementById("p_status").value;
+                    const description = document.getElementById("p_description").value;
+                    const imgInput = document.getElementById("sp-img");
+                    const files = imgInput.files;
+
+                    if (name === "") {
+                        alert("Vui lòng nhập tên sản phẩm");
+                        return;
+                    }
+                    if (producer === "") {
+                        alert("Vui lòng nhập nhà cung cấp");
+                        return;
+                    }
+
+                    const formData = new FormData();
+                    formData.append("pid", pid);
+                    formData.append("name", name);
+                    formData.append("type", type);
+                    formData.append("style", style);
+                    formData.append("material", material);
+                    formData.append("producer", producer);
+                    formData.append("status", status);
+                    formData.append("description", description);
+
+                    if (files && files.length > 0) {
+                        Array.from(files).forEach(f => {
+                            formData.append("images", f);
+                        });
+                    }
+
+                    fetch("/projectWeb_war/admin/product_edit", {
+                        method: "POST",
+                        body: formData
+                    })
+                        .then(res => res.json())
+                        .then(result => {
+                            if (result.success) {
+                                alert("Cập nhật thành công");
+                                handleProductSearch();
+                            } else {
+                                alert(result.message || "Cập nhật thất bại");
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            alert("Lỗi kết nối server");
+                        });
+                }
+            );
+
+            /* ===== ĐỔ DỮ LIỆU LÊN FORM ===== */
+            const p = data.product;
+
+            document.getElementById("p_name").value = p.name;
+            document.getElementById("p_type").value = p.type;
+            document.getElementById("p_style").value = p.style;
+            document.getElementById("p_material").value = p.material;
+            document.getElementById("p_producer").value = p.producer;
+            document.getElementById("p_status").value = p.status;
+            document.getElementById("p_description").value = p.description;
+
+            const preview = document.getElementById("preview-list");
+            preview.innerHTML = "";
+
+            data.images.forEach(img => {
+                const div = document.createElement("div");
+                div.className = "preview-item";
+                div.innerHTML = `<img src="${img.image}">`;
+                preview.appendChild(div);
+            });
+
+            /* ===== PREVIEW ẢNH MỚI ===== */
+            document.getElementById("sp-img").addEventListener("change", e => {
+                preview.innerHTML = "";
+                Array.from(e.target.files).forEach(file => {
+                    const div = document.createElement("div");
+                    div.className = "preview-item";
+                    div.innerHTML = `<img src="${URL.createObjectURL(file)}">`;
+                    preview.appendChild(div);
+                });
+            });
+        });
 }
 
 function toggleProductStatus(pid) {

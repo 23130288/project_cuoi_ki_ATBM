@@ -34,6 +34,45 @@ public class ProductDao extends BaseDao {
                 .mapToBean(Product.class).list());
     }
 
+    public List<Product> getListProductForAdmin() {
+        return get().withHandle(h -> h.createQuery("SELECT p.pid, p.name, p.producer, p.type, p.material, p.style, p.status, COALESCE(SUM(pv.quantity), 0) AS TotlaProduct " +
+                        "FROM product p LEFT JOIN product_variant pv ON p.pid = pv.pid " +
+                        "GROUP BY p.pid, p.name, p.producer, p.type, p.material, p.style, p.status;")
+                .mapToBean(Product.class).list());
+    }
+
+    public Product getProductForEdit(int pid) {
+        return get().withHandle(h -> h.createQuery("select pid, name, producer, type, material, style, status, description from product Where pid = :pid")
+                .bind("pid", pid)
+                .mapToBean(Product.class).first());
+    }
+
+    public boolean updateProduct(int pid, String name, String type, String style,
+                                 String material, String producer, String status, String description) {
+        return get().withHandle(h ->
+                h.createUpdate("""
+                                    UPDATE product
+                                    SET name = :name,
+                                        type = :type,
+                                        style = :style,
+                                        material = :material,
+                                        producer = :producer,
+                                        status = :status,
+                                        description = :description
+                                    WHERE pid = :pid
+                                """)
+                        .bind("pid", pid)
+                        .bind("name", name)
+                        .bind("type", type)
+                        .bind("style", style)
+                        .bind("material", material)
+                        .bind("producer", producer)
+                        .bind("status", status)
+                        .bind("description", description)
+                        .execute() > 0
+        );
+    }
+
     public List<Integer> getListProductID() {
         return get().withHandle(h ->
                 h.createQuery("select pid from product")
@@ -81,76 +120,76 @@ public class ProductDao extends BaseDao {
     }
 
     public List<Product> searchByFilter(
-        String producer,
-        String category,
-        String color,
-        String size,
-        Double minPrice,
-        Double maxPrice,
-        String sort
-) {
+            String producer,
+            String category,
+            String color,
+            String size,
+            Double minPrice,
+            Double maxPrice,
+            String sort
+    ) {
 
-    String sql = " SELECT DISTINCT p.pid, p.name, p.producer, p.type, p.material, p.style, p.description, p.status FROM product p JOIN product_variant v ON p.pid = v.pid WHERE 1 = 1 ";
+        String sql = " SELECT DISTINCT p.pid, p.name, p.producer, p.type, p.material, p.style, p.description, p.status FROM product p JOIN product_variant v ON p.pid = v.pid WHERE 1 = 1 ";
 
-    if (producer != null && !producer.isBlank()) {
-        sql += " AND LOWER(p.producer) LIKE LOWER(:producer) ";
-    }
+        if (producer != null && !producer.isBlank()) {
+            sql += " AND LOWER(p.producer) LIKE LOWER(:producer) ";
+        }
 
-    if (category != null && !category.isBlank()) {
-        sql += " AND LOWER(p.type) = LOWER(:category) ";
-    }
+        if (category != null && !category.isBlank()) {
+            sql += " AND LOWER(p.type) = LOWER(:category) ";
+        }
 
-    if (color != null && !color.isBlank()) {
-        sql += " AND LOWER(v.color) = LOWER(:color) ";
-    }
+        if (color != null && !color.isBlank()) {
+            sql += " AND LOWER(v.color) = LOWER(:color) ";
+        }
 
-    if (size != null && !size.isBlank()) {
-        sql += " AND v.size = :size ";
-    }
+        if (size != null && !size.isBlank()) {
+            sql += " AND v.size = :size ";
+        }
 
-    if (minPrice != null) {
-        sql += " AND v.price >= :minPrice ";
-    }
+        if (minPrice != null) {
+            sql += " AND v.price >= :minPrice ";
+        }
 
-    if (maxPrice != null) {
-        sql += " AND v.price <= :maxPrice ";
-    }
+        if (maxPrice != null) {
+            sql += " AND v.price <= :maxPrice ";
+        }
 
-    if ("price_asc".equals(sort)) {
-        sql += " ORDER BY v.price ASC ";
-    } else if ("price_desc".equals(sort)) {
-        sql += " ORDER BY v.price DESC ";
-    } else if ("name_asc".equals(sort)) {
-        sql += " ORDER BY p.name ASC ";
-    } else if ("name_desc".equals(sort)) {
-        sql += " ORDER BY p.name DESC ";
-    }
+        if ("price_asc".equals(sort)) {
+            sql += " ORDER BY v.price ASC ";
+        } else if ("price_desc".equals(sort)) {
+            sql += " ORDER BY v.price DESC ";
+        } else if ("name_asc".equals(sort)) {
+            sql += " ORDER BY p.name ASC ";
+        } else if ("name_desc".equals(sort)) {
+            sql += " ORDER BY p.name DESC ";
+        }
 
         String finalSql = sql;
         return get().withHandle(h -> {
-        var query = h.createQuery(finalSql);
+            var query = h.createQuery(finalSql);
 
-        if (producer != null && !producer.isBlank())
-            query.bind("producer", "%" + producer + "%");
+            if (producer != null && !producer.isBlank())
+                query.bind("producer", "%" + producer + "%");
 
-        if (category != null && !category.isBlank())
-            query.bind("category", category);
+            if (category != null && !category.isBlank())
+                query.bind("category", category);
 
-        if (color != null && !color.isBlank())
-            query.bind("color", color);
+            if (color != null && !color.isBlank())
+                query.bind("color", color);
 
-        if (size != null && !size.isBlank())
-            query.bind("size", size);
+            if (size != null && !size.isBlank())
+                query.bind("size", size);
 
-        if (minPrice != null)
-            query.bind("minPrice", minPrice);
+            if (minPrice != null)
+                query.bind("minPrice", minPrice);
 
-        if (maxPrice != null)
-            query.bind("maxPrice", maxPrice);
+            if (maxPrice != null)
+                query.bind("maxPrice", maxPrice);
 
-        return query.mapToBean(Product.class).list();
-    });
-}
+            return query.mapToBean(Product.class).list();
+        });
+    }
 
     public List<Product> getHotProducts() {
         return get().withHandle(h ->

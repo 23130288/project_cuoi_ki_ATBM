@@ -38,7 +38,7 @@ public class ProductService {
 
             // tên file: pid_index_isMain.jpg
             String fileName = pid + "_" + index + "_" + (isMain ? 1 : 0) + ext;
-            String relativePath = "/images/product/" + pid + "/" + fileName;
+            String relativePath = "images/product/" + pid + "/" + fileName;
             String realPath = getUploadDir(pid) + File.separator + fileName;
 
             try {
@@ -53,6 +53,54 @@ public class ProductService {
         }
         // Tạo thông báo
         ns.createGlobalNotification("All", "Sản phẩm mới", "Sản phẩm \"" + name + "\" vừa ra mắt. Vào mua ngay thôi!");
+
+        return true;
+    }
+
+    public boolean updateProduct(int pid, String name, String type, String style, String material, String producer, String status, String description, List<Part> imageParts) {
+        // 1. Update thông tin sản phẩm
+        boolean updated = pDao.updateProduct(pid, name, type, style, material, producer, status, description);
+
+        if (!updated) return false;
+
+        // 2. Nếu KHÔNG chọn ảnh mới → kết thúc
+        if (imageParts == null || imageParts.isEmpty()
+                || imageParts.stream().allMatch(p -> p == null || p.getSize() == 0)) {
+            return true;
+        }
+
+        // 3. Có ảnh mới → xóa ảnh cũ (DB + file)
+        List<ImageProduct> oldImages = ipDao.getImagesByProductId(pid);
+        for (ImageProduct img : oldImages) {
+            File f = new File("D:/mio/projectWeb/src/main/webapp/" + img.getImage());
+            if (f.exists()) f.delete();
+        }
+        ipDao.deleteImagesByPid(pid);
+
+        // 4. Lưu ảnh mới (GIỮ NGUYÊN LOGIC CỦA BẠN)
+        int index = 1;
+        for (Part part : imageParts) {
+            if (part == null || part.getSize() == 0) continue;
+
+            boolean isMain = (index == 1);
+
+            String ext = Paths.get(part.getSubmittedFileName())
+                    .getFileName().toString();
+            ext = ext.substring(ext.lastIndexOf("."));
+
+            String fileName = pid + "_" + index + "_" + (isMain ? 1 : 0) + ext;
+            String relativePath = "images/product/" + pid + "/" + fileName;
+            String realPath = getUploadDir(pid) + File.separator + fileName;
+
+            try {
+                part.write(realPath);
+                ipDao.insertProductImage(pid, relativePath, isMain);
+                index++;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
 
         return true;
     }
@@ -83,7 +131,15 @@ public class ProductService {
     }
 
     public List<Product> getAllProducts() {
-        return pDao.getListProduct();
+        return pDao.getListProductForAdmin();
+    }
+
+    public Product getProductForEdit(int pid) {
+        return pDao.getProductForEdit(pid);
+    }
+
+    public List<ImageProduct> getImagesByPid(int pid) {
+        return ipDao.getImagesByProductIdFroAdmin(pid);
     }
 
     public List<Product> getAllProductsNameLike(String name) {
@@ -146,33 +202,33 @@ public class ProductService {
     }
 
     public List<Product> searchInFilter(
-        String producer,
-        String category,
-        String color,
-        String size,
-        String minPrice,
-        String maxPrice,
-        String sort
-) {
+            String producer,
+            String category,
+            String color,
+            String size,
+            String minPrice,
+            String maxPrice,
+            String sort
+    ) {
 
-    Double min = (minPrice == null || minPrice.isBlank())
-            ? null : Double.parseDouble(minPrice);
+        Double min = (minPrice == null || minPrice.isBlank())
+                ? null : Double.parseDouble(minPrice);
 
-    Double max = (maxPrice == null || maxPrice.isBlank())
-            ? null : Double.parseDouble(maxPrice);
+        Double max = (maxPrice == null || maxPrice.isBlank())
+                ? null : Double.parseDouble(maxPrice);
 
-    List<Product> products = pDao.searchByFilter(
-            producer, category, color, size, min, max, sort
-    );
+        List<Product> products = pDao.searchByFilter(
+                producer, category, color, size, min, max, sort
+        );
 
-    // LOAD VARIANT + IMAGE (CỰC KỲ QUAN TRỌNG)
-    for (Product p : products) {
-        p.setVariants(pvDao.getVariantsByProductId(p.getPid()));
-        p.setImages(ipDao.getImagesByProductId(p.getPid()));
+        // LOAD VARIANT + IMAGE (CỰC KỲ QUAN TRỌNG)
+        for (Product p : products) {
+            p.setVariants(pvDao.getVariantsByProductId(p.getPid()));
+            p.setImages(ipDao.getImagesByProductId(p.getPid()));
+        }
+
+        return products;
     }
-
-    return products;
-}
 
 
     public List<Product> getHotProducts() {
