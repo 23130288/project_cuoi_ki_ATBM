@@ -27,7 +27,7 @@
         <div class="filter-container">
 
             <button type="button" class="filter-toggle" id="filterToggle">
-                <label>Bộ lọc</label>
+                <label>Bộ Lọc</label>
                 <i class="fa-solid fa-plus"></i>
             </button>
 
@@ -35,7 +35,7 @@
 
                 <!-- PRODUCER -->
                 <div class="filter-group">
-                    <label>Hãng sản xuất:</label>
+                    <label>Hãng Sản Xuất:</label>
                     <input type="text" name="producer" placeholder="Nhập tên hãng...">
                 </div>
 
@@ -51,7 +51,7 @@
 
                 <!-- COLOR -->
                 <div class="filter-group">
-                    <label>Màu sắc:</label>
+                    <label>Màu Sắc:</label>
                     <select name="color">
                         <option value="">Tất cả</option>
                         <option value="red">Đỏ</option>
@@ -69,7 +69,7 @@
 
                 <!-- SIZE -->
                 <div class="filter-group">
-                    <label>Size:</label>
+                    <label>Kích Cỡ:</label>
                     <select name="size">
                         <option value="">Tất cả</option>
                         <option value="S">S</option>
@@ -83,16 +83,19 @@
                 </div>
 
                 <!-- PRICE -->
-                <div class="filter-group">
-                    <label>Giá từ:</label>
-                    <input type="number" name="minPrice" min="0" step="100000" placeholder="0">
-                    <label>Đến:</label>
-                    <input type="number" name="maxPrice" min="0" step="100000" placeholder="0">
+                <div class="filter-group price-group">
+                    <label>Giá:</label>
+                    <div class="price-inline">
+                        <input type="number" name="minPrice" placeholder="Từ">
+                        <span>-</span>
+                        <input type="number" name="maxPrice" placeholder="Đến">
+                    </div>
                 </div>
+
 
                 <!-- SORT -->
                 <div class="filter-group">
-                    <label>Sắp xếp:</label>
+                    <label>Sắp Xếp:</label>
                     <select name="sort">
                         <option value="price_asc">Giá Thấp → Cao</option>
                         <option value="price_desc">Giá Cao → Thấp</option>
@@ -102,7 +105,7 @@
                 </div>
 
                 <!-- SUBMIT -->
-                <button type="submit" class="btn-search">Áp dụng</button>
+                <button type="submit" class="btn-result">Áp Dụng</button>
 
             </div>
         </div>
@@ -152,6 +155,7 @@
             <h2>Không tìm thấy sản phẩm.Vui lòng thử lại</h2>
         </c:otherwise>
     </c:choose>
+
 
 
 </section>

@@ -203,7 +203,7 @@
 .container-search .search-bar input {
     flex: 1;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid black;
     outline: none;
 }
 
@@ -212,74 +212,144 @@
 }
 
 .container-search .search-bar button {
-    border: 1px solid #ccc;
+    border: 1px solid black;
     border-left: none;
     border-radius: 0;
-    background: #F2B035;
+    background: #f5f5f5;
     padding: 10px;
     transition: 0.3s;
 }
 
 .container-search .search-bar button:hover {
-    color: white;
-    background-color: purple;
+    color: black;
+    background-color: #F2B035;
 }
 
-/* Filter */
-.container-search .filter-container .filter-toggle {
+.container-search .filter-container {
     width: 100%;
-    padding: 10px;
-    background: #F1E7C4;
-    border: none;
+    max-width: 1200px;
+    margin: 20px auto;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    padding: 12px 16px;
+}
+
+.container-search .filter-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    padding: 12px 16px;
+}
+
+.container-search .filter-toggle {
+    width: 100%;
+    background: #f5f5f5;
+    border: 1px solid black;
+    padding: 12px 16px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+
     display: flex;
     align-items: center;
-    justify-content: space-between; /* label trái, icon phải */
+    justify-content: space-between;
+
     border-radius: 8px;
-    transition: 0.3s;
+}
+.container-search .filter-toggle:hover{
+    color :black;
+    background: #F2B035;
 }
 
-.container-search .filter-container .filter-toggle:hover {
-    cursor: pointer;
-    background: #F2C641;
+.container-search .filter-toggle i {
+    transition: transform 0.3s ease;
 }
 
-.container-search .filter-container .filter-panel {
+.container-search .filter-toggle.active i {
+    transform: rotate(45deg);
+}
+
+.container-search .filter-panel {
     display: none;
-    margin-top: 10px;
-    padding: 12px;
-    background: whitesmoke;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    margin-top: 15px;
 }
 
-.container-search .filter-container .filter-group {
+.container-search .filter-panel.active {
+    display: grid;
+    gap: 16px;
+}
+
+.container-search .filter-group {
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px;
+    gap: 6px;
 }
 
-.container-search .filter-container .filter-group label {
-    font-weight: bold;
-    margin-bottom: 5px;
+.container-search .filter-group label {
+    font-size: 17px;
+    font-weight: 600;
+    color: black;
 }
 
-.container-search .filter-container .filter-tags {
+.container-search .filter-group input,
+.container-search .filter-group select {
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1px solid #555555;
+    font-size: 14px;
+}
+
+.container-search .filter-group input:focus,
+.container-search .filter-group select:focus {
+    outline: none;
+    border-color: #F2B035;
+}
+
+.container-search .price-group {
+    grid-column: span 2;
+}
+
+.container-search .price-inline {
     display: flex;
-    gap: 8px;
+    align-items: center;
+    gap: 10px;
 }
 
-.container-search .filter-container .tag {
-    padding: 6px 12px;
-    background: white;
-    border-radius: 20px;
+.container-search .price-inline input {
+    flex: 1;
+}
+.container-search .filter-group.sort-group {
+    grid-column: span 2;
+}
+
+.container-search .btn-result {
+    width: 100%;
+    height: 42px;
+    margin: 18px auto 0;
+    color: black;
+    background: #f5f5f5;
+    border: 1px solid black;
+    border-radius: 5px;
+
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
-    border: 1px solid #ccc;
+    transition: background 0.3s;
 }
 
-.container-search .filter-container .tag.selected {
-    background: #F2C641;
-    border-color: #F2C641;
+.container-search .btn-result:hover {
+    background: #F2B035;
+    color : black;
 }
+
+
+
+
+
 
 
 

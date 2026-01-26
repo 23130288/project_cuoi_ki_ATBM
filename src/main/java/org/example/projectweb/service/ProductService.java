@@ -161,9 +161,7 @@ public class ProductService {
     Double max = (maxPrice == null || maxPrice.isBlank())
             ? null : Double.parseDouble(maxPrice);
 
-    List<Product> products = pDao.searchByFilter(
-            producer, category, color, size, min, max, sort
-    );
+    List<Product> products = pDao.searchByFilter(producer, category, color, size, min, max, sort );
 
     // LOAD VARIANT + IMAGE (CỰC KỲ QUAN TRỌNG)
     for (Product p : products) {
