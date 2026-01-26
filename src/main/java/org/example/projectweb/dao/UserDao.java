@@ -43,4 +43,13 @@ public class UserDao extends BaseDao {
                         .execute()
         );
     }
+
+    public void updatePassword(int uid, String newPassword) {
+        get().useHandle(h -> {
+            h.createUpdate("""
+                    update user set password = :newPassword where uid = :uid
+                    """).bind("newPassword", newPassword).bind("uid", uid)
+                    .execute();
+        });
+    }
 }

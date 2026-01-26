@@ -11,7 +11,7 @@
 <header>
     <div class="top-banner">
         <div class="brand-name">
-            <a href="trang_chu/trang_chu.jsp">
+            <a href="trangChu">
                 <img src="shareStuff/header/image/logo.png" alt="Travel Logo">
             </a>
         </div>
@@ -40,7 +40,6 @@
             </form>
         </div>
         <div class="container-icons">
-
             <div class="avatar-icon-shopping-cart">
                 <div class="inner-circle">
                     <a href="cart">
@@ -50,7 +49,7 @@
             </div>
             <div class="avatar-icon-user">
                 <div class="inner-circle">
-                    <a href="dang_nhap">
+                    <a href="tai_khoan">
                         <i class="fa fa-user"></i>
                     </a>
                 </div>

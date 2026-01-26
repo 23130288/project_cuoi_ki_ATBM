@@ -19,4 +19,8 @@ public class UserService {
         }
         return u;
     }
+
+    public void updatePassword(int uid, String newPassword) {
+        userDao.updatePassword(uid, newPassword);
+    }
 }

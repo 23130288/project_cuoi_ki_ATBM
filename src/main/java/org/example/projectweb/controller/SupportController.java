@@ -3,6 +3,7 @@ package org.example.projectweb.controller;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import org.example.projectweb.model.User;
 import org.example.projectweb.service.SupportService;
 
 import java.io.IOException;
@@ -18,12 +19,14 @@ public class SupportController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         SupportService ss = new SupportService();
 
-        int userId = 1;
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
         String topic = request.getParameter("topic");
         String title = request.getParameter("title");
         String message = request.getParameter("message");
 
-        ss.createSupport(userId, topic, title, message);
+        ss.createSupport(user.getUid(), topic, title, message);
 
         response.sendRedirect("support");
     }

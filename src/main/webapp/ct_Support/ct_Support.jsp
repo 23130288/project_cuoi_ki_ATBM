@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
 <body>
-
+<jsp:include page="../shareStuff/header/header.jsp" />
 <main>
     <h1>Trung tâm hỗ trợ khách hàng</h1>
     <div class="container">
@@ -37,22 +37,23 @@
             </c:forEach>
         </div>
 
-        <!-- form -->
-        <form class="support-form" method="post" action="add-message">
-            <c:choose>
-                <c:when test="${support.status == 'done'}">
-                    <label id="done">Đã xử lý xong</label>
-                </c:when>
-                <c:otherwise>
-                    <input type="hidden" name="spid" value="${support.spid}"/>
-                    <label>
-                        <textarea rows=3 name="mess" placeholder="Trả lời tại đây..."></textarea>
-                    </label>
-                    <button type="submit" id="sendBtn">Gửi phản hồi</button>
-                </c:otherwise>
-            </c:choose>
-        </form>
+<%--        <!-- form -->--%>
+<%--        <form class="support-form" method="post" action="add-message">--%>
+<%--            <c:choose>--%>
+<%--                <c:when test="${support.status == 'done'}">--%>
+<%--                    <label id="done">Đã xử lý xong</label>--%>
+<%--                </c:when>--%>
+<%--                <c:otherwise>--%>
+<%--                    <input type="hidden" name="spid" value="${support.spid}"/>--%>
+<%--                    <label>--%>
+<%--                        <textarea rows=3 name="mess" placeholder="Trả lời tại đây..."></textarea>--%>
+<%--                    </label>--%>
+<%--                    <button type="submit" id="sendBtn">Gửi phản hồi</button>--%>
+<%--                </c:otherwise>--%>
+<%--            </c:choose>--%>
+<%--        </form>--%>
     </div>
 </main>
+<jsp:include page="../shareStuff/footer/footer.jsp" />
 </body>
 </html>

@@ -212,7 +212,7 @@ body {
 
 #selection_2 .password-wrapper {
     position: relative;
-    padding: 10px 0;
+    padding: 0;
     margin: 0;
 }
 
@@ -227,16 +227,13 @@ body {
     font-size: 20px;
 }
 
-#selection_2 .password-wrapper button:hover {
-    color: #EDB310;
-}
-
 /* --- PHẦN THÔNG BÁO --- */
 .notification_item {
     display: flex;
     background: #f9f9f9;
     padding: 15px;
     gap: 15px;
+    text-decoration: none;
 }
 
 .notification_item:hover {
@@ -342,6 +339,11 @@ body {
     display: block;
 }
 
+.container .products {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
 /* nothing image show */
 .container #cancelled.active {
     display: flex;
@@ -392,6 +394,7 @@ body {
     font-weight: bold;
     color: #F0AF35;
 }
+
 /* ===== Popup ===== */
 .popup {
     position: fixed;
@@ -505,6 +508,7 @@ body {
     align-items: flex-start; /* căn theo trên */
     gap: 10px; /* khoảng cách giữa preview và drop-zone */
 }
+
 .preview-item {
     margin: auto;
 }
@@ -515,4 +519,15 @@ body {
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid #EDB310;
+}
+
+#password-info-button {
+    text-align: center;
+    flex-direction: column;
+}
+.password-error {
+    color: red;
+}
+.password-success {
+    color: green;
 }

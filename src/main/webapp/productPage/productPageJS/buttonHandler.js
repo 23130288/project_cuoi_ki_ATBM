@@ -69,7 +69,13 @@ addToCartBtn.addEventListener('click', () => {
     );
     let url = `add-cart?pid=${pid}&pvid=${variant.pvid}&mainImg=${mainImg}&q=1`;
     fetch(url)
-        .then(res => res.json())
+        .then(res => {
+            if (res.status === 401) {
+                window.location.href = 'dang_nhap';
+                return;
+            }
+            return res.json();
+        })
         .then(data => {
             if (data.success) {
                 showMessage('Thêm vào giỏ hàng thành công!', 'green');
@@ -94,7 +100,13 @@ buyBtn.addEventListener('click', () => {
     );
     let url = `add-cart?pid=${pid}&pvid=${variant.pvid}&mainImg=${mainImg}&q=1`;
     fetch(url)
-        .then(res => res.json())
+        .then(res => {
+            if (res.status === 401) {
+                window.location.href = 'dang_nhap';
+                return;
+            }
+            return res.json();
+        })
         .then(data => {
             if (data.success) {
                 window.location.href = 'cart';

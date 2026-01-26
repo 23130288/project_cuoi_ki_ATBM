@@ -125,11 +125,51 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-document.querySelectorAll('.notification_item').forEach(item => {
-    item.addEventListener('click', () => {
-        window.location.href = 'ct_Order.jsp';
-    });
+// document.querySelectorAll('.notification_item').forEach(item => {
+//     item.addEventListener('click', () => {
+//         window.location.href = 'ct_Order.jsp';
+//     });
+// });
+
+
+// ============================================ PASSWORD ============================================
+const oldPassword = document.getElementById("old_password");
+const password = document.getElementById("password");
+const confirmPassword = document.getElementById("confirm_password");
+const toggleOldPassword = document.getElementById("toggleOldPassword");
+const togglePassword = document.getElementById('togglePassword');
+const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+
+toggleOldPassword.addEventListener('mouseover', () => {
+    oldPassword.type = 'text';
+});
+toggleOldPassword.addEventListener('mouseout', () => {
+    oldPassword.type = 'password';
+});
+
+togglePassword.addEventListener('mouseover', () => {
+    password.type = 'text';
+});
+togglePassword.addEventListener('mouseout', () => {
+    password.type = 'password';
+});
+
+toggleConfirmPassword.addEventListener('mouseover', () => {
+    confirmPassword.type = 'text';
+});
+toggleConfirmPassword.addEventListener('mouseout', () => {
+    confirmPassword.type = 'password';
 });
 
 
-
+document.addEventListener("DOMContentLoaded", function () {
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get("tab") || "user-info";
+    document.querySelectorAll(".information-container").forEach(div => {
+        div.style.display = "none";
+    });
+    const activeTab = document.getElementById(tab);
+    if (activeTab) {
+        activeTab.style.display = "block";
+    }
+});
