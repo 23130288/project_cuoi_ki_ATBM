@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.Map;
 
 public class ProductService {
-    private ProductDao pDao = new ProductDao();
-    private ProductVariantDao pvDao = new ProductVariantDao();
-    private ImageProductDao ipDao = new ImageProductDao();
-    private NotificationService ns = new NotificationService();
+    private final ProductDao pDao = new ProductDao();
+    private final ProductVariantDao pvDao = new ProductVariantDao();
+    private final ImageProductDao ipDao = new ImageProductDao();
+    private final NotificationService ns = new NotificationService();
 
     public boolean addProduct(String name, String type, String style, String material, String producer, String status, String description, List<Part> imageParts) {
         if (pDao.getProductByName(name) != null) {
@@ -58,18 +58,18 @@ public class ProductService {
     }
 
     public boolean updateProduct(int pid, String name, String type, String style, String material, String producer, String status, String description, List<Part> imageParts) {
-        // 1. Update thông tin sản phẩm
+        // Update thông tin sản phẩm
         boolean updated = pDao.updateProduct(pid, name, type, style, material, producer, status, description);
 
         if (!updated) return false;
 
-        // 2. Nếu KHÔNG chọn ảnh mới → kết thúc
+        // Nếu KHÔNG chọn ảnh mới → kết thúc
         if (imageParts == null || imageParts.isEmpty()
                 || imageParts.stream().allMatch(p -> p == null || p.getSize() == 0)) {
             return true;
         }
 
-        // 3. Có ảnh mới → xóa ảnh cũ (DB + file)
+        // Có ảnh mới → xóa ảnh cũ (DB + file)
         List<ImageProduct> oldImages = ipDao.getImagesByProductId(pid);
         for (ImageProduct img : oldImages) {
             File f = new File("D:/mio/projectWeb/src/main/webapp/" + img.getImage());
@@ -77,7 +77,7 @@ public class ProductService {
         }
         ipDao.deleteImagesByPid(pid);
 
-        // 4. Lưu ảnh mới (GIỮ NGUYÊN LOGIC CỦA BẠN)
+        // Lưu ảnh mới
         int index = 1;
         for (Part part : imageParts) {
             if (part == null || part.getSize() == 0) continue;
@@ -97,12 +97,15 @@ public class ProductService {
                 ipDao.insertProductImage(pid, relativePath, isMain);
                 index++;
             } catch (Exception e) {
-                e.printStackTrace();
                 return false;
             }
         }
 
         return true;
+    }
+
+    public boolean updateProductVariant(int pvid, int price, int quantity) {
+        return pDao.updateProductVariant(pvid, price, quantity);
     }
 
     private String getUploadDir(int pid) {
@@ -167,10 +170,6 @@ public class ProductService {
 
     public Map<Integer, String> getProductNameMaplike(String name) {
         return pDao.getProductNameMapLike(name);
-    }
-
-    public List<Product> getAllSreachProduct(String name) {
-        return pDao.getAllProductNameLike(name);
     }
 
     public Product getProductById(int productId) {

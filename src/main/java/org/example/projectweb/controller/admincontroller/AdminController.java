@@ -15,7 +15,7 @@ public class AdminController extends HttpServlet {
         HttpSession session = request.getSession();
 //        User user = (User) session.getAttribute("user");
         UserService us = new UserService();
-        User user = us.getUserById(1);   // test user id = 1
+        User user = us.getUserById(2);
         session.setAttribute("user", user);
 
         if (user == null) {

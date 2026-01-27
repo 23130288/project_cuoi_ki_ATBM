@@ -47,29 +47,21 @@ public class ProductDao extends BaseDao {
                 .mapToBean(Product.class).first());
     }
 
-    public boolean updateProduct(int pid, String name, String type, String style,
-                                 String material, String producer, String status, String description) {
+    public boolean updateProduct(int pid, String name, String type, String style, String material, String producer, String status, String description) {
         return get().withHandle(h ->
-                h.createUpdate("""
-                                    UPDATE product
-                                    SET name = :name,
-                                        type = :type,
-                                        style = :style,
-                                        material = :material,
-                                        producer = :producer,
-                                        status = :status,
-                                        description = :description
-                                    WHERE pid = :pid
-                                """)
-                        .bind("pid", pid)
-                        .bind("name", name)
-                        .bind("type", type)
-                        .bind("style", style)
-                        .bind("material", material)
-                        .bind("producer", producer)
-                        .bind("status", status)
-                        .bind("description", description)
-                        .execute() > 0
+                h.createUpdate("UPDATE product " +
+                                "SET name = :name, type = :type, style = :style, material = :material, producer = :producer, status = :status, description = :description " +
+                                "WHERE pid = :pid;")
+                        .bind("pid", pid).bind("name", name).bind("type", type).bind("style", style)
+                        .bind("material", material).bind("producer", producer).bind("status", status)
+                        .bind("description", description).execute() > 0
+        );
+    }
+
+    public boolean updateProductVariant(int pvid, int price, int quantity) {
+        return get().withHandle(h ->
+                h.createUpdate("UPDATE product_variant SET price = :price, quantity = :quantity WHERE pvid = :pvid;")
+                        .bind("pvid", pvid).bind("price", price).bind("quantity", quantity).execute() > 0
         );
     }
 
