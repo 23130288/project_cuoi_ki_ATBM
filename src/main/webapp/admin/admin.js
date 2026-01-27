@@ -157,7 +157,7 @@
                 document.getElementById("btn_dang_xuat").addEventListener("click", () => {
                     localStorage.removeItem("user");
                     alert("Đăng xuất thành công!");
-                    window.location.href = "../dang_nhap/dang_nhap.jsp";
+                    window.location.href = "trang_chu/trang_chu.jsp";
                 });
             }
 

@@ -3,12 +3,10 @@ package org.example.projectweb.controller.admincontroller.Service_Policy;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
+import jakarta.servlet.http.*;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.example.projectweb.model.User;
 import org.example.projectweb.service.Service_PolicyService;
 
 import java.io.IOException;
@@ -28,6 +26,20 @@ public class AddService_Policy extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
+        //check thẩm quyền
+        HttpSession session = request.getSession();
+        User check = (User) session.getAttribute("user");
+        session.setAttribute("user", check);
+        if (check == null) {
+            request.getRequestDispatcher("/dang_nhap").forward(request, response);
+            return;
+        }
+
+        if (!"admin".equalsIgnoreCase(check.getRole())) {
+            request.getRequestDispatcher("/tham_quyen").forward(request, response);
+            return;
+        }
+
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 

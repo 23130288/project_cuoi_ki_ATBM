@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Footer</title>
-    <link rel="stylesheet" href="shareStuff/footer/footer.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/shareStuff/footer/footer.css">
 </head>
 <body>
 <footer>
@@ -44,7 +44,7 @@
         </div>
 
         <div class="brand">
-            <img src="shareStuff/footer/image/logo_white.png">
+            <img src="${pageContext.request.contextPath}/shareStuff/footer/image/logo_white.png">
             <p>© 2025 Công ty Balo & Vali Du lịch Travel</p>
         </div>
     </div>
