@@ -18,11 +18,8 @@ public class AddMessage extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        HttpSession session = request.getSession();
-//        User u = (User) session.getAttribute("user");
-
-        UserService us = new UserService();
-        User u = us.getUserById(1);
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("user");
 
         int spid = Integer.parseInt(request.getParameter("spid"));
         String message = request.getParameter("mess");

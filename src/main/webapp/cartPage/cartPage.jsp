@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
 <body>
+<jsp:include page="../shareStuff/header/header.jsp"/>
 <main>
     <h1>Giỏ hàng</h1>
     <div class="container">
@@ -197,10 +198,15 @@
             <form id="form-input-info" action="checkout" method="post">
                 <div class="container-user-title">
                     <h2>Thông tin người dùng</h2>
-                    <a href="tai_khoan" class="edit-btn" id="editBtn">Chỉnh sửa <i class="fa-solid fa-pen"></i></a>
+                    <c:if test="${user != null}">
+                        <a href="tai_khoan" class="edit-btn" id="editBtn">Chỉnh sửa <i class="fa-solid fa-pen"></i></a>
+                    </c:if>
                 </div>
                 <div class="form-container">
                     <c:choose>
+                        <c:when test="${user == null}">
+                            <a href="dang_nhap" class="login-notice"><p>Xin hãy đăng nhập để có thể dùng chức năng giỏ hàng.</p></a>
+                        </c:when>
                         <c:when test="${empty user.phone || empty user.address}">
                             <div class="missing-information-container">
                                 <p>Vui lòng cập nhật đầy đủ thông tin cá nhân (Sđt, địa chỉ) trước khi thanh toán.</p>
@@ -248,6 +254,7 @@
         </div>
     </div>
 </main>
+<jsp:include page="../shareStuff/footer/footer.jsp"/>
 <script>
 </script>
 <script src="cartPage/cartPageJS/variant.js"></script>

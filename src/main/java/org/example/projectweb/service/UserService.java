@@ -27,4 +27,8 @@ public class UserService {
     public void updatePassword(int uid, String newPassword) {
         userDao.updatePassword(uid, newPassword);
     }
+
+    public void changeUserInfo(int uid, String name, String phone, String address) {
+        userDao.changeUserInfo(uid, name, phone, address);
+    }
 }

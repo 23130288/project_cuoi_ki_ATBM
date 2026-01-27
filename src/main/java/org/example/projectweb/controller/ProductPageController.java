@@ -19,10 +19,8 @@ public class ProductPageController extends HttpServlet {
         ReviewService rs = new ReviewService();
         WishlistService ws = new WishlistService();
 
-        UserService us = new UserService();
-        User u = us.getUserById(1);
-//        HttpSession session = request.getSession();
-//        User u = (User) session.getAttribute("user");
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("user");
         int productId = Integer.parseInt(request.getParameter("pid"));
 
         Product p = ps.getProductById(productId);
@@ -34,7 +32,13 @@ public class ProductPageController extends HttpServlet {
             colors.add(pv.getColor());
             sizes.add(pv.getSize());
         }
-        Review userReview = rs.getReviewByUidAndPid(u.getUid(), productId);
+        Review userReview = null;
+        boolean inWishlist = false;
+        if (u != null) {
+            userReview = rs.getReviewByUidAndPid(u.getUid(), productId);
+            inWishlist = ws.inWishlist(u.getUid(), productId);
+        }
+
 
         // product
         request.setAttribute("p", p);
@@ -44,10 +48,10 @@ public class ProductPageController extends HttpServlet {
         request.setAttribute("imgs", ps.getImgsByPid(productId));
         request.setAttribute("mainImg", ps.getMainImg(productId));
         request.setAttribute("avgRating", rs.getAvgRating(productId));
-        request.setAttribute("inWishlist", ws.inWishlist(u.getUid(), productId));
+        request.setAttribute("inWishlist", inWishlist);
 
         // user
-        request.setAttribute("user", us.getUserById(u.getUid()));
+        request.setAttribute("user", u);
         request.setAttribute("userReview", userReview);
         request.setAttribute("reviews", rs.getReviewsForProduct(productId));
 
@@ -56,10 +60,12 @@ public class ProductPageController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserService us = new UserService();
-        User u = us.getUserById(1);
-//        HttpSession session = request.getSession();
-//        User u = (User) session.getAttribute("user");
+        HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("user");
+        if (u == null) {
+            response.sendRedirect("dang_nhap");
+            return;
+        }
 
         int productId = Integer.parseInt(request.getParameter("productId"));
         WishlistService ws = new WishlistService();

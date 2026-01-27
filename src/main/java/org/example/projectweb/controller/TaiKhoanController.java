@@ -14,10 +14,8 @@ import java.util.List;
 public class TaiKhoanController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        HttpSession session = request.getSession();
-//        User user = (User) session.getAttribute("user");
-        UserService us = new UserService();
-        User user = us.getUserById(1);
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
 
         if (user == null) {
             request.getRequestDispatcher("dang_nhap").forward(request, response);
@@ -28,7 +26,7 @@ public class TaiKhoanController extends HttpServlet {
 
         // Notifications
         NotificationService ns = new NotificationService();
-//        request.setAttribute("notifications", ns.getNotificationsByUid(user.getUid()));
+        request.setAttribute("notifications", ns.getNotificationsByUid(user.getUid()));
 
         // Orers
         OrderService os = new OrderService();

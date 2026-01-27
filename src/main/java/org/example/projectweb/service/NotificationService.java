@@ -4,6 +4,7 @@ import org.example.projectweb.dao.NotificationDao;
 import org.example.projectweb.dao.UserDao;
 import org.example.projectweb.dao.UserNotificationDao;
 import org.example.projectweb.model.Notification;
+import org.example.projectweb.model.UserNotificationView;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -40,5 +41,17 @@ public class NotificationService {
             int id = Integer.parseInt(type);
             unDao.insertUserNotification(nid, id, false, createdDate);
         }
+    }
+
+    public List<UserNotificationView> getNotificationsByUid(int uid) {
+        return nDao.getNotificationsByUid(uid);
+    }
+
+    public void markAsRead(int uid, int nid) {
+        nDao.markAsRead(uid, nid);
+    }
+
+    public int countUnread(int uid) {
+        return nDao.countUnread(uid);
     }
 }

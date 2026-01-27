@@ -4,6 +4,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import org.example.projectweb.cart.Cart;
+import org.example.projectweb.model.User;
 import org.example.projectweb.model.VoucherUser;
 import org.example.projectweb.service.VoucherService;
 
@@ -22,8 +23,12 @@ public class ApplyVoucherCart extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         HttpSession session = request.getSession();
+        User u = (User) session.getAttribute("user");
+        if (u == null) {
+            response.sendRedirect("dang_nhap");
+            return;
+        }
         Cart c = (Cart) session.getAttribute("cart");
-//        User u = (User) session.getAttribute("user");
 
         if (c == null) {
             c = new Cart();

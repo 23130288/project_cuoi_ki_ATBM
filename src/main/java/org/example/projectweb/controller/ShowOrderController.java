@@ -16,10 +16,12 @@ import java.util.List;
 public class ShowOrderController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        HttpSession session = request.getSession();
-//        User u = (User) session.getAttribute("user");
-        UserService us = new UserService();
-        User u = us.getUserById(1);
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            response.sendRedirect("dang_nhap");
+            return;
+        }
 
         int oid = Integer.parseInt(request.getParameter("oid"));
 
@@ -28,7 +30,7 @@ public class ShowOrderController extends HttpServlet {
         Order order = os.getOrderByOid(oid);
         List<OrderDetailView> orderDetails = os.getOrderDetailViewByOid(oid);
 
-        request.setAttribute("user", u);
+        request.setAttribute("user", user);
         request.setAttribute("order", order);
         request.setAttribute("orderDetails", orderDetails);
 

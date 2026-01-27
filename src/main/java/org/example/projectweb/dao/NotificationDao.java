@@ -1,6 +1,8 @@
 package org.example.projectweb.dao;
 
 import org.example.projectweb.model.Notification;
+import org.example.projectweb.model.UserNotificationView;
+
 import java.util.List;
 
 public class NotificationDao extends BaseDao {
@@ -33,5 +35,29 @@ public class NotificationDao extends BaseDao {
         return get().withHandle(handle -> handle.createUpdate("INSERT INTO notification (type, title, content, created_date, status) VALUES (:type, :title, :content, :createdDate, true)")
                 .bind("type", type).bind("title", title).bind("content", content).bind("createdDate", createdDate).executeAndReturnGeneratedKeys("nid").mapTo(int.class).one()
         );
+    }
+
+    public List<UserNotificationView> getNotificationsByUid(int uid) {
+        return get().withHandle(h -> h.createQuery("""
+                select n.nid, un.uid, n.title, n.content, un.is_read as isRead, un.received_date as receivedDate
+                from user_notification un join notification n on un.nid = n.nid
+                where un.uid = :uid
+                order by un.is_read asc, un.received_date desc
+                """).bind("uid", uid).mapToBean(UserNotificationView.class).list());
+    }
+
+    public void markAsRead(int uid, int nid) {
+        get().useHandle(h -> h.createUpdate("""
+                        update user_notification set is_read = 1 where uid = :uid and nid = :nid
+                        """).bind("uid", uid).bind("nid", nid)
+                .execute());
+    }
+
+    public int countUnread(int uid) {
+        return get().withHandle(h -> h.createQuery("""
+                select count(un.nid)
+                from user_notification un join notification n on un.nid = n.nid
+                where un.uid = :uid and is_read = 0
+                """).bind("uid", uid).mapTo(Integer.class).one());
     }
 }

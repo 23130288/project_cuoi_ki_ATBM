@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
@@ -40,6 +41,16 @@
             </form>
         </div>
         <div class="container-icons">
+            <div class="avatar-icon-notify">
+                <div class="inner-circle">
+                    <a href="tai_khoan?tab=notification">
+                        <i class="fa-solid fa-bell"></i>
+                        <c:if test="${unreadCount > 0}">
+                            <span class="notify-dot"></span>
+                        </c:if>
+                    </a>
+                </div>
+            </div>
             <div class="avatar-icon-shopping-cart">
                 <div class="inner-circle">
                     <a href="cart">
