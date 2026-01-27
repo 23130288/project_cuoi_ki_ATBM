@@ -43,8 +43,8 @@
             <h2>Quản lý người dùng</h2>
             <div class="Menu-bar">                
                 <div class="search-bar">
-                    <input type="text" name="query" placeholder="Tên người dung..."/>
-                    <button class="btn-search"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <input type="text" name="query" id="searchUserInput" placeholder="Tên người dung..."/>
+                    <button class="btn-search" onclick="handleUserSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
             </div>
             
@@ -172,7 +172,7 @@
             }
 
             if (text === "Quản lý người dùng") {
-                loadUserList();
+                handleUserSearch();
             }
 
             if (text === "Quản lý đơn hàng") {
@@ -264,41 +264,83 @@ function openAdminPopup(title, bodyHTML, onConfirm) {
 //     }
 // });
 
-//hàm hỗ trợ ajax-json
+//================================= hàm hỗ trợ ajax-json =================================
 //================================= các phương thước phần user =================================
-function loadUserList() {
-    fetch('/projectWeb_war/admin/users')
+function handleUserSearch() {
+    const keyword = document.getElementById("searchUserInput").value.trim();
+    loadUsers(keyword);
+}
+
+function loadUsers(keyword = "") {
+    let url = '/projectWeb_war/admin/users';
+
+    if (keyword !== "") {
+        url = `/projectWeb_war/admin/user_Sreach?keyword=${encodeURIComponent(keyword)}`;
+    }
+
+    fetch(url)
         .then(res => res.json())
         .then(users => {
-            const table = document.getElementById("userTable");
+            //check rỗng
+            if (!users || users.length === 0) {
+                alert("Không tìm thấy người nào.");
+                loadUsers("");
+                return;
+            }
+            printUserTable(users);
+        })
+        .catch(err => console.error(err));
+}
 
-            // XÓA DỮ LIỆU CŨ
-            table.innerHTML = `
-            <tr>
-                <th>ID</th>
-                <th>Tên</th>
-                <th>Email</th>
-                <th>Vai trò</th>
-                <th>Trạng thái</th>
-                <th>Thao tác</th>
-            </tr>
-            `;
-            users.forEach(u => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${u.uid}</td>
-                    <td>${u.name}</td>
-                    <td>${u.email}</td>
-                    <td>${u.role}</td>
-                    <td>${u.status ? "Hoạt động" : "Bị khóa"}</td>
-                    <td>
-                        <button onclick="toggleUserStatus(${u.uid})">
-                            ${u.status ? "Khóa" : "Mở"}
-                        </button>
-                    </td>
-                `;
-                table.appendChild(row);
-            });
+function printUserTable(users) {
+    const table = document.getElementById("userTable");
+
+    //xóa bảng cũ
+    table.innerHTML = `
+        <tr>
+            <th>ID</th>
+            <th>Tên</th>
+            <th>Email</th>
+            <th>Trạng thái</th>
+            <th>Vai trò</th>
+            <th>Thao tác</th>
+        </tr>
+    `;
+
+    users.forEach(u => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${u.uid}</td>
+            <td>${u.name}</td>
+            <td>${u.email}</td>
+            <td>${u.status ? "Hoạt động" : "Bị khóa"}</td>
+            <td>
+                <button onclick="UserRoleChange(${u.uid})">${u.role}</button>
+            </td>
+            <td>
+                <button onclick="toggleUserStatus(${u.uid})">${u.status ? "Khóa" : "Mở"}</button>
+            </td>
+        `;
+        table.appendChild(row);
+    });
+}
+
+function UserRoleChange(uid) {
+    if (!confirm("Bạn có chắc muốn thay đổi vai trò user này?")) {
+        return;
+    }
+
+    fetch(`/projectWeb_war/admin/user/toggle_user_Role?uid=${uid}`, {
+        method: "POST"
+    })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message);
+            handleUserSearch(); // load lại bảng
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Có lỗi xảy ra");
         });
 }
 
@@ -313,7 +355,7 @@ function toggleUserStatus(uid) {
         .then(res => res.json())
         .then(data => {
             alert(data.message);
-            loadUserList(); // load lại bảng
+            handleUserSearch(); // load lại bảng
         })
         .catch(err => {
             console.error(err);
@@ -661,7 +703,7 @@ function addProductVariantExcel() {
     }, 0);
 }
 
-function addProductVariant(pid, name, type) {
+function addProductVariant(pid, name) {
     openAdminPopup(
         "Thêm biến thể cho " + name,
         `
@@ -830,7 +872,7 @@ function printProductTable(products) {
             <td>${p.producer}</td>
             <td>${p.status}</td>
             <td>
-                <button onclick="addProductVariant(${p.pid}, '${p.name}', '${p.type}')">+</button>
+                <button onclick="addProductVariant(${p.pid}, '${p.name}')">+</button>
                 <button onclick="editProduct(${p.pid})">Sửa</button>
                 <button onclick="toggleProductStatus(${p.pid})">${p.status}</button>
             </td>
@@ -869,7 +911,8 @@ function printproductVariantsTable(productVariants) {
             <td>${pv.quantity}</td>
             <td>
                 <button onclick="editProductVariant(${pv.pvid}, '${pv.productName}', '${pv.size}', 
-                '${pv.color}', ${pv.price}, ${pv.quantity})">Sửa</button>
+                '${pv.color}', ${pv.price}, ${pv.quantity})">Sửa
+                </button>
             </td>
         `;
         table.appendChild(row);
@@ -1063,9 +1106,9 @@ function editProductVariant(pvid, productName, size, color, price, quantity) {
             const quantity = document.getElementById("pv_quantity").value || 0;
 
             const formData = new FormData();
-            formData.append("pvid", 2);
-            formData.append("price", 10000);
-            formData.append("quantity", 10);
+            formData.append("pvid", pvid);
+            formData.append("price", price);
+            formData.append("quantity", quantity);
 
             fetch("/projectWeb_war/admin/product_variant_edit", {
                 method: "POST",

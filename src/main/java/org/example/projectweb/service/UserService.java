@@ -12,6 +12,10 @@ public class UserService {
         return userDao.getListUser();
     }
 
+    public List<User> getAllUsersNameLike(String name) {
+        return userDao.getAllUsersNameLike(name);
+    }
+
     public User getUserById(int id) {
         User u = userDao.getUserById(id);
         if (u == null || !u.isStatus()) {
