@@ -139,8 +139,9 @@
         "Đăng xuất": `
             <h2>Đăng xuất</h2>
             <p>Bạn có chắc muốn đăng xuất khỏi trang quản trị?</p>
-            <button class="bt_xac_nhan" id="btn_dang_xuat">Đăng xuất</button>
-     `
+            <form method="post" action="log-out">
+                <button class="bt_xac_nhan" id="btn-dang-xuat">Đăng xuất</button>
+            </form>     `
     };
 
     // Hiển thị mặc định
@@ -152,15 +153,6 @@
         item.addEventListener("click", () => {
             const text = item.textContent.trim();
             infoBox.innerHTML = contents[text] || "<p>Chưa có nội dung</p>";
-
-            if (text === "Đăng xuất") {
-                document.getElementById("btn_dang_xuat").addEventListener("click", () => {
-                    localStorage.removeItem("user");
-                    alert("Đăng xuất thành công!");
-                    window.location.href = "trang_chu/trang_chu.jsp";
-                });
-            }
-
             if (text === "Quản lý sản phẩm") {
                 handleProductSearch();
 
@@ -273,7 +265,7 @@ function openAdminPopup(title, bodyHTML, onConfirm) {
 // });
 
 //hàm hỗ trợ ajax-json
-//load user
+//================================= các phương thước phần user =================================
 function loadUserList() {
     fetch('/projectWeb_war/admin/users')
         .then(res => res.json())
@@ -685,23 +677,29 @@ function addProductVariant(pid, name, type) {
                 
                  <div class="popup_item">
                     <label>Kích thước:</label>
-                    <select id="p_size"></select>
+                    <select id="p_size">
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="XXL">XXL</option>
+                    </select>
                 </div>
                 
                 <div class="popup_item">
                     <label>Màu sắc:</label>
                     <select id="p_color">
-                        <option value="black">Đen</option>
-                        <option value="white">Trắng</option>
-                        <option value="gray">Xám</option>
-                        <option value="navy">Xanh navy</option>
-                        <option value="blue">Xanh dương</option>
-                        <option value="green">Xanh lá</option>
-                        <option value="brown">Nâu</option>
-                        <option value="beige">Be</option>
                         <option value="red">Đỏ</option>
+                        <option value="orange">Cam</option>
                         <option value="yellow">Vàng</option>
-                    </select> 
+                        <option value="green">Xanh lá</option>
+                        <option value="blue">Xanh dương</option>
+                        <option value="indigo">Chàm</option>
+                        <option value="violet">Tím</option>
+                        <option value="white">Trắng</option>
+                        <option value="black">Đen</option>
+                        <option value="grey">Xám</option>
+                    </select>
                 </div>
           
                 <div class="popup_item">
@@ -748,25 +746,6 @@ function addProductVariant(pid, name, type) {
                     alert("Lỗi đã sảy ra.");
                 });
         });
-    loadSizeByType(type);
-}
-
-function loadSizeByType(type) {
-    const sizeSelect = document.getElementById("p_size");
-
-    if ("baLo".toLowerCase() === type.toLowerCase()) {
-        sizeSelect.innerHTML = `
-            <option value="S">S (Nhỏ)</option>
-            <option value="M">M (Trung)</option>
-            <option value="L">L (Lớn)</option>
-        `;
-    } else if ("vali".toLowerCase() === type.toLowerCase()) {
-        sizeSelect.innerHTML = `
-            <option value="20">20 inch (Xách tay)</option>
-            <option value="24">24 inch (Trung)</option>
-            <option value="28">28 inch (Lớn)</option>
-        `;
-    }
 }
 
 function handleProductSearch() {
@@ -889,7 +868,8 @@ function printproductVariantsTable(productVariants) {
             <td>${formatVND(pv.price)}</td>
             <td>${pv.quantity}</td>
             <td>
-                <button onclick="">Sửa</button>
+                <button onclick="editProductVariant(${pv.pvid}, '${pv.productName}', '${pv.size}', 
+                '${pv.color}', ${pv.price}, ${pv.quantity})">Sửa</button>
             </td>
         `;
         table.appendChild(row);
@@ -904,80 +884,64 @@ function editProduct(pid) {
                 "Cập nhật sản phẩm",
                 `
                 <div class="popup_item">
-                    <label>Chế độ nhập:</label>
-                    <div style="display:flex; gap:20px;">
-                        <label>
-                            <input type="radio" name="import_mode" value="manual" checked>
-                            Nhập thủ công
-                        </label>
-                        <label>
-                            <input type="radio" name="import_mode" value="excel">
-                            Nhập từ Excel
-                        </label>
-                    </div>
+                    <label>Tên sản phẩm:</label>
+                    <input type="text" id="p_name">
                 </div>
 
-                <div id="manual_mode">
-                    <div class="popup_item">
-                        <label>Tên sản phẩm:</label>
-                        <input type="text" id="p_name">
-                    </div>
+                <div class="popup_item">
+                    <label>Loại:</label>
+                    <select id="p_type">
+                        option value="Balo">Balo</option>
+                        <option value="Vali">Vali</option>
+                    </select>
+                </div>
 
-                    <div class="popup_item">
-                        <label>Loại:</label>
-                        <select id="p_type">
-                            <option value="Balo">Balo</option>
-                            <option value="Vali">Vali</option>
-                        </select>
-                    </div>
+                <div class="popup_item">
+                    <label>Kiểu dáng:</label>
+                    <select id="p_style">
+                        <option value="túi đeo chéo">túi đeo chéo</option>
+                        <option value="túi đeo bụng">túi đeo bụng</option>
+                        <option value="túi sách">túi sách</option>
+                    </select>
+                </div>
 
-                    <div class="popup_item">
-                        <label>Kiểu dáng:</label>
-                        <select id="p_style">
-                            <option value="túi đeo chéo">túi đeo chéo</option>
-                            <option value="túi đeo bụng">túi đeo bụng</option>
-                            <option value="túi sách">túi sách</option>
-                        </select>
-                    </div>
+                <div class="popup_item">
+                    <label>Chất liệu:</label>
+                    <select id="p_material">
+                        <option value="hợp kim">hợp kim</option>
+                        <option value="coston">coston</option>
+                    </select>
+                </div>
 
-                    <div class="popup_item">
-                        <label>Chất liệu:</label>
-                        <select id="p_material">
-                            <option value="hợp kim">hợp kim</option>
-                            <option value="coston">coston</option>
-                        </select>
-                    </div>
+                <div class="popup_item">
+                    <label>Nhà cung cấp:</label>
+                    <input type="text" id="p_producer">
+                </div>
 
-                    <div class="popup_item">
-                        <label>Nhà cung cấp:</label>
-                        <input type="text" id="p_producer">
-                    </div>
-
-                    <div class="popup_item">
-                        <label>Trạng thái:</label>
-                        <select id="p_status">
-                            <option value="normal">Đang bán</option>
-                            <option value="hot">Bán chạy</option>
-                            <option value="canceled">Dừng bán</option>
-                        </select>
-                    </div>
+                <div class="popup_item">
+                    <label>Trạng thái:</label>
+                    <select id="p_status">
+                        <option value="normal">Đang bán</option>
+                        <option value="hot">Bán chạy</option>
+                        <option value="canceled">Dừng bán</option>
+                    </select>
+                </div>
                     
-                    <div class="popup_item">
-                        <label>Mô tả:</label>
-                        <textarea id="p_description"></textarea>
+                <div class="popup_item">
+                    <label>Mô tả:</label>
+                    <textarea id="p_description"></textarea>
+                </div>
+
+                <div class="popup_item">
+                    <label>Ảnh sản phẩm:</label>
+
+                    <div class="img-upload-box">
+                        <span>+</span>
+                        <p>Chọn ảnh mới nếu muốn thay thế</p>
+                        <input type="file" id="sp-img" accept="image/*" multiple>
                     </div>
 
-                    <div class="popup_item">
-                        <label>Ảnh sản phẩm:</label>
-
-                        <div class="img-upload-box">
-                            <span>+</span>
-                            <p>Chọn ảnh mới nếu muốn thay thế</p>
-                            <input type="file" id="sp-img" accept="image/*" multiple>
-                        </div>
-
-                        <div class="preview-list" id="preview-list"></div>
-                    </div>
+                    <div class="preview-list" id="preview-list"></div>
                 </div>
                 `,
                 function () {
@@ -1068,6 +1032,65 @@ function editProduct(pid) {
                 });
             });
         });
+}
+
+function editProductVariant(pvid, productName, size, color, price, quantity) {
+    openAdminPopup(
+        "Cập nhật biến thể của " + productName,
+        `
+                <div class="popup_item">
+                    <label>Kích thước:</label>
+                    <input type="text" id="pv_size" readonly>            
+                </div>
+
+                <div class="popup_item">
+                   <label>Màu sắc:</label>
+                   <input type="text" id="pv_color" readonly>            
+                </div>
+
+                <div class="popup_item">
+                    <label>Giá tiền:</label>
+                    <input type="number" id="pv_price" min="0" step="1000">
+                </div>
+
+                <div class="popup_item">
+                    <label>Số lượng sản phẩm:</label>
+                    <input type="number" id="pv_quantity" min="0" step="1">
+                </div>
+                `,
+        function () {
+            const price = document.getElementById("pv_price").value || 0;
+            const quantity = document.getElementById("pv_quantity").value || 0;
+
+            const formData = new FormData();
+            formData.append("pvid", 2);
+            formData.append("price", 10000);
+            formData.append("quantity", 10);
+
+            fetch("/projectWeb_war/admin/product_variant_edit", {
+                method: "POST",
+                body: formData
+            })
+                .then(res => res.json())
+                .then(result => {
+                    if (result.success) {
+                        alert("Cập nhật thành công");
+                        handleProductVariantSearch();
+                    } else {
+                        alert(result.message || "Cập nhật thất bại");
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Lỗi kết nối server");
+                });
+        }
+    );
+    /* ===== ĐỔ DỮ LIỆU LÊN FORM ===== */
+    document.getElementById("pv_size").value = size;
+    document.getElementById("pv_color").value = color;
+    document.getElementById("pv_price").value = price;
+    document.getElementById("pv_quantity").value = quantity;
 }
 
 function toggleProductStatus(pid) {
