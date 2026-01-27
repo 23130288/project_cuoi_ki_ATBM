@@ -16,11 +16,8 @@ import java.util.List;
 public class ShowSupport extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        HttpSession session = request.getSession();
-//        User user = (User) session.getAttribute("user");
-
-        UserService us = new UserService();
-        User user = us.getUserById(1);
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
 
         if (user == null) {
             response.sendRedirect("dang_nhap");

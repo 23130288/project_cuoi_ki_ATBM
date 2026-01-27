@@ -159,6 +159,16 @@ header .avatar-icon-notify {
     align-items: center;
 }
 
+.notify-dot {
+    position: absolute;
+    right: 145px;
+    top: 50px;
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: 50%;
+}
+
 header .avatar-icon-shopping-cart {
     height: 45px;
     border-radius: 50%;

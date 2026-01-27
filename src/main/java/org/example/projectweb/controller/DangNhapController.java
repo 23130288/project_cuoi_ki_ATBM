@@ -20,7 +20,6 @@ public class DangNhapController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-
         String email = request.getParameter("email");
         String pass = request.getParameter("password");
 

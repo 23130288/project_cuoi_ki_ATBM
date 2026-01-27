@@ -23,10 +23,7 @@ public class CheckOutController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         Cart c = (Cart) session.getAttribute("cart");
-//        User user = (User) session.getAttribute("user");
-
-        UserService us = new UserService();
-        User u = us.getUserById(1);
+        User user = (User) session.getAttribute("user");
 
         if (c == null || c.isEmpty()) {
             response.sendRedirect("cart");
@@ -44,7 +41,7 @@ public class CheckOutController extends HttpServlet {
             uvid = v.getUvid();
         }
 
-        int oid = os.createOrder(u.getUid(), uvid, description);
+        int oid = os.createOrder(user.getUid(), uvid, description);
         os.createOrderDetails(oid, c);
 
         c.removeAll();

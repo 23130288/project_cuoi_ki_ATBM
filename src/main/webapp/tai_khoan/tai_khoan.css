@@ -234,6 +234,10 @@ body {
     padding: 15px;
     gap: 15px;
     text-decoration: none;
+    border: lightgrey solid 1px;
+}
+.notification_item.unread {
+    background: #e0e5ee;
 }
 
 .notification_item:hover {
@@ -260,7 +264,7 @@ body {
 
 .info span {
     font-size: 12px;
-    color: #999;
+    color: #797979;
 }
 
 /* ============================= tab menu ============================= */
@@ -530,4 +534,26 @@ body {
 }
 .password-success {
     color: green;
+}
+.btn-group {
+    margin-top: 12px;
+    display: flex;
+    justify-content: center;
+}
+.save-btn, .cancel-btn {
+    display: none;
+}
+.change-btn, .save-btn, .cancel-btn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+.save-btn {
+    background: #EDB310;
+}
+
+.cancel-btn {
+    background: #ccc;
+    margin-left: 6px;
 }

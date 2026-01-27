@@ -33,46 +33,50 @@
         <%-- -===============================- USER INFO -===============================- --%>
         <div class="information-container" id="user-info">
             <h2>Thông tin tài khoản</h2>
-            <button class="change-btn" id="btn-doi-thong-tin">Đổi thông tin</button>
-            <div class="in4">
-                <div class="in4_row">
-                    <label class="in4_label" for="email">Tên tài khoản</label>
-                    <input class="in4_input" type="text" id="email" name="name" value="${user.name}" readonly>
-                </div>
+            <form action="change-user-information" method="post" id="userForm">
+                <div class="in4">
+                    <div class="in4_row">
+                        <label class="in4_label" for="email">Thông tin đăng nhập</label>
+                        <input class="in4_input" type="email" id="email" name="email" value="${user.email}" readonly>
+                    </div>
 
-                <div class="in4_row">
-                    <label class="in4_label" for="email">Thông tin đăng nhập</label>
-                    <input class="in4_input" type="text" id="email" name="email" value="${user.email}" readonly>
-                </div>
+                    <div class="in4_row">
+                        <label class="in4_label" for="email">Tên tài khoản</label>
+                        <input class="in4_input info2" type="text" id="email" name="name" value="${user.name}" readonly>
+                    </div>
 
-                <div class="in4_row">
-                    <label class="in4_label" for="sdt">Số điện thoại *</label>
-                    <input class="in4_input" type="text" id="sdt" name="sdt" placeholder="Bạn chưa nhập sdt"
-                           value="${user.phone}" readonly>
-                </div>
+                    <div class="in4_row">
+                        <label class="in4_label" for="sdt">Số điện thoại *</label>
+                        <input class="in4_input info2" type="text" id="sdt" name="sdt" placeholder="Bạn chưa nhập sdt"
+                               value="${user.phone}" inputmode="numeric" pattern="[0-9]*" maxlength="11" readonly>
+                    </div>
 
-                <div class="in4_row">
-                    <label class="in4_label" for="address">Địa chỉ *</label>
-                    <input class="in4_input" type="text" id="address" name="address"
-                           placeholder="Bạn chưa nhập địa chỉ"
-                           value="${user.address}" readonly>
+                    <div class="in4_row">
+                        <label class="in4_label" for="address">Địa chỉ *</label>
+                        <input class="in4_input info2" type="text" id="address" name="address"
+                               placeholder="Bạn chưa nhập địa chỉ"
+                               value="${user.address}" readonly>
+                    </div>
                 </div>
-            </div>
+                <div class="btn-group">
+                    <button type="button" class="change-btn" id="btn-edit">Đổi thông tin</button>
+                    <button type="submit" class="save-btn" id="btn-save">Lưu</button>
+                    <button type="button" class="cancel-btn" id="btn-cancel">Hủy</button>
+                </div>
+            </form>
         </div>
         <%-- -===============================- NOTIFICATION -===============================- --%>
         <div class="information-container" id="notification">
             <h2>Thông báo</h2>
-
-            <a href="../ct_Order/ct_Order.jsp" class="notification_item">
-                <%--                <div class="avatar">--%>
-                <%--                    <img src="image/balo_cam_trai.png" alt="Ảnh đại diện">--%>
-                <%--                </div>--%>
-                <div class="info">
-                    <h4>Đơn hàng giao thành công</h4>
-                    <p>Mã đơn hàng: hvshiodvosidjvpodjspc</p>
-                    <span>10/04/2025</span>
+            <c:forEach var="n" items="${notifications}">
+                <div class="notification_item ${!n.isRead ? 'unread' : ''}" data-nid="${n.nid}">
+                    <div class="info">
+                        <h4>${n.title}</h4>
+                        <p>${n.content}</p>
+                        <span>${n.receivedDate}</span>
+                    </div>
                 </div>
-            </a>
+            </c:forEach>
         </div>
         <%-- -===============================- ORDER -===============================- --%>
         <div class="information-container" id="order">

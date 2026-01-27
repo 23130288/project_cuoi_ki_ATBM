@@ -131,7 +131,6 @@ document.addEventListener("DOMContentLoaded", function () {
 //     });
 // });
 
-
 // ============================================ PASSWORD ============================================
 const oldPassword = document.getElementById("old_password");
 const password = document.getElementById("password");
@@ -172,4 +171,60 @@ document.addEventListener("DOMContentLoaded", function () {
     if (activeTab) {
         activeTab.style.display = "block";
     }
+});
+
+
+// NOTIFICATIONS
+document.querySelectorAll(".notification_item").forEach(item => {
+    item.addEventListener("click", function () {
+        if (!this.classList.contains("unread")) return;
+
+        const nid = this.dataset.nid;
+
+        fetch("read-notification", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: "nid=" + nid
+        })
+            .then(res => {
+                if (res.ok) {
+                    this.classList.remove("unread");
+                }
+            });
+    });
+});
+
+
+// USER INFORMATION
+const btnEdit = document.getElementById("btn-edit");
+const btnSave = document.getElementById("btn-save");
+const btnCancel = document.getElementById("btn-cancel");
+const inputs = document.querySelectorAll("#userForm .in4_input.info2");
+
+let oldValues = {};
+
+btnEdit.onclick = () => {
+    inputs.forEach(i => {
+        oldValues[i.name] = i.value;
+        if (i.name) i.removeAttribute("readonly");
+    });
+    btnEdit.style.display = "none";
+    btnSave.style.display = "block";
+    btnCancel.style.display = "block";
+};
+
+btnCancel.onclick = () => {
+    inputs.forEach(i => {
+        if (i.name) i.value = oldValues[i.name];
+        i.setAttribute("readonly", true);
+    });
+    btnEdit.style.display = "block";
+    btnSave.style.display = "none";
+    btnCancel.style.display = "none";
+};
+const sdtInput = document.getElementById("sdt");
+sdtInput.addEventListener("input", function () {
+    this.value = this.value.replace(/[^0-9]/g, "");
 });

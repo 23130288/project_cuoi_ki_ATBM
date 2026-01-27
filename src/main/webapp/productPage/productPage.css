@@ -359,3 +359,7 @@ main .section-review .comment span {
     font-size: 12px;
     color: #999999;
 }
+.warning .review-warning {
+    text-align: center;
+    font-weight: bold;
+}

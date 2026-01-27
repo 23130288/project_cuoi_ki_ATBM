@@ -20,12 +20,6 @@ toggleConfirm.addEventListener('mouseout', () => {
 });
 
 
-//sử lí nút
-document.getElementById('log').addEventListener('click', function (event) {
-    event.preventDefault();
-    window.location.href = '../tai_khoan/tai_khoan.jsp';
-});
-
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
 const passwordError = document.getElementById("passwordError");
 const confirmError = document.getElementById("confirmError");
@@ -45,3 +39,16 @@ confirmPassword.addEventListener("input", () => {
     submit.disabled = !confirmValid;
 });
 
+
+
+// ============================================ EMAIL ============================================
+const email = document.getElementById("email");
+const emailError = document.getElementById("emailError");
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+email.addEventListener("input", () => {
+    const em = email.value;
+    const emValid = emailRegex.test(em);
+    emailError.textContent = emValid ? "" : "Sai định dạng email";
+    submit.disabled = !emValid;
+});

@@ -45,11 +45,18 @@ public class UserDao extends BaseDao {
     }
 
     public void updatePassword(int uid, String newPassword) {
-        get().useHandle(h -> {
-            h.createUpdate("""
-                    update user set password = :newPassword where uid = :uid
-                    """).bind("newPassword", newPassword).bind("uid", uid)
-                    .execute();
-        });
+        get().useHandle(h -> h.createUpdate("""
+                        update user set password = :newPassword where uid = :uid
+                        """).bind("newPassword", newPassword).bind("uid", uid)
+                .execute());
+    }
+
+    public void changeUserInfo(int uid, String name, String phone, String address) {
+        get().useHandle(h -> h.createUpdate("""
+                        update user 
+                        set name = :name, phone = :phone, address = :address
+                        where uid = :uid
+                        """).bind("name", name).bind("phone", phone).bind("address", address).bind("uid", uid)
+                .execute());
     }
 }

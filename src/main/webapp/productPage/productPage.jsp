@@ -183,7 +183,9 @@
                     </c:choose>
                 </c:when>
                 <c:otherwise>
-                    <p class="review-warning">Bạn cần mua sản phẩm này để có thể đánh giá.</p>
+                    <div class="warning">
+                        <p class="review-warning">Bạn cần mua sản phẩm này để có thể đánh giá.</p>
+                    </div>
                 </c:otherwise>
             </c:choose>
         </div>
