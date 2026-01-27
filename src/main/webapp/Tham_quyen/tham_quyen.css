@@ -1,0 +1,21 @@
+body {
+    margin: 0;
+    height: auto;
+    flex-direction: column;
+    align-items: center;
+    font-family: sans-serif;
+    color: white;
+}
+
+#selection_2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 500px;
+}
+
+#selection_2 .no-permission {
+    color: red;
+    font-size: 18px;
+    font-weight: 600;
+}

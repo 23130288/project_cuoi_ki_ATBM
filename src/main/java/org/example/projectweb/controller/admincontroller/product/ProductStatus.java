@@ -5,8 +5,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.example.projectweb.dao.ProductDao;
 import org.example.projectweb.model.Product;
+import org.example.projectweb.model.User;
 
 import java.io.IOException;
 
@@ -20,14 +22,27 @@ public class ProductStatus extends HttpServlet {
     final ProductDao productDao = new ProductDao();
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
+        //check thẩm quyền
+        HttpSession session = request.getSession();
+        User check = (User) session.getAttribute("user");
+        session.setAttribute("user", check);
+        if (check == null) {
+            request.getRequestDispatcher("/dang_nhap").forward(request, response);
+            return;
+        }
 
-        int pid = Integer.parseInt(req.getParameter("pid"));
+        if (!"admin".equalsIgnoreCase(check.getRole())) {
+            request.getRequestDispatcher("/tham_quyen").forward(request, response);
+            return;
+        }
+
+        int pid = Integer.parseInt(request.getParameter("pid"));
 
         Product product = productDao.getProductById(pid);
         if (product == null) {
-            resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
@@ -38,8 +53,8 @@ public class ProductStatus extends HttpServlet {
         }
         productDao.updateStatus(product.getPid(), product.getStatus());
 
-        resp.setContentType("application/json");
-        resp.getWriter().write(
+        response.setContentType("application/json");
+        response.getWriter().write(
                 "{\"message\":\"Cập nhật trạng thái thành công\"}"
         );
     }

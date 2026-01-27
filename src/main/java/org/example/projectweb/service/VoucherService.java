@@ -26,10 +26,10 @@ public class VoucherService {
 
     private String getImageByType(String type) {
         return switch (type) {
-            case "mien_phi_van_chuyen" -> "/images/voucher/free_ship.png";
-            case "giam_gia" -> "/images/voucher/sale_d.png";
-            case "phan_tram" -> "/images/voucher/sale_p.png";
-            default -> "/images/voucher/default.png";
+            case "mien_phi_van_chuyen" -> "images/voucher/free_ship.png";
+            case "giam_gia" -> "images/voucher/sale_d.png";
+            case "phan_tram" -> "images/voucher/sale_p.png";
+            default -> "images/voucher/default.png";
         };
     }
 

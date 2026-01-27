@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <title>HEADER</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="shareStuff/header/header.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/shareStuff/header/header.css">
 </head>
 <body>
 <header>
     <div class="top-banner">
         <div class="brand-name">
             <a href="trangChu">
-                <img src="shareStuff/header/image/logo.png" alt="Travel Logo">
+                <img src="${pageContext.request.contextPath}/shareStuff/header/image/logo.png" alt="Travel Logo">
             </a>
         </div>
         <div class="header-search">
