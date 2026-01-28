@@ -27,7 +27,7 @@ public class VoucherDao extends BaseDao {
 
     public List<VoucherUser> getVoucherUsersByUid(int uid) {
         return get().withHandle(h -> h.createQuery("""
-                select min(vu.uvid) as uvid, v.vid, v.name, v.discount, v.`condition`
+                select min(vu.uvid) as uvid, v.vid, v.name, v.discount, v.`condition`, v.image, v.expired_date
                 from voucher v join voucher_user vu on v.vid = vu.vid
                 where vu.uid = :uid and v.status = 1 and vu.applicable = 1
                 group by v.vid, v.name, v.discount, v.condition
@@ -56,6 +56,7 @@ public class VoucherDao extends BaseDao {
                         .execute()
         );
     }
+
     public List<Voucher> getLoadVouchers() {
         String sql = "SELECT vid, name, discount,`condition`, expired_date, image, status FROM voucher WHERE status = 1 AND expired_date >= NOW() ";
 
@@ -78,12 +79,11 @@ public class VoucherDao extends BaseDao {
     }
 
     public void setApplicable(int uvid, int bool) {
-        get().useHandle(h -> {
-            h.createUpdate("update voucher_user set applicable = :bool where uvid = :uvid")
-                    .bind("bool", bool).bind("uvid", uvid)
-                    .execute();
-        });
+        get().useHandle(h -> h.createUpdate("update voucher_user set applicable = :bool where uvid = :uvid")
+                .bind("bool", bool).bind("uvid", uvid)
+                .execute());
     }
+
     public boolean isVoucherReceived(int uid, int vid) {
         String sql = " SELECT uvid FROM voucher_user WHERE uid = :uid AND vid = :vid ";
 
@@ -96,6 +96,7 @@ public class VoucherDao extends BaseDao {
                         .isPresent()
         );
     }
+
     public void receiveVoucher(int uid, int vid) {
         String sql = " INSERT INTO voucher_user(uid, vid, applicable) VALUES (:uid, :vid, 1) ";
 
@@ -108,4 +109,20 @@ public class VoucherDao extends BaseDao {
     }
 
 
+    public List<Voucher> getVouchersUserNotHave(int uid) {
+        return get().withHandle(h -> h.createQuery("""
+                select v.vid, v.name, v.discount, v.`condition`, v.image
+                from voucher v
+                where not exists (
+                    select 1 from voucher_user vu
+                    where vu.vid = v.vid
+                    and vu.uid = :uid)
+                and v.status = 1
+                """).bind("uid", uid).mapToBean(Voucher.class).list());
+    }
+
+    public List<Voucher> getUseableVouchers() {
+        return get().withHandle(h -> h.createQuery("select vid, name, discount, `condition`, image from voucher where status = 1")
+                .mapToBean(Voucher.class).list());
+    }
 }

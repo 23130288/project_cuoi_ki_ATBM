@@ -24,15 +24,20 @@ public class HeaderFilter implements Filter {
         HttpSession session = req.getSession(false);
 
         int unread = 0;
+        String avatar = null;
         if (session != null) {
             User user = (User) session.getAttribute("user");
             if (user != null) {
                 NotificationService ns = new NotificationService();
                 unread = ns.countUnread(user.getUid());
+                
+                avatar = user.getAvatar();
             }
         }
 
         request.setAttribute("unreadCount", unread);
+        request.setAttribute("userAvatar", avatar);
+
         chain.doFilter(request, response);
     }
 }

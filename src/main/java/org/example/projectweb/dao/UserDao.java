@@ -21,7 +21,10 @@ public class UserDao extends BaseDao {
 
     public void addUser(String email, String pass, String name) {
         get().useHandle(h ->
-                h.createUpdate("INSERT INTO user (name, email, password, role, status) VALUES (:name, :email, :password, :role, :status)")
+                h.createUpdate("""
+                                INSERT INTO user (name, email, password, avatar, role, status)
+                                VALUES (:name, :email, :password, 'images/userAvatar/default_user.jpg', :role, :status)
+                                """)
                         .bind("name", name).bind("email", email).bind("password", pass).bind("role", "user").bind("status", true).execute()
         );
     }

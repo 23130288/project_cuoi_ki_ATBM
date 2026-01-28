@@ -8,14 +8,9 @@
     <title>TÌM KIẾM </title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
     <link rel="stylesheet" href="trang_tim_kiem/trang_tim_kiem.css">
-    <link rel="stylesheet" href="../shareStuff/header/header.css">
-    <link rel="stylesheet" href="../shareStuff/footer/footer.css">
 </head>
 <body>
-<header>
-    <div id="header-placeholder"></div>
-    <script src="../shareStuff/header/headerGetter.js"></script>
-</header>
+<jsp:include page="../shareStuff/header/header.jsp"/>
 <div class="container-search">
     <div class="search-bar">
         <input type="text" name="query" placeholder="Tên sản phẩm..."/>
@@ -23,14 +18,11 @@
     </div>
 
     <form method="post" action="search">
-
         <div class="filter-container">
-
             <button type="button" class="filter-toggle" id="filterToggle">
                 <label>Bộ Lọc</label>
                 <i class="fa-solid fa-plus"></i>
             </button>
-
             <div class="filter-panel" id="filterPanel">
 
                 <!-- PRODUCER -->
@@ -106,13 +98,9 @@
 
                 <!-- SUBMIT -->
                 <button type="submit" class="btn-result">Áp Dụng</button>
-
             </div>
         </div>
-
     </form>
-
-
 </div>
 
 <section class="results">
@@ -124,10 +112,10 @@
                     <div class="product-card">
                         <c:choose>
                             <c:when test="${ not empty p.mainImage}">
-                                <img src="${p.mainImage.image}" alt="">
+                                <a href="productPage?pid=${p.pid}"><img src="${p.mainImage.image}" alt=""></a>
                             </c:when>
                             <c:otherwise>
-                                <img src="trang_chu/image/balo_phuot.png" alt="">
+                                <a href="productPage?pid=${p.pid}"><img src="trang_chu/image/balo_leo_nui.png" alt=""></a>
                             </c:otherwise>
                         </c:choose>
 
@@ -141,10 +129,13 @@
                             </p>
                         </c:if>
                         <div class="product-actions">
-                            <button class="buy-btn">Xem Ngay</button>
-                            <div class="inner-circle1">
-                                <i class="fa fa-shopping-cart"></i>
-                            </div>
+                            <a class="buy-btn" href="productPage?pid=${p.pid}">Xem Ngay</a>
+                            <button type="button" class="inner-circle1"
+                                    data-pid="${p.pid}"
+                                    data-pvid="${p.variants[0].pvid}"
+                                    data-main-img="${p.mainImage.image}">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                            </button>
                         </div>
                     </div>
                 </c:forEach>
@@ -155,15 +146,8 @@
             <h2>Không tìm thấy sản phẩm.Vui lòng thử lại</h2>
         </c:otherwise>
     </c:choose>
-
-
-
 </section>
-
-<footer>
-    <div id="footer-placeholder"></div>
-    <script src="../shareStuff/footer/footerGetter.js"></script>
-</footer>
+<jsp:include page="../shareStuff/footer/footer.jsp"/>
 <script src="trang_tim_kiem/trang_tim_kiem.js"></script>
 </body>
 

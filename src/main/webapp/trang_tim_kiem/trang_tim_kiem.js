@@ -85,6 +85,28 @@ tags.forEach(tag => {
 
 
 
+document.querySelectorAll(".inner-circle1").forEach(btn => {
+    btn.addEventListener("click", function () {
+        const pid = this.dataset.pid;
+        const pvid = this.dataset.pvid;
+        const mainImg = this.dataset.mainImg;
+        fetch(`add-cart?pid=${pid}&pvid=${pvid}&mainImg=${mainImg}&q=1`)
+            .then(res => {
+                if (res.status === 401) {
+                    window.location.href = "dang_nhap";
+                    return;
+                }
+                return res.json();
+            })
+            .then(data => {
+                if (data?.success) {
+                    this.disabled = true;
+                    this.innerHTML = '<i class="fa-solid fa-check"></i>';
+                }
+            })
+            .catch(err => console.error(err));
+    });
+});
 
 
 

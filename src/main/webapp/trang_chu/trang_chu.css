@@ -215,6 +215,7 @@
 }
 
 .product-actions .buy-btn {
+    text-decoration: none;
     flex-grow: 1;
     background-color: orange;
     color: white;
