@@ -61,7 +61,14 @@
             <div class="avatar-icon-user">
                 <div class="inner-circle">
                     <a href="tai_khoan">
-                        <i class="fa fa-user"></i>
+                        <c:choose>
+                            <c:when test="${userAvatar != null}">
+                                <img src="${userAvatar}" alt="avatar" class="avatar-img">
+                            </c:when>
+                            <c:otherwise>
+                                <i class="fa fa-user"></i>
+                            </c:otherwise>
+                        </c:choose>
                     </a>
                 </div>
             </div>
@@ -76,16 +83,10 @@
             <ul>
                 <li><a href="trangChu">TRANG CHỦ</a></li>
                 <li class="dropdown">
-                    <a href="trangChu">SẢN PHẨM</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">TẤT CẢ</a></li>
-                        <li><a href="#">VALI</a></li>
-                        <li><a href="#">BALO</a></li>
-                    </ul>
+                    <a href="search">TÌM KIẾM</a>
                 </li>
                 <li><a href="wishlist">WISHLIST</a></li>
                 <li><a href="support">LIÊN HỆ</a></li>
-                <li><a href="thong_tin/thong_tin.jsp">ABOUT US</a></li>
                 <li><a href="chinh_sach">CHÍNH SÁCH</a></li>
                 <li><a href="dich_vu">DỊCH VỤ</a></li>
             </ul>

@@ -58,7 +58,7 @@ public class DangKyController extends HttpServlet {
             request.getRequestDispatcher("dang_ky/dang_ky.jsp")
                     .forward(request, response);
         } else {
-            response.sendRedirect("/dang_nhap");
+            response.sendRedirect("dang_nhap");
         }
     }
 }

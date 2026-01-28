@@ -61,5 +61,17 @@ public class VoucherService {
     public void setApplicable(int uvid, int bool) {
         vDao.setApplicable(uvid, bool);
     }
+
+    public List<Voucher> getVouchersUserNotHave(int uid) {
+        return vDao.getVouchersUserNotHave(uid);
+    }
+
+    public void receiveVoucher(int uid, int vid) {
+        vDao.receiveVoucher(uid, vid);
+    }
+
+    public List<Voucher> getUseableVouchers() {
+        return vDao.getUseableVouchers();
+    }
 }
 

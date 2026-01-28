@@ -19,7 +19,7 @@ public class ProductVariantDao extends BaseDao {
     }
 
     public List<ProductVariant> getVariantsByProductId(int productId) {
-        return get().withHandle(h -> h.createQuery("select size, color, price, quantity from product_variant where pid = :pid")
+        return get().withHandle(h -> h.createQuery("select pvid, size, color, price, quantity from product_variant where pid = :pid")
                 .bind("pid", productId)
                 .mapToBean(ProductVariant.class).list());
     }

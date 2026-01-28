@@ -18,7 +18,6 @@ public class Product implements Serializable {
     private List<ProductVariant> variants;
     private List<ImageProduct> images;
 
-
     public Product() {
 
     }

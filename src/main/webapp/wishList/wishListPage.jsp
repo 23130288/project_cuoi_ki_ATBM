@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
 <body>
-<jsp:include page="../shareStuff/header/header.jsp" />
+<jsp:include page="../shareStuff/header/header.jsp"/>
 <main>
     <h1>Sản phẩm yêu thích</h1>
     <div class="container">
@@ -62,7 +62,12 @@
                         </c:choose>
                     </div>
                     <div class="wishlist-item-buttons">
-                        <button class="add-to-cart">Thêm vào giỏ</button>
+                        <button class="add-to-cart"
+                                data-pid="${p.pid}"
+                                data-pvid="${p.variants[0].pvid}"
+                                data-main-img="${listMainImgs[st.index].image}">
+                            Thêm vào giỏ
+                        </button>
                         <form action="wishlist" method="post">
                             <input type="hidden" name="action" value="remove">
                             <input type="hidden" name="productId" value="${p.pid}">
@@ -74,6 +79,7 @@
         </div>
     </div>
 </main>
-<jsp:include page="../shareStuff/footer/footer.jsp" />
+<jsp:include page="../shareStuff/footer/footer.jsp"/>
+<script src="wishList/wishListPageJS.js"></script>
 </body>
 </html>

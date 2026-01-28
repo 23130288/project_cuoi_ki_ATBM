@@ -16,7 +16,7 @@
 <div class="selection_2" id="selection_2">
     <div class="menu" id="menu">
         <div class="avata">
-            <img src="images/userAvatar/${user.avatar}" alt="${user.avatar}">
+            <img src="${user.avatar}" alt="${user.avatar}">
             <h3 class="username">${user.name}</h3>
         </div>
         <div class="menu_item">
@@ -68,15 +68,19 @@
         <%-- -===============================- NOTIFICATION -===============================- --%>
         <div class="information-container" id="notification">
             <h2>Thông báo</h2>
-            <c:forEach var="n" items="${notifications}">
-                <div class="notification_item ${!n.isRead ? 'unread' : ''}" data-nid="${n.nid}">
-                    <div class="info">
-                        <h4>${n.title}</h4>
-                        <p>${n.content}</p>
-                        <span>${n.receivedDate}</span>
-                    </div>
+            <div class="container">
+                <div class="products">
+                    <c:forEach var="n" items="${notifications}">
+                        <div class="notification_item ${!n.isRead ? 'unread' : ''}" data-nid="${n.nid}">
+                            <div class="info">
+                                <h4>${n.title}</h4>
+                                <p>${n.content}</p>
+                                <span>${n.receivedDate}</span>
+                            </div>
+                        </div>
+                    </c:forEach>
                 </div>
-            </c:forEach>
+            </div>
         </div>
         <%-- -===============================- ORDER -===============================- --%>
         <div class="information-container" id="order">

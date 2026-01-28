@@ -23,14 +23,27 @@ document.querySelectorAll(".slider-container").forEach(container => {
     update();
 });
 
-const buttons = document.querySelectorAll(".getBtn");
+document.querySelectorAll(".inner-circle1").forEach(btn => {
+    btn.addEventListener("click", function () {
+        const pid = this.dataset.pid;
+        const pvid = this.dataset.pvid;
+        const mainImg = this.dataset.mainImg;
 
-buttons.forEach(btn => {
-    btn.addEventListener("click", () => {
-        alert("Bạn đã nhận được voucher!");
+        let url = `add-cart?pid=${pid}&pvid=${pvid}&mainImg=${mainImg}&q=1`;
+        fetch(url)
+            .then(res => {
+                if (res.status === 401) {
+                    window.location.href = "dang_nhap";
+                    return;
+                }
+                return res.json();
+            })
+            .then(data => {
+                if (data?.success) {
+                    this.disabled = true;
+                    this.innerHTML = '<i class="fa-solid fa-check"></i>';
+                }
+            })
+            .catch(err => console.error(err));
     });
 });
-
-
-
-

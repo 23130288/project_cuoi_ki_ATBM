@@ -5,8 +5,10 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import org.example.projectweb.dao.VoucherDao;
 import org.example.projectweb.model.Product;
+import org.example.projectweb.model.User;
 import org.example.projectweb.model.Voucher;
 import org.example.projectweb.service.ProductService;
+import org.example.projectweb.service.VoucherService;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,10 +19,19 @@ public class trangChuController extends HttpServlet {
     private final VoucherDao voucherDao = new VoucherDao();
 
     @Override
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<Voucher> vouchers = voucherDao.getLoadVouchers();
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+
+        VoucherService vs = new VoucherService();
+//        List<Voucher> vouchers = voucherDao.getLoadVouchers();
+        List<Voucher> vouchers;
+        if (user == null) {
+            vouchers = vs.getUseableVouchers();
+        } else {
+            vouchers = vs.getVouchersUserNotHave(user.getUid());
+        }
         request.setAttribute("vouchers", vouchers);
 
 
@@ -34,8 +45,8 @@ public class trangChuController extends HttpServlet {
 
         request.getRequestDispatcher("trang_chu/trang_chu.jsp")
                 .forward(request, response);
-
     }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 

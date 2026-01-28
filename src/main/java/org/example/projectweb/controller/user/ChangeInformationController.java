@@ -17,14 +17,13 @@ public class ChangeInformationController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        HttpSession session = request.getSession();
-//        User user = (User) session.getAttribute("user");
-//        if (user == null) {
-//            response.sendRedirect("dang_nhap");
-//            return;
-//        }
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            response.sendRedirect("dang_nhap");
+            return;
+        }
         UserService us = new UserService();
-        User user = us.getUserById(1);
 
         String name = request.getParameter("name");
         String phone = request.getParameter("sdt");
@@ -35,7 +34,7 @@ public class ChangeInformationController extends HttpServlet {
         user.setName(name);
         user.setPhone(phone);
         user.setAddress(address);
-//        session.setAttribute("user", user);
+        session.setAttribute("user", user);
 
         response.sendRedirect("tai_khoan");
     }
