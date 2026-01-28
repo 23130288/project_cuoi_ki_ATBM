@@ -64,6 +64,22 @@ public class ProductDao extends BaseDao {
                         .bind("pvid", pvid).bind("price", price).bind("quantity", quantity).execute() > 0
         );
     }
+    public String getBestSellingProductName() {
+        return get().withHandle(h ->
+                h.createQuery("""
+            SELECT p.name
+            FROM order_detail od
+            JOIN product_variant pv ON od.pvid = pv.pvid
+            JOIN product p ON pv.pid = p.pid
+            GROUP BY p.pid, p.name
+            ORDER BY SUM(od.quantity) DESC
+            LIMIT 1
+        """)
+                        .mapTo(String.class)
+                        .findOne()
+                        .orElse("Không có dữ liệu")
+        );
+    }
 
     public List<Integer> getListProductID() {
         return get().withHandle(h ->
