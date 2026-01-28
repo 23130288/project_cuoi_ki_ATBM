@@ -129,12 +129,12 @@
                 </div>
         `,
 
-        "Thống kê báo cáo": `
-            <h2>Thống kê doanh thu</h2>
-            <p>Doanh thu tháng này: <b>12.500.000₫</b></p>
-            <p>Tổng đơn hàng: <b>58</b></p>
-            <p>Sản phẩm bán chạy nhất: <b>Vali cao cấp</b></p>
-        `,
+            "Thống kê báo cáo": `
+            <h2>Thống kê báo cáo</h2>
+            <div id="report_statistics">
+                <p>Đang tải dữ liệu...</p>
+            </div>
+            `,
 
         "Đăng xuất": `
             <h2>Đăng xuất</h2>
@@ -203,6 +203,10 @@
 
             if (text === "Trả lời câu hỏi") {
                 loadSupportList("all");
+            }
+
+            if (text === "Thống kê báo cáo") {
+                getReportStatistics();
             }
         });
     });
@@ -1788,4 +1792,35 @@ function loadSupportList(filter) {
                 container.appendChild(div);
             });
         });
+}
+
+function getReportStatistics() {
+    fetch("/projectWeb_war/admin/ReportStatistics")
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Lỗi khi lấy thống kê");
+            }
+            return response.json();
+        })
+        .then(data => {
+            renderReportStatistics(data);
+        })
+        .catch(error => {
+            document.getElementById("report_statistics").innerHTML =
+                "<p>Lỗi tải thống kê</p>";
+            console.error(error);
+        });
+}
+
+function renderReportStatistics(stats) {
+    const container = document.getElementById("report_statistics");
+
+    container.innerHTML = `
+        <p><b>Tổng số đơn:</b> ${stats.totalOrders}</p>
+        <p><b>Số đơn thành công:</b> ${stats.completedOrders}</p>
+        <p><b>Sản phẩm bán chạy nhất:</b> ${stats.bestSellingProductName}</p>
+        <p><b>Tổng số sản phẩm đã bán:</b> ${stats.totalProductsSold}</p>
+        <p><b>Doanh thu tháng:</b> ${stats.monthlyRevenue.toLocaleString()} ₫</p>
+        <p><b>Số khách hàng:</b> ${stats.totalCustomers}</p>
+    `;
 }

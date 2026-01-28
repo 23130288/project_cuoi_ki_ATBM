@@ -46,13 +46,27 @@ public class GetListSupport extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+            throws IOException, ServletException {
+        //check thẩm quyền
+        HttpSession session = request.getSession();
+        User check = (User) session.getAttribute("user");
+        session.setAttribute("user", check);
+        if (check == null) {
+            request.getRequestDispatcher("/dang_nhap").forward(request, response);
+            return;
+        }
+
+        if (!"admin".equalsIgnoreCase(check.getRole())) {
+            request.getRequestDispatcher("/tham_quyen").forward(request, response);
+            return;
+        }
+
         int spid = Integer.parseInt(request.getParameter("spid"));
         int uid = Integer.parseInt(request.getParameter("uid"));
         String message = request.getParameter("message");
         String uidStr = String.valueOf(uid);
 
-        sups.createreply(spid, 2, uidStr, message);
+        sups.createreply(spid, check.getUid(), uidStr, message);
 
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write("{\"success\":true}");

@@ -18,6 +18,63 @@ public class OrderDao extends BaseDao {
                 .mapToBean(Order.class).list());
     }
 
+    public int countAllOrders() {
+        return get().withHandle(h ->
+                h.createQuery("SELECT COUNT(oid) FROM `order`")
+                        .mapTo(Integer.class).one()
+        );
+    }
+    public int countCompletedOrders() {
+        return get().withHandle(h ->
+                h.createQuery("SELECT COUNT(oid) FROM `order` WHERE status = 'delivered'")
+                        .mapTo(Integer.class).one()
+        );
+    }
+
+    public double getMonthlyRevenue(int month, int year) {
+        return get().withHandle(h ->
+                h.createQuery("""
+            SELECT COALESCE(SUM(final_price), 0) AS revenue
+                                                  FROM (
+                                                      SELECT
+                                                          o.oid,
+                                                          SUM(od.quantity * pv.price)
+                                                          -
+                                                          COALESCE(
+                                                              CASE
+                                                                  WHEN v.name = 'phan_tram'
+                                                                      THEN SUM(od.quantity * pv.price) * v.discount
+                                                                  WHEN v.name = 'giam_gia'
+                                                                      THEN v.discount
+                                                                  ELSE 0
+                                                              END
+                                                          , 0) AS final_price
+                                                      FROM `order` o
+                                                      JOIN order_detail od ON o.oid = od.oid
+                                                      JOIN product_variant pv ON od.pvid = pv.pvid
+                                                      LEFT JOIN voucher_user vu ON o.uvid = vu.uvid
+                                                      LEFT JOIN voucher v ON vu.vid = v.vid
+                                                      WHERE MONTH(o.created_date) = :month
+                                                        AND YEAR(o.created_date) = :year
+                                                      GROUP BY o.oid
+                                                  ) t;
+                                
+        """)
+                        .bind("month", month)
+                        .bind("year", year)
+                        .mapTo(Double.class)
+                        .list()
+                        .stream().mapToDouble(Double::doubleValue).sum()
+        );
+    }
+
+    public int getTotalProductsSold() {
+        return get().withHandle(h ->
+                h.createQuery("SELECT COALESCE(SUM(quantity), 0) FROM order_detail")
+                        .mapTo(Integer.class).one()
+        );
+    }
+
     public List<Order> getListOrderByCostomerAdmin(String name) {
         return get().withHandle(h -> h.createQuery("SELECT o.oid,u.name AS customer,SUM(od.quantity*pv.price) AS totalPrice,o.created_date AS createdDate,o.status " +
                         "FROM `order` o JOIN user u ON o.uid=u.uid " +

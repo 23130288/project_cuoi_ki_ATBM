@@ -32,8 +32,15 @@ public class UserDao extends BaseDao {
     }
 
     public List<User> getListUser() {
-        return get().withHandle(h -> h.createQuery("select uid, name, email, phone, password, address, bdate, avatar, role, status from user")
+        return get().withHandle(h -> h.createQuery("select uid, name, email, role, status from user")
                 .mapToBean(User.class).list());
+    }
+
+    public int countCustomers() {
+        return get().withHandle(h ->
+                h.createQuery("SELECT COUNT(DISTINCT o.uid) FROM `order` o JOIN user u ON o.uid = u.uid WHERE u.role = 'user' AND u.status = true")
+                        .mapTo(Integer.class).one()
+        );
     }
 
     public List<User> getAllUsersNameLike(String name) {
