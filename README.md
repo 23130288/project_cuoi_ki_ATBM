@@ -1,5 +1,7 @@
-# projectWeb
-we are doing web "Bán vali và balo du lịch"
-Thành viên : hải,khôi,tâm --> 60 Đồng Nai
+# project_cuoi_ki_ATBM
 
-me changing file location makes it go from 3000+, 1000- to 10.000+,8700-, me stupid
+Chủ đề: Web bán balo và vali
+Nhóm 25:
+ - 23130288 | Trần Công Tâm
+ - 23130086 | Nguyễn Thanh Hải
+ - 21130572 | Trần Văn Toàn
