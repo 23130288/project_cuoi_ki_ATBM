@@ -205,7 +205,8 @@
                 <div class="form-container">
                     <c:choose>
                         <c:when test="${user == null}">
-                            <a href="dang_nhap" class="login-notice"><p>Xin hãy đăng nhập để có thể dùng chức năng giỏ hàng.</p></a>
+                            <a href="dang_nhap" class="login-notice"><p>Xin hãy đăng nhập để có thể dùng chức năng giỏ
+                                hàng.</p></a>
                         </c:when>
                         <c:when test="${empty user.phone || empty user.address}">
                             <div class="missing-information-container">
@@ -245,7 +246,44 @@
                                 </div>
                             </div>
                             <div class="container-buttons">
-                                <button type="submit" class="confirm-btn">Thanh toán</button>
+                                <button type="button" class="confirm-btn" id="confirmBtn">Thanh toán</button>
+                            </div>
+
+                            <!-- digital sign -->
+                            <div class="digital-sign-model" id="digitalSignModel">
+                                <div class="digital-sign-box">
+                                    <h2>Ký số điện tử</h2>
+                                    <div class="sign-info">
+                                        <p>Tài liệu: ...</p>
+                                        <p>Thuật toán: SHA256withRSA</p>
+                                        <p>Thời gian: <span id="currentTime"></span></p>
+                                    </div>
+
+                                    <div class="output-box">
+                                        <h3>Download file:</h3>
+                                        <div class="output-file">
+                                            <span id="signedFileName">document.txt</span>
+                                            <a href="#" download class="download-btn">Tải xuống</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-box">
+                                        <h3>Chọn file xác thực</h3>
+                                        <div class="file-group">
+                                            <label for="inputFile">File Input</label>
+                                            <input type="file" id="inputFile">
+                                        </div>
+                                        <div class="file-group">
+                                            <label for="sigFile">File Sig</label>
+                                            <input type="file" id="sigFile">
+                                        </div>
+                                    </div>
+
+                                    <div class="button-group">
+                                        <button class="cancel-btn" id="cancelBtn">Hủy</button>
+                                        <button type="submit" class="sign-btn" id="signBtn">Xác nhận ký điện tử</button>
+                                    </div>
+                                </div>
                             </div>
                         </c:otherwise>
                     </c:choose>
@@ -260,5 +298,6 @@
 <script src="cartPage/cartPageJS/variant.js"></script>
 <script src="cartPage/cartPageJS/quantity.js"></script>
 <script src="cartPage/cartPageJS/voucher.js"></script>
+<script src="cartPage/cartPageJS/signature.js"></script>
 </body>
 </html>
