@@ -1,8 +1,15 @@
 package bao_mat;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.DigestInputStream;
@@ -65,11 +72,47 @@ public class Signature {
 		return dataOutBase64;
 	}
 
-	public static String signature(String file, String KeyStr) throws Exception {
-		String re = "";
+	public static boolean makeFileSignature(String signature, String signatureFile) {
+		try {
+			DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(signatureFile)));
+			out.writeUTF(signature);
+			out.close();
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	public static String newNameFile(String nameBefor) {
+		String nameAfter = "";
+		String[] words = nameBefor.split("\\\\");
+
+		for (int i = 0; i < words.length - 1; i++) {
+			nameAfter += words[i];
+			nameAfter += "\\";
+		}
+		nameAfter += "Signature.txt";
+		return nameAfter;
+	}
+
+	public static String readKey(String fKey) throws Exception {
+		BufferedReader buff = new BufferedReader(
+				new InputStreamReader(new FileInputStream(fKey), StandardCharsets.UTF_8));
+		String key = buff.readLine();
+		buff.close();
+		return key;
+	}
+
+	public static String signature(String file, String fKey) throws Exception {
 		String tmp = "";
 		tmp = hashFile(file);
-		re = encrypt(tmp, KeyStr);
-		return re;
+		String KeyStr = readKey(fKey);
+		String signature = encrypt(tmp, KeyStr);
+		String signatureFile = newNameFile(file);
+		boolean check = makeFileSignature(signature, signatureFile);
+		if (check)
+			return signatureFile;
+		else
+			return "Lỗi khi kí tên.";
 	}
 }
