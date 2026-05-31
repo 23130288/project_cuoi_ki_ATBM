@@ -80,4 +80,14 @@ public class Voucher implements Serializable {
     public void setStatus(boolean status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder res = new StringBuilder();
+        res.append("Voucher: ").append(name).append("\n").append("\tDiscount: ").append(discount);
+        if (discount > 0 && discount < 1)
+            res.append("đ");
+        else res.append("%");
+        return res.toString();
+    }
 }

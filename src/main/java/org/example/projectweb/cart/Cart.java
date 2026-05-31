@@ -56,9 +56,7 @@ public class Cart implements Serializable {
 
     public int getTotalQuantity() {
         AtomicInteger total = new AtomicInteger();
-        data.values().forEach(p -> {
-            total.addAndGet(p.getQuantity());
-        });
+        data.values().forEach(p -> total.addAndGet(p.getQuantity()));
         return total.get();
     }
 
@@ -79,7 +77,6 @@ public class Cart implements Serializable {
             return total;
 
         double discount = voucher.getDiscount();
-        double condition = voucher.getCondition();
         if (discount < 1 && discount > 0)
             return total * (1 - discount);
         return total - discount;
@@ -107,5 +104,19 @@ public class Cart implements Serializable {
 
     public boolean isEmpty() {
         return data.isEmpty();
+    }
+
+    public String getContents() {
+        StringBuilder res = new StringBuilder();
+        int i = 1;
+        for (Map.Entry<Integer, CartItem> entry : data.entrySet()) {
+            res.append(i++).append(". ").append(entry.getValue().toString()).append("\n\n");
+        }
+        res.append("Total price: ").append(this.getTotalPrice()).append("\n");
+        if (voucher != null)
+            res.append(voucher).append("\n");
+        else res.append("Voucher: null").append("\n");
+        res.append("Final price: ").append(this.getFinalPrice());
+        return res.toString();
     }
 }
