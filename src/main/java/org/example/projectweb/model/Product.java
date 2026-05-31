@@ -136,16 +136,11 @@ public class Product implements Serializable {
 
     @Override
     public String toString() {
-        return "Product{" +
-                "pid=" + pid +
-                ", name='" + name + '\'' +
-                ", producer='" + producer + '\'' +
-                ", type='" + type + '\'' +
-                ", material='" + material + '\'' +
-                ", style='" + style + '\'' +
-                ", description='" + description + '\'' +
-                ", status='" + status + '\'' +
-                '}';
+        return "Product: " + name + "\n" +
+                "\tproducer: " + producer + "\n" +
+                "\ttype: " + type + "\n" +
+                "\tmaterial: " + material + "\n" +
+                "\tstyle: " + style;
     }
 
     public ImageProduct getMainImage() {

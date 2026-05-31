@@ -248,47 +248,44 @@
                             <div class="container-buttons">
                                 <button type="button" class="confirm-btn" id="confirmBtn">Thanh toán</button>
                             </div>
-
-                            <!-- digital sign -->
-                            <div class="digital-sign-model" id="digitalSignModel">
-                                <div class="digital-sign-box">
-                                    <h2>Ký số điện tử</h2>
-                                    <div class="sign-info">
-                                        <p>Tài liệu: ...</p>
-                                        <p>Thuật toán: SHA256withRSA</p>
-                                        <p>Thời gian: <span id="currentTime"></span></p>
-                                    </div>
-
-                                    <div class="output-box">
-                                        <h3>Download file:</h3>
-                                        <div class="output-file">
-                                            <span id="signedFileName">document.txt</span>
-                                            <a href="#" download class="download-btn">Tải xuống</a>
-                                        </div>
-                                    </div>
-
-                                    <div class="input-box">
-                                        <h3>Chọn file xác thực</h3>
-                                        <div class="file-group">
-                                            <label for="inputFile">File Input</label>
-                                            <input type="file" id="inputFile">
-                                        </div>
-                                        <div class="file-group">
-                                            <label for="sigFile">File Sig</label>
-                                            <input type="file" id="sigFile">
-                                        </div>
-                                    </div>
-
-                                    <div class="button-group">
-                                        <button class="cancel-btn" id="cancelBtn">Hủy</button>
-                                        <button type="submit" class="sign-btn" id="signBtn">Xác nhận ký điện tử</button>
-                                    </div>
-                                </div>
-                            </div>
                         </c:otherwise>
                     </c:choose>
                 </div>
             </form>
+            <!-- digital sign -->
+            <div class="digital-sign-model" id="digitalSignModel">
+                <div class="digital-sign-box">
+                    <h2>Ký số điện tử</h2>
+                    <div class="sign-info">
+                        <p>Tài liệu: ...</p>
+                        <p>Thuật toán: SHA256withRSA</p>
+                        <p>Thời gian: <span id="currentTime"></span></p>
+                    </div>
+
+                    <div class="output-box">
+                        <h3>Download file:</h3>
+                        <div class="output-file">
+                            <span id="signedFileName">document.txt</span>
+                            <form action="download_file_cart_content" method="post">
+                                <input type="hidden" name="fileName" value="document.txt">
+                                <button type="submit" class="download-btn">Tải xuống</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="input-box">
+                        <div class="file-group">
+                            <label for="sigFile">File Sig</label>
+                            <input type="file" id="sigFile">
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="button" class="cancel-btn" id="cancelBtn">Hủy</button>
+                        <button type="submit" class="sign-btn" id="signBtn">Xác nhận ký điện tử</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </main>

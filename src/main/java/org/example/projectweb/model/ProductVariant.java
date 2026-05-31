@@ -68,4 +68,10 @@ public class ProductVariant implements Serializable {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    @Override
+    public String toString() {
+        return "productVariant (size: " + size +
+                ", color: " + color + ")";
+    }
 }

@@ -1,27 +1,16 @@
 package org.example.projectweb.service;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.*;
 
 public class SignService {
-    public boolean verifySign(PublicKey pubKey, String sigPath, String inputPath) throws IOException, NoSuchAlgorithmException, InvalidKeyException, SignatureException {
-        FileInputStream sigFis = new FileInputStream(sigPath);
-        byte[] sigToVerify = new byte[sigFis.available()];
-        sigFis.read(sigToVerify);
-        sigFis.close();
-
-        Signature sig = Signature.getInstance("...");
+    public boolean verifySign(PublicKey pubKey, String sigPath, byte[] contentBytes) throws IOException, NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+        byte[] sigToVerify = Files.readAllBytes(Path.of(sigPath));
+        Signature sig = Signature.getInstance("SHA256withRSA");
         sig.initVerify(pubKey);
-        FileInputStream dataFis = new FileInputStream(inputPath);
-        BufferedInputStream bufin = new BufferedInputStream(dataFis);
-
-        byte[] buffer = new byte[1024];
-        int len;
-        while ((len = bufin.read(buffer)) != -1) {
-            sig.update(buffer, 0, len);
-        }
+        sig.update(contentBytes);
         return sig.verify(sigToVerify);
     }
 }

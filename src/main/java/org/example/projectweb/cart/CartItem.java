@@ -89,4 +89,12 @@ public class CartItem implements Serializable {
             this.quantity = 1;
         return this.quantity;
     }
+
+    @Override
+    public String toString() {
+        return product + "\n" +
+                "\t" + productVariant + "\n" +
+                "\tprice: " + price + "\n" +
+                "\tquantity: " + quantity;
+    }
 }
