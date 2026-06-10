@@ -39,7 +39,7 @@ public class DangNhapController extends HttpServlet {
             if ("admin".equalsIgnoreCase(user.getRole()))
                 response.sendRedirect("admin");
             else
-                response.sendRedirect("tai_khoan");
+                response.sendRedirect("trangChu");
         } else {
             // đăng nhập thất bại
             request.setAttribute("err", "Bạn nhập sai email hoặc mật khẩu");
