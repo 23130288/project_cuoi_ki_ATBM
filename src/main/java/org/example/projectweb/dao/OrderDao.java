@@ -24,6 +24,7 @@ public class OrderDao extends BaseDao {
                         .mapTo(Integer.class).one()
         );
     }
+
     public int countCompletedOrders() {
         return get().withHandle(h ->
                 h.createQuery("SELECT COUNT(oid) FROM `order` WHERE status = 'delivered'")
@@ -34,32 +35,32 @@ public class OrderDao extends BaseDao {
     public double getMonthlyRevenue(int month, int year) {
         return get().withHandle(h ->
                 h.createQuery("""
-            SELECT COALESCE(SUM(final_price), 0) AS revenue
-                                                  FROM (
-                                                      SELECT
-                                                          o.oid,
-                                                          SUM(od.quantity * pv.price)
-                                                          -
-                                                          COALESCE(
-                                                              CASE
-                                                                  WHEN v.name = 'phan_tram'
-                                                                      THEN SUM(od.quantity * pv.price) * v.discount
-                                                                  WHEN v.name = 'giam_gia'
-                                                                      THEN v.discount
-                                                                  ELSE 0
-                                                              END
-                                                          , 0) AS final_price
-                                                      FROM `order` o
-                                                      JOIN order_detail od ON o.oid = od.oid
-                                                      JOIN product_variant pv ON od.pvid = pv.pvid
-                                                      LEFT JOIN voucher_user vu ON o.uvid = vu.uvid
-                                                      LEFT JOIN voucher v ON vu.vid = v.vid
-                                                      WHERE MONTH(o.created_date) = :month
-                                                        AND YEAR(o.created_date) = :year
-                                                      GROUP BY o.oid
-                                                  ) t;
+                                    SELECT COALESCE(SUM(final_price), 0) AS revenue
+                                                                          FROM (
+                                                                              SELECT
+                                                                                  o.oid,
+                                                                                  SUM(od.quantity * pv.price)
+                                                                                  -
+                                                                                  COALESCE(
+                                                                                      CASE
+                                                                                          WHEN v.name = 'phan_tram'
+                                                                                              THEN SUM(od.quantity * pv.price) * v.discount
+                                                                                          WHEN v.name = 'giam_gia'
+                                                                                              THEN v.discount
+                                                                                          ELSE 0
+                                                                                      END
+                                                                                  , 0) AS final_price
+                                                                              FROM `order` o
+                                                                              JOIN order_detail od ON o.oid = od.oid
+                                                                              JOIN product_variant pv ON od.pvid = pv.pvid
+                                                                              LEFT JOIN voucher_user vu ON o.uvid = vu.uvid
+                                                                              LEFT JOIN voucher v ON vu.vid = v.vid
+                                                                              WHERE MONTH(o.created_date) = :month
+                                                                                AND YEAR(o.created_date) = :year
+                                                                              GROUP BY o.oid
+                                                                          ) t;
                                 
-        """)
+                                """)
                         .bind("month", month)
                         .bind("year", year)
                         .mapTo(Double.class)
@@ -104,11 +105,12 @@ public class OrderDao extends BaseDao {
                 .mapTo(Boolean.class).first());
     }
 
-    public int createOrder(int uid, Integer uvid, String description) {
+    public int createOrder(int uid, Integer uvid, String description, String signature, int pkId) {
         return get().withHandle(h -> h.createUpdate("""
-                        insert into `order` (uid, uvid, description, created_date, status)
-                        values (:uid, :uvid, :description, now(), 'delivering')
+                        insert into `order` (uid, uvid, description, created_date, status, signature, pk_id)
+                        values (:uid, :uvid, :description, now(), 'delivering', :signature, :pkId)
                         """).bind("uid", uid).bind("uvid", uvid).bind("description", description)
+                .bind("signature", signature).bind("pkId", pkId)
                 .executeAndReturnGeneratedKeys("oid")
                 .mapTo(Integer.class).one());
     }
@@ -128,7 +130,7 @@ public class OrderDao extends BaseDao {
 
     public Order getOrderByOid(int oid) {
         return get().withHandle(h -> h.createQuery("""
-                        select oid, uid, uvid, description, created_date as createdDate, status
+                        select oid, uid, uvid, description, created_date as createdDate, status, signature as signatureHash, pk_id as pkId
                         from `order` where oid = :oid
                         """).bind("oid", oid)
                 .mapToBean(Order.class).one());
@@ -136,7 +138,7 @@ public class OrderDao extends BaseDao {
 
     public List<OrderDetailView> getOrderDetailViewByOid(int oid) {
         return get().withHandle(h -> h.createQuery("""
-                        select od.pvid, p.name, ip.image, pv.color, pv.size, pv.price, od.quantity
+                        select od.pvid, p.name, ip.image, p.producer, p.type, p.material, p.style, pv.color, pv.size, pv.price, od.quantity
                         from `order` o join order_detail od on o.oid = od.oid
                         join product_variant pv on pv.pvid = od.pvid
                         join product p on p.pid = pv.pid
@@ -240,5 +242,14 @@ public class OrderDao extends BaseDao {
                         group by o.oid, o.uvid, o.created_date, o.status
                         """).bind("uid", uid).bind("status", status)
                 .mapToBean(Order.class).list());
+    }
+
+    public void updateSignature(int oid, String signature, String publicKeyStr) {
+        get().useHandle(h -> h.createUpdate("""
+                update order
+                    set public_key = :publicKeyStr,
+                        signature = :signature
+                where oid = :oid
+                """).bind("oid", oid).bind("signature", signature).bind("publicKeyStr", publicKeyStr).execute());
     }
 }

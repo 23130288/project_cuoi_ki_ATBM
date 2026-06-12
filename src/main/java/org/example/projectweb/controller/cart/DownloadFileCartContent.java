@@ -23,9 +23,9 @@ public class DownloadFileCartContent extends HttpServlet {
         String fileName = request.getParameter("fileName");
         String content = c.getContents();
 
+        // download file
         response.setContentType("text/plain; charset=UTF-8");
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-
         InputStream in = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
         OutputStream out = response.getOutputStream();
         int i;

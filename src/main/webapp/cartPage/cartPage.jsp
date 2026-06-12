@@ -195,7 +195,7 @@
 
         <%-- ====================================== user info ====================================== --%>
         <div class="user-info">
-            <form id="form-input-info" action="checkout" method="post">
+            <form id="form-input-info" action="checkout" method="post" enctype="multipart/form-data">
                 <div class="container-user-title">
                     <h2>Thông tin người dùng</h2>
                     <c:if test="${user != null}">
@@ -248,44 +248,44 @@
                             <div class="container-buttons">
                                 <button type="button" class="confirm-btn" id="confirmBtn">Thanh toán</button>
                             </div>
+
+                            <!-- digital sign -->
+                            <div class="digital-sign-model" id="digitalSignModel">
+                                <div class="digital-sign-box">
+                                    <h2>Ký số điện tử</h2>
+                                    <div class="sign-info">
+                                        <p>Thuật toán: SHA256withRSA</p>
+                                        <p>Thời gian: <span id="currentTime"></span></p>
+                                    </div>
+
+                                    <div class="output-box">
+                                        <h3>File:</h3>
+                                        <div class="output-file">
+                                            <span id="signedFileName">document.txt</span>
+                                            <button type="submit" form="downloadForm" class="download-btn"><i
+                                                    class="fa-solid fa-download"></i></button>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-box">
+                                        <h3>Signature:</h3>
+                                        <input type="file" id="sigFile" name="sigFile" required>
+                                    </div>
+
+                                    <div class="button-group">
+                                        <button type="button" class="cancel-btn" id="cancelBtn">Hủy</button>
+                                        <button type="button" class="sign-btn" id="signBtn">Xác nhận ký điện tử</button>
+                                    </div>
+                                    <p class="error-verify" id="error-verify">Signature verification failed</p>
+                                </div>
+                            </div>
                         </c:otherwise>
                     </c:choose>
                 </div>
             </form>
-            <!-- digital sign -->
-            <div class="digital-sign-model" id="digitalSignModel">
-                <div class="digital-sign-box">
-                    <h2>Ký số điện tử</h2>
-                    <div class="sign-info">
-                        <p>Tài liệu: ...</p>
-                        <p>Thuật toán: SHA256withRSA</p>
-                        <p>Thời gian: <span id="currentTime"></span></p>
-                    </div>
-
-                    <div class="output-box">
-                        <h3>Download file:</h3>
-                        <div class="output-file">
-                            <span id="signedFileName">document.txt</span>
-                            <form action="download_file_cart_content" method="post">
-                                <input type="hidden" name="fileName" value="document.txt">
-                                <button type="submit" class="download-btn">Tải xuống</button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <div class="input-box">
-                        <div class="file-group">
-                            <label for="sigFile">File Sig</label>
-                            <input type="file" id="sigFile">
-                        </div>
-                    </div>
-
-                    <div class="button-group">
-                        <button type="button" class="cancel-btn" id="cancelBtn">Hủy</button>
-                        <button type="submit" class="sign-btn" id="signBtn">Xác nhận ký điện tử</button>
-                    </div>
-                </div>
-            </div>
+            <form id="downloadForm" action="download_file_cart_content" method="post">
+                <input type="hidden" name="fileName" value="document.txt">
+            </form>
         </div>
     </div>
 </main>
