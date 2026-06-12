@@ -4,6 +4,10 @@ public class OrderDetailView {
     private int pvid;
     private String name;
     private String image;
+    private String producer;
+    private String type;
+    private String material;
+    private String style;
     private String color;
     private String size;
     private double price;
@@ -11,10 +15,15 @@ public class OrderDetailView {
 
     public OrderDetailView() {
     }
-    public OrderDetailView(int pvid, String name, String image, String color, String size, double price, int quantity) {
+
+    public OrderDetailView(int pvid, String name, String image, String producer, String type, String material, String style, String color, String size, double price, int quantity) {
         this.pvid = pvid;
         this.name = name;
         this.image = image;
+        this.producer = producer;
+        this.type = type;
+        this.material = material;
+        this.style = style;
         this.color = color;
         this.size = size;
         this.price = price;
@@ -34,6 +43,22 @@ public class OrderDetailView {
 
     public String getImage() {
         return image;
+    }
+
+    public String getProducer() {
+        return producer;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getMaterial() {
+        return material;
+    }
+
+    public String getStyle() {
+        return style;
     }
 
     public String getColor() {
@@ -71,6 +96,22 @@ public class OrderDetailView {
         this.image = image;
     }
 
+    public void setProducer(String producer) {
+        this.producer = producer;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setMaterial(String material) {
+        this.material = material;
+    }
+
+    public void setStyle(String style) {
+        this.style = style;
+    }
+
     public void setColor(String color) {
         this.color = color;
     }
@@ -85,5 +126,16 @@ public class OrderDetailView {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public String toString() {
+        return "Product: " + name + "\n" +
+                "\tproducer: " + producer + "\n" +
+                "\ttype: " + type + "\n" +
+                "\tmaterial: " + material + "\n" +
+                "\tstyle: " + style + "\n" +
+                "\tproductVariant: (size: " + size + ", color: " + color + ")\n" +
+                "\tprice: " + price + "\n" +
+                "\tquantity: " + quantity;
     }
 }

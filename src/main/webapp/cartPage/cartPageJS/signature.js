@@ -9,3 +9,20 @@ confirmBtn.addEventListener("click", () => {
 cancelBtn.addEventListener("click", () => {
     digitalSignModel.style.display = "none";
 });
+
+document.getElementById("signBtn").addEventListener("click", () => {
+    const form = document.getElementById("form-input-info");
+    const formData = new FormData(form);
+    fetch("checkout", {
+        method: "POST",
+        body: formData
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (!data.success) {
+                document.getElementById("error-verify").style.display = "block";
+            } else {
+                window.location.href = data.redirectUrl;
+            }
+        });
+});

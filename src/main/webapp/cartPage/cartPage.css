@@ -683,6 +683,7 @@ main #form-input-info .confirm-btn {
 .cancel-btn {
     background: lightgray;
 }
+
 .cancel-btn:hover {
     color: white;
     background: red;
@@ -692,6 +693,16 @@ main #form-input-info .confirm-btn {
     background: #F2C641;
     font-weight: bold;
 }
+
 .sign-btn:hover {
     background: #F2B035;
+}
+
+.error-verify {
+    display:none;
+    text-align: center;
+    margin-top: 10px;
+    color: red;
+    font-size: 15px;
+    font-weight: bold;
 }

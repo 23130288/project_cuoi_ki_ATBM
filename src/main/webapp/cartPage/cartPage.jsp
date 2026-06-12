@@ -195,7 +195,7 @@
 
         <%-- ====================================== user info ====================================== --%>
         <div class="user-info">
-            <form id="form-input-info" action="checkout" method="post">
+            <form id="form-input-info" action="checkout" method="post" enctype="multipart/form-data">
                 <div class="container-user-title">
                     <h2>Thông tin người dùng</h2>
                     <c:if test="${user != null}">
@@ -269,13 +269,14 @@
 
                                     <div class="input-box">
                                         <h3>Signature:</h3>
-                                        <input type="file" id="sigFile">
+                                        <input type="file" id="sigFile" name="sigFile" required>
                                     </div>
 
                                     <div class="button-group">
                                         <button type="button" class="cancel-btn" id="cancelBtn">Hủy</button>
-                                        <button type="submit" class="sign-btn" id="signBtn">Xác nhận ký điện tử</button>
+                                        <button type="button" class="sign-btn" id="signBtn">Xác nhận ký điện tử</button>
                                     </div>
+                                    <p class="error-verify" id="error-verify">Signature verification failed</p>
                                 </div>
                             </div>
                         </c:otherwise>

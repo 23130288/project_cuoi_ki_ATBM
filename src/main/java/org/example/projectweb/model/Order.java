@@ -9,6 +9,8 @@ public class Order implements Serializable {
     private String description;
     private String createdDate;
     private String status;
+    private String signatureHash;
+    private int pkId;
 
     private String customer;
     private double totalPrice;
@@ -19,13 +21,15 @@ public class Order implements Serializable {
     public Order() {
     }
 
-    public Order(int oid, int uid, int uvid, String description, String createdDate, String status) {
+    public Order(int oid, int uid, int uvid, String description, String createdDate, String status, String signatureHash, int pkId) {
         this.oid = oid;
         this.uid = uid;
         this.uvid = uvid;
         this.description = description;
         this.createdDate = createdDate;
         this.status = status;
+        this.signatureHash = signatureHash;
+        this.pkId = pkId;
     }
 
     /**
@@ -56,7 +60,13 @@ public class Order implements Serializable {
         return customer;
     }
 
+    public String getSignatureHash() {
+        return signatureHash;
+    }
 
+    public int getPkId() {
+        return pkId;
+    }
 
     public String getCreatedDate() {
         return createdDate;
@@ -96,6 +106,7 @@ public class Order implements Serializable {
     public void setCustomer(String customer) {
         this.customer = customer;
     }
+
     public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
     }
@@ -106,6 +117,14 @@ public class Order implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setSignatureHash(String signatureHash) {
+        this.signatureHash = signatureHash;
+    }
+
+    public void setPkId(int pkId) {
+        this.pkId = pkId;
     }
 
     public void setTotalPrice(double totalPrice) {

@@ -11,7 +11,9 @@ public class ProductVariant implements Serializable {
     private double price;
     private int quantity;
 
-    public ProductVariant() {}
+    public ProductVariant() {
+    }
+
     public ProductVariant(int pvid, int pid, String size, String color, double price, int quantity) {
         this.pvid = pvid;
         this.pid = pid;
@@ -71,7 +73,6 @@ public class ProductVariant implements Serializable {
 
     @Override
     public String toString() {
-        return "productVariant (size: " + size +
-                ", color: " + color + ")";
+        return "productVariant: (size: " + size + ", color: " + color + ")";
     }
 }

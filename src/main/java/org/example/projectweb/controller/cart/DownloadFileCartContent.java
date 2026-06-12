@@ -23,18 +23,6 @@ public class DownloadFileCartContent extends HttpServlet {
         String fileName = request.getParameter("fileName");
         String content = c.getContents();
 
-        // save file on the project
-        String uploadDir = getServletContext().getRealPath("/files");
-        System.out.println(uploadDir);
-        File dir = new File(uploadDir);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        File file = new File(dir + "\\"  + fileName);
-        FileOutputStream fos = new FileOutputStream(file);
-        fos.write(content.getBytes(StandardCharsets.UTF_8));
-        fos.close();
-
         // download file
         response.setContentType("text/plain; charset=UTF-8");
         response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
