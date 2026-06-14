@@ -24,6 +24,7 @@
             <a class="item" href="#">Quản lý thông báo</a>
             <a class="item" href="#">Quản lý dịch vụ, chính sách</a>
             <a class="item" href="#">Quản lý người dùng</a>
+            <a class="item" href="#">Quản lý Khóa</a>
             <a class="item" href="#">Quản lý đơn hàng</a>
             <a class="item" href="#">Trả lời câu hỏi</a>
             <a class="item" href="#">Thống kê báo cáo</a>

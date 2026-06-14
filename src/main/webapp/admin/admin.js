@@ -55,6 +55,23 @@
             </div>
         `,
 
+        "Quản lý Khóa": `
+            <h2>Quản lý và tạo khóa</h2>
+                <div class="Key-filter">
+                    <label>
+                        <input type="radio" name="keyFilter" checked onchange="loadkeyList('all')">Tất cả
+                    </label>
+                    
+                    <label style="margin-left:20px">
+                        <input type="radio" name="keyFilter" onchange="loadkeyList('processing')">Chưa trả lời
+                    </label>
+                </div>
+
+                <div id="keyList">
+                      <!-- notification_item sẽ được JS đổ vào đây -->
+                </div>
+        `,
+
         "Quản lý đơn hàng": `
             <h2>Quản lý đơn hàng</h2>
             <div class="Menu-bar">
@@ -173,6 +190,10 @@
 
             if (text === "Quản lý người dùng") {
                 handleUserSearch();
+            }
+
+            if (text === "Quản lý Khóa") {
+                loadkeyList("all");
             }
 
             if (text === "Quản lý đơn hàng") {
@@ -1823,4 +1844,79 @@ function renderReportStatistics(stats) {
         <p><b>Doanh thu tháng:</b> ${stats.monthlyRevenue.toLocaleString()} ₫</p>
         <p><b>Số khách hàng:</b> ${stats.totalCustomers}</p>
     `;
+}
+//key
+function loadkeyList(filter) {
+    fetch(`/projectWeb_war/admin/Keys?filter=${filter}`)
+        .then(res => res.json())
+        .then(list => {
+            const container = document.getElementById("keyList");
+            container.innerHTML = ""; // xóa dữ liệu cũ
+
+            list.forEach(s => {
+                const div = document.createElement("div");
+                div.className = "notification_item";
+                div.dataset.spid = s.spid;
+
+                div.onclick = () => openAdminPopup(
+                    "Trả lời câu hỏi",
+                    `
+                        <div class="popup_item">
+                            <label>chủ đề:</label>
+                            <input type="text" value="${s.topic}" readonly>
+                        </div>
+                        
+                        <div class="popup_item">
+                            <label>Nội dung:</label>
+                            <input type="text" value="${s.message}" readonly>
+                        </div>
+                
+                         <div class="popup_item">
+                            <label>Phần nhập câu trả lời:</label>
+                            <textarea id="answerContent"></textarea>
+                        </div>
+                    `,
+                    () => {
+                        const content = document.getElementById("answerContent").value;
+
+                        if (!content.trim()) {
+                            alert("Vui lòng nhập nội dung trả lời");
+                            return;
+                        }
+
+                        const form = new URLSearchParams();
+                        form.append("spid", s.spid);
+                        form.append("uid", s.uid);
+                        form.append("message", content);
+
+                        fetch("/projectWeb_war/admin/keys", {
+                            method: "POST",
+                            body: form
+                        })
+                            .then(res => {
+                                if (!res.ok) throw new Error("Gửi thất bại");
+                                return res.json();
+                            })
+                            .then(() => {
+                                alert("Đã gửi câu trả lời");
+                                loadkeyList("all");
+                            })
+                            .catch(err => {
+                                console.error(err);
+                                alert("Có lỗi xảy ra");
+                            });
+                    }
+                );
+
+                div.innerHTML = `
+                <div class="info">
+                    <h4>${s.topic} | ${s.title}</h4>
+                    <p>Mã câu hỏi: ${s.spid} | Người gửi: ${s.uid} | Trạng thái: ${s.status}</p>
+                    <span>${s.createdDate}</span>
+                </div>
+                `;
+
+                container.appendChild(div);
+            });
+        });
 }
