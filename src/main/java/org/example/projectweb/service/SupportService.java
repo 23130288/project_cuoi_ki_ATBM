@@ -7,7 +7,7 @@ import org.example.projectweb.model.SupportMessage;
 import java.util.List;
 
 public class SupportService {
-    private SupportDao spDao = new SupportDao();
+    final SupportDao spDao = new SupportDao();
     final NotificationService ns = new NotificationService();
 
     public void createSupport(int userId, String topic, String title, String message) {
@@ -18,6 +18,12 @@ public class SupportService {
         if ("all".equalsIgnoreCase(filter))
             return spDao.getSupports();
         else return spDao.getSupportsprocessing();
+    }
+
+    public List<Support> getSupportsKey(String filter) {
+        if ("all".equalsIgnoreCase(filter))
+            return spDao.getSupportskey();
+        else return spDao.getSupportspkeyrocessing();
     }
 
     public List<Support> getSupportsByUid(int uid) {

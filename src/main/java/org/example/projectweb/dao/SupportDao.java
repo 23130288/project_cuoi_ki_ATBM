@@ -24,6 +24,24 @@ public class SupportDao extends BaseDao {
                 group by s.spid""").mapToBean(Support.class).list());
     }
 
+    public List<Support> getSupportskey() {
+        return get().withHandle(h -> h.createQuery("""
+                select s.spid, s.uid, mess.message, s.topic, s.title, s.created_date as createdDate, s.status
+                from support s
+                join support_message mess on s.spid=mess.spid
+                where topic = 'key'
+                group by s.spid""").mapToBean(Support.class).list());
+    }
+
+    public List<Support> getSupportspkeyrocessing() {
+        return get().withHandle(h -> h.createQuery("""
+                select s.spid, s.uid, mess.message, s.topic, s.title, s.created_date as createdDate, s.status
+                from support s
+                join support_message mess on s.spid=mess.spid
+                where status = 'processing' and topic = 'key'
+                group by s.spid""").mapToBean(Support.class).list());
+    }
+
     public void createSupport(int userId, String topic, String title, String message) {
         get().useHandle(h -> {
             int spid = h.createUpdate("""
@@ -71,12 +89,10 @@ public class SupportDao extends BaseDao {
     }
 
     public List<SupportMessage> getMessagesBySpid(int spid) {
-        return get().withHandle(h -> {
-            return h.createQuery("""
-                            select sender_id, message, created_date
-                            from support_message where spid = :spid
-                            """).bind("spid", spid)
-                    .mapToBean(SupportMessage.class).list();
-        });
+        return get().withHandle(h -> h.createQuery("""
+                        select sender_id, message, created_date
+                        from support_message where spid = :spid
+                        """).bind("spid", spid)
+                .mapToBean(SupportMessage.class).list());
     }
 }
