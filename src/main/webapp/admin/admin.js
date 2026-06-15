@@ -1858,61 +1858,16 @@ function loadkeyList(filter) {
                 div.className = "notification_item";
                 div.dataset.spid = s.spid;
 
-                div.onclick = () => openAdminPopup(
-                    "Trả lời câu hỏi",
-                    `
-                        <div class="popup_item">
-                            <label>chủ đề:</label>
-                            <input type="text" value="${s.topic}" readonly>
-                        </div>
-                        
-                        <div class="popup_item">
-                            <label>Nội dung:</label>
-                            <input type="text" value="${s.message}" readonly>
-                        </div>
-                
-                         <div class="popup_item">
-                            <label>Phần nhập câu trả lời:</label>
-                            <textarea id="answerContent"></textarea>
-                        </div>
-                    `,
-                    () => {
-                        const content = document.getElementById("answerContent").value;
-
-                        if (!content.trim()) {
-                            alert("Vui lòng nhập nội dung trả lời");
-                            return;
-                        }
-
-                        const form = new URLSearchParams();
-                        form.append("spid", s.spid);
-                        form.append("uid", s.uid);
-                        form.append("message", content);
-
-                        fetch("/projectWeb_war/admin/keys", {
-                            method: "POST",
-                            body: form
-                        })
-                            .then(res => {
-                                if (!res.ok) throw new Error("Gửi thất bại");
-                                return res.json();
-                            })
-                            .then(() => {
-                                alert("Đã gửi câu trả lời");
-                                loadkeyList("all");
-                            })
-                            .catch(err => {
-                                console.error(err);
-                                alert("Có lỗi xảy ra");
-                            });
-                    }
-                );
-
                 div.innerHTML = `
                 <div class="info">
                     <h4>${s.topic} | ${s.title}</h4>
                     <p>Mã câu hỏi: ${s.spid} | Người gửi: ${s.uid} | Trạng thái: ${s.status}</p>
                     <span>${s.createdDate}</span>
+                
+                    <div class="action-buttons">
+                        <button class="btn-create">Tạo khóa</button>
+                        <button class="btn-reject">Từ chối</button>
+                    </div>
                 </div>
                 `;
 
