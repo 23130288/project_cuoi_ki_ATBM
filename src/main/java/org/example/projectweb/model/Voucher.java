@@ -84,10 +84,12 @@ public class Voucher implements Serializable {
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder();
-        res.append("Voucher: ").append(name).append("\n").append("\tDiscount: ").append(discount);
+        res.append(name).append("\n").append("\tDiscount: ").append(discount);
         if (discount > 0 && discount < 1)
             res.append("đ");
         else res.append("%");
+        res.append("\t").append("Condition: ").append(condition).append("\n");
+        res.append("\t").append("Expired date: ").append(expiredDate);
         return res.toString();
     }
 }

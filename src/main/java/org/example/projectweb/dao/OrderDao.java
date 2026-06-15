@@ -105,12 +105,11 @@ public class OrderDao extends BaseDao {
                 .mapTo(Boolean.class).first());
     }
 
-    public int createOrder(int uid, Integer uvid, String description, String signature, int pkId) {
+    public int createOrder(int uid, Integer uvid, String description, double finalPrice) {
         return get().withHandle(h -> h.createUpdate("""
-                        insert into `order` (uid, uvid, description, created_date, status, signature, pk_id)
-                        values (:uid, :uvid, :description, now(), 'delivering', :signature, :pkId)
-                        """).bind("uid", uid).bind("uvid", uvid).bind("description", description)
-                .bind("signature", signature).bind("pkId", pkId)
+                        insert into `order` (uid, uvid, description, created_date, final_price, status)
+                        values (:uid, :uvid, :description, now(), :finalPrice, 'waiting')
+                        """).bind("uid", uid).bind("uvid", uvid).bind("description", description).bind("finalPrice", finalPrice)
                 .executeAndReturnGeneratedKeys("oid")
                 .mapTo(Integer.class).one());
     }
@@ -130,8 +129,10 @@ public class OrderDao extends BaseDao {
 
     public Order getOrderByOid(int oid) {
         return get().withHandle(h -> h.createQuery("""
-                        select oid, uid, uvid, description, created_date as createdDate, status, signature as signatureHash, pk_id as pkId
-                        from `order` where oid = :oid
+                        select o.oid, o.uid, o.uvid, o.description, o.created_date as createdDate, o.final_price as finalPrice, o.status,
+                                os.hash, os.signature, os.sign_status as signStatus, os.pk_id as pkId
+                        from `order` o join order_signature os on o.oid = os.oid
+                        where o.oid = :oid
                         """).bind("oid", oid)
                 .mapToBean(Order.class).one());
     }
@@ -194,21 +195,11 @@ public class OrderDao extends BaseDao {
 
     public List<Order> getOrdersByUid(int uid) {
         return get().withHandle(h -> h.createQuery("""
-                        select o.oid, o.uvid, o.created_date as createdDate, o.status,
-                        sum(od.quantity * pv.price) -
-                        COALESCE(
-                            case
-                                when v.name = 'phan_tram'
-                                    then sum(od.quantity * pv.price) * v.discount
-                                when v.name = 'giam_gia'
-                                    then v.discount
-                                else 0
-                            end
-                        , 0)
-                        as finalPrice
-                        
+                        select o.oid, o.uid, o.uvid, o.description, o.created_date as createdDate, sum(pv.price * od.quantity) as totalPrice, o.final_price as finalPrice, o.status,
+                                os.hash, os.signature, os.sign_status as signStatus, os.pk_id as pkId
                         from `order` o
                         join order_detail od on o.oid = od.oid
+                        left join order_signature os on o.oid = os.oid
                         join product_variant pv on od.pvid = pv.pvid
                         left join voucher_user vu on o.uvid = vu.uvid
                         left join voucher v on vu.vid = v.vid
@@ -246,10 +237,26 @@ public class OrderDao extends BaseDao {
 
     public void updateSignature(int oid, String signature, String publicKeyStr) {
         get().useHandle(h -> h.createUpdate("""
-                update order
+                update `order`
                     set public_key = :publicKeyStr,
                         signature = :signature
                 where oid = :oid
                 """).bind("oid", oid).bind("signature", signature).bind("publicKeyStr", publicKeyStr).execute());
+    }
+
+    public void createOrderSignatureHolder(int oid) {
+        get().withHandle(h -> h.createUpdate("""
+                        insert into order_signature (oid, sign_status)
+                        values (:oid, 0)
+                        """)
+                .bind("oid", oid).execute());
+    }
+
+    public void insertHash(int oid, String hash) {
+        get().useHandle(h -> h.createUpdate("""
+                update order_signature
+                set hash = :hash
+                where oid = :oid
+                """).bind("oid", oid).bind("hash", hash).execute());
     }
 }

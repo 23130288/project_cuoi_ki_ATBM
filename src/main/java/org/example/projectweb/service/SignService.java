@@ -29,7 +29,7 @@ public class SignService {
         return dataOutBase64;
     }
 
-    private String hashFile(String filePath) throws NoSuchAlgorithmException, FileNotFoundException {
+    public String hashFile(String filePath) throws NoSuchAlgorithmException, FileNotFoundException {
         MessageDigest digest = MessageDigest.getInstance("MD5");
         InputStream is = new BufferedInputStream(new FileInputStream(filePath));
         try (DigestInputStream dis = new DigestInputStream(is, digest)) {

@@ -12,7 +12,6 @@
 <body>
 <main>
     <div class="container">
-        <h2 class="thanks-message">Cảm ơn bạn đã thanh toán</h2>
         <h3 class="title">Đơn hàng #${order.oid}</h3>
         <p class="date">${order.createdDate}</p>
         <div class="customer-info">
