@@ -302,7 +302,8 @@ body {
 
 .container .product-header-price,
 .container .product-header-status,
-.container .product-header-date {
+.container .product-header-date,
+.container .product-header-sign-status {
     flex: 1;
     text-align: center;
 }
@@ -380,23 +381,28 @@ body {
 }
 
 .container .container-contents .product .product-price,
-.container .container-contents .product .product-status-delivered,
-.container .container-contents .product .product-status-delivering,
 .container .container-contents .product .product-status,
-.container .container-contents .product .product-date {
+.container .container-contents .product .product-status,
+.container .container-contents .product .product-date,
+.container .container-contents .product .product-sign-status {
     text-align: center;
     padding: 5px;
     flex: 1;
 }
 
-.container .product .product-status-delivered {
+.container .product .product-status.delivered {
     font-weight: bold;
     color: green;
 }
 
-.container .product .product-status-delivering {
+.container .product .product-status.delivering {
     font-weight: bold;
     color: #F0AF35;
+}
+
+.container .product .product-status.waiting {
+    font-weight: bold;
+    color: #444444;
 }
 
 /* ===== Popup ===== */
@@ -533,7 +539,7 @@ body {
     color: red;
 }
 .password-success {
-    color: green;
+    color: #4CAF50;
 }
 .btn-group {
     margin-top: 12px;
@@ -556,4 +562,12 @@ body {
 .cancel-btn {
     background: #ccc;
     margin-left: 6px;
+}
+
+.signed {
+    color: #4CAF50;
+}
+
+.unsigned {
+    color: red;
 }

@@ -92,13 +92,15 @@
                     <a href="#" class="tab-menu" data-tab="cancelled">Hủy</a>
                 </div>
                 <div class="container-contents">
+                    <%-- All --%>
                     <div class="product-content all active">
                         <!--header-->
                         <div class="product-header">
                             <div class="product-header-title">Sản phẩm</div>
                             <div class="product-header-price">Đơn giá</div>
-                            <div class="product-header-status">Tình trạng</div>
                             <div class="product-header-date">Ngày tạo</div>
+                            <div class="product-header-status">Tình trạng</div>
+                            <div class="product-header-sign-status">Ký</div>
                         </div>
                         <!--content-->
                         <div class="products">
@@ -111,8 +113,21 @@
                                                                                  type="number"
                                                                                  groupingUsed="true"/> đ
                                     </div>
-                                    <div class="product-status-${order.status}">${order.status}</div>
                                     <div class="product-date">${order.createdDate}</div>
+                                    <div class="product-status ${order.status}">${order.status}</div>
+                                    <div class="product-sign-status">
+                                        <c:choose>
+                                            <c:when test="${order.changed}">
+                                                <i class="fa-solid fa-triangle-exclamation text-warning"></i>Đã thay đổi
+                                            </c:when>
+                                            <c:when test="${order.signStatus}">
+                                                <i class="fa-solid fa-circle-check signed"></i>Đã ký
+                                            </c:when>
+                                            <c:otherwise>
+                                                <i class="fa-solid fa-circle-xmark unsigned"></i>Chưa ký
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
                                 </div>
                             </c:forEach>
                         </div>
@@ -124,76 +139,125 @@
                             <div class="product-header-title">Tiêu đề</div>
                             <div class="product-header-price">Đơn giá</div>
                             <div class="product-header-date">Ngày tạo</div>
+                            <div class="product-header-sign-status">Ký</div>
                         </div>
                         <!--content-->
                         <div class="products">
-                            <c:forEach var="order" items="${deliveredOrders}">
-                                <div class="product">
-                                    <div class="product-title">
-                                        <div class="product-info">
-                                            <a href="show-order?oid=${order.oid}"><label>Đơn
-                                                hàng ${order.oid}</label></a>
+                            <c:forEach var="order" items="${orders}">
+                                <c:if test="${order.status == 'delivered'}">
+                                    <div class="product">
+                                        <div class="product-title">
+                                            <div class="product-info">
+                                                <a href="show-order?oid=${order.oid}"><label>Đơn
+                                                    hàng ${order.oid}</label></a>
+                                            </div>
+                                        </div>
+                                        <div class="product-price"><fmt:formatNumber value="${order.finalPrice}"
+                                                                                     type="number"
+                                                                                     groupingUsed="true"/> đ
+                                        </div>
+                                        <div class="product-date">${order.createdDate}</div>
+                                        <div class="product-sign-status">
+                                            <c:choose>
+                                                <c:when test="${order.changed}">
+                                                    <i class="fa-solid fa-triangle-exclamation text-warning"></i>Bị thay đổi
+                                                </c:when>
+                                                <c:when test="${order.signStatus}">
+                                                    <i class="fa-solid fa-circle-check signed"></i>Đã ký
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <i class="fa-solid fa-circle-xmark unsigned"></i>Chưa ký
+                                                </c:otherwise>
+                                            </c:choose>
                                         </div>
                                     </div>
-                                    <div class="product-price"><fmt:formatNumber value="${order.finalPrice}"
-                                                                                 type="number"
-                                                                                 groupingUsed="true"/> đ
-                                    </div>
-                                    <div class="product-date">${order.createdDate}</div>
-                                </div>
+                                </c:if>
                             </c:forEach>
                         </div>
                     </div>
-                    <!-- Shipping -->
+                    <!-- Delivering -->
                     <div class="product-content shipping">
                         <!--header-->
                         <div class="product-header">
                             <div class="product-header-title">Tiêu đề</div>
                             <div class="product-header-price">Đơn giá</div>
                             <div class="product-header-date">Ngày tạo</div>
+                            <div class="product-header-sign-status">Ký</div>
                         </div>
                         <!--content-->
                         <div class="products">
-                            <c:forEach var="order" items="${deliveringOrder}">
-                                <div class="product">
-                                    <div class="product-title">
-                                        <div class="product-info">
-                                            <a href="show-order?oid=${order.oid}"><label>Đơn
-                                                hàng ${order.oid}</label></a>
+                            <c:forEach var="order" items="${orders}">
+                                <c:if test="${order.status == 'delivering'}">
+                                    <div class="product">
+                                        <div class="product-title">
+                                            <div class="product-info">
+                                                <a href="show-order?oid=${order.oid}"><label>Đơn
+                                                    hàng ${order.oid}</label></a>
+                                            </div>
+                                        </div>
+                                        <div class="product-price"><fmt:formatNumber value="${order.finalPrice}"
+                                                                                     type="number"
+                                                                                     groupingUsed="true"/> đ
+                                        </div>
+                                        <div class="product-date">${order.createdDate}</div>
+                                        <div class="product-sign-status">
+                                            <c:choose>
+                                                <c:when test="${order.changed}">
+                                                    <i class="fa-solid fa-triangle-exclamation text-warning"></i>Đã thay đổi
+                                                </c:when>
+                                                <c:when test="${order.signStatus}">
+                                                    <i class="fa-solid fa-circle-check signed"></i>Đã ký
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <i class="fa-solid fa-circle-xmark unsigned"></i>Chưa ký
+                                                </c:otherwise>
+                                            </c:choose>
                                         </div>
                                     </div>
-                                    <div class="product-price"><fmt:formatNumber value="${order.finalPrice}"
-                                                                                 type="number"
-                                                                                 groupingUsed="true"/> đ
-                                    </div>
-                                    <div class="product-date">${order.createdDate}</div>
-                                </div>
+                                </c:if>
                             </c:forEach>
                         </div>
                     </div>
+                    <!-- Cancelled -->
                     <div class="product-content cancelled">
                         <!--header-->
                         <div class="product-header">
                             <div class="product-header-title">Tiêu đề</div>
                             <div class="product-header-price">Đơn giá</div>
                             <div class="product-header-date">Ngày tạo</div>
+                            <div class="product-header-sign-status">Ký</div>
                         </div>
                         <!--content-->
                         <div class="products">
-                            <c:forEach var="order" items="${canceledOrder}">
-                                <div class="product">
-                                    <div class="product-title">
-                                        <div class="product-info">
-                                            <a href="show-order?oid=${order.oid}"><label>Đơn
-                                                hàng ${order.oid}</label></a>
+                            <c:forEach var="order" items="${orders}">
+                                <c:if test="${order.status == 'cancelled'}">
+                                    <div class="product">
+                                        <div class="product-title">
+                                            <div class="product-info">
+                                                <a href="show-order?oid=${order.oid}"><label>Đơn
+                                                    hàng ${order.oid}</label></a>
+                                            </div>
+                                        </div>
+                                        <div class="product-price"><fmt:formatNumber value="${order.finalPrice}"
+                                                                                     type="number"
+                                                                                     groupingUsed="true"/> đ
+                                        </div>
+                                        <div class="product-date">${order.createdDate}</div>
+                                        <div class="product-sign-status">
+                                            <c:choose>
+                                                <c:when test="${order.changed}">
+                                                    <i class="fa-solid fa-triangle-exclamation text-warning"></i>Đã thay đổi
+                                                </c:when>
+                                                <c:when test="${order.signStatus}">
+                                                    <i class="fa-solid fa-circle-check signed"></i>Đã ký
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <i class="fa-solid fa-circle-xmark unsigned"></i>Chưa ký
+                                                </c:otherwise>
+                                            </c:choose>
                                         </div>
                                     </div>
-                                    <div class="product-price"><fmt:formatNumber value="${order.finalPrice}"
-                                                                                 type="number"
-                                                                                 groupingUsed="true"/> đ
-                                    </div>
-                                    <div class="product-date">${order.createdDate}</div>
-                                </div>
+                                </c:if>
                             </c:forEach>
                         </div>
                     </div>

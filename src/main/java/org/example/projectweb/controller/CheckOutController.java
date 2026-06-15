@@ -4,7 +4,6 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import org.example.projectweb.cart.Cart;
-import org.example.projectweb.model.PublicKeyModel;
 import org.example.projectweb.model.User;
 import org.example.projectweb.model.VoucherUser;
 import org.example.projectweb.service.*;
@@ -33,7 +32,6 @@ public class CheckOutController extends HttpServlet {
             response.sendRedirect("cart");
             return;
         }
-        String fileName = request.getParameter("fileName");
         String description = request.getParameter("note");
 
         VoucherService vs = new VoucherService();
@@ -45,52 +43,14 @@ public class CheckOutController extends HttpServlet {
             vs.setApplicable(v.getUvid(), 0);
             uvid = v.getUvid();
         }
-
-        // verify signature
-        saveFileOnProject(c, fileName);
-        DataInputStream dis = new DataInputStream(new BufferedInputStream(request.getPart("sigFile").getInputStream()));
-        String signature = dis.readUTF();
-        PublicKeyModel publicKeyModel = new PublicKeyService().getPublicKeyByUid(user.getUid());
-        try {
-            String tempFilePath = getServletContext().getRealPath("/files") + "\\" + fileName;
-            boolean valid = new SignService().verifySign(tempFilePath, signature, publicKeyModel.getPublicKeyStr());
-            File file = new File(tempFilePath);
-            if (file.exists()) {
-                file.delete();
-            }
-            if (!valid) {
-                response.getWriter().print("{"
-                        + "\"success\":false"
-                        + "}");
-                return;
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
         // create order
-        int oid = os.createOrder(user.getUid(), uvid, description, signature, publicKeyModel.getPkId());
+        int oid = os.createOrder(user.getUid(), uvid, description, c.getFinalPrice());
         os.createOrderDetails(oid, c);
+        os.createHashContent(oid);
 
         c.removeAll();
         c.setVoucher(null);
-        response.getWriter().print("{"
-                + "\"success\":true,"
-                + "\"redirectUrl\":\"show-order?oid=" + oid + "\""
-                + "}");
-    }
-
-    private void saveFileOnProject(Cart c, String fileName) throws IOException {
-        // save file on the project
-        String uploadDir = getServletContext().getRealPath("/files");
-        File dir = new File(uploadDir);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        File file = new File(dir + "\\" + fileName);
-        FileOutputStream fos = new FileOutputStream(file);
-        fos.write(c.getContents().getBytes(StandardCharsets.UTF_8));
-        fos.close();
+        response.sendRedirect("show-order?oid=" + oid);
     }
 }
 

@@ -1,0 +1,26 @@
+package org.example.projectweb.service;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+
+public class FileService {
+    public static void createFile(String filePath, String fileName, String content) throws IOException {
+        File dir = new File(filePath);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        File file = new File(dir + "\\" + fileName);
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.write(content.getBytes(StandardCharsets.UTF_8));
+        fos.close();
+    }
+
+    public static void deleteFile(String filePath) {
+        File file = new File(filePath);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+}

@@ -8,28 +8,21 @@ public class Order implements Serializable {
     private int uvid;
     private String description;
     private String createdDate;
+    private double finalPrice;
     private String status;
-    private String signatureHash;
+
+    private String hash;
+    private String signature;
+    private boolean signStatus;
     private int pkId;
+    private boolean changed;
 
     private String customer;
     private double totalPrice;
     private double discount;
-    private double finalPrice;
     private Voucher voucher;
 
     public Order() {
-    }
-
-    public Order(int oid, int uid, int uvid, String description, String createdDate, String status, String signatureHash, int pkId) {
-        this.oid = oid;
-        this.uid = uid;
-        this.uvid = uvid;
-        this.description = description;
-        this.createdDate = createdDate;
-        this.status = status;
-        this.signatureHash = signatureHash;
-        this.pkId = pkId;
     }
 
     /**
@@ -60,12 +53,16 @@ public class Order implements Serializable {
         return customer;
     }
 
-    public String getSignatureHash() {
-        return signatureHash;
+    public String getSignature() {
+        return signature;
     }
 
     public int getPkId() {
         return pkId;
+    }
+
+    public boolean isChanged() {
+        return changed;
     }
 
     public String getCreatedDate() {
@@ -86,6 +83,14 @@ public class Order implements Serializable {
 
     public Voucher getVoucher() {
         return voucher;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public boolean isSignStatus() {
+        return signStatus;
     }
 
     /**
@@ -119,12 +124,24 @@ public class Order implements Serializable {
         this.status = status;
     }
 
-    public void setSignatureHash(String signatureHash) {
-        this.signatureHash = signatureHash;
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
+
+    public void setSignStatus(boolean signStatus) {
+        this.signStatus = signStatus;
     }
 
     public void setPkId(int pkId) {
         this.pkId = pkId;
+    }
+
+    public void setChanged(boolean changed) {
+        this.changed = changed;
     }
 
     public void setTotalPrice(double totalPrice) {

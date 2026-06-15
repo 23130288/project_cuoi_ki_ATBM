@@ -28,19 +28,19 @@ public class TaiKhoanController extends HttpServlet {
         NotificationService ns = new NotificationService();
         request.setAttribute("notifications", ns.getNotificationsByUid(user.getUid()));
 
-        // Orers
+        // Orders
         OrderService os = new OrderService();
+        VoucherService vs = new VoucherService();
         List<Order> orders = os.getOrdersByUid(user.getUid());
-        List<Order> deliveredOrders = os.getOrdersByUidAndStatus(user.getUid(), "delivered");
-        List<Order> deliveringOrder = os.getOrdersByUidAndStatus(user.getUid(), "delivering");
-        List<Order> canceledOrder = os.getOrdersByUidAndStatus(user.getUid(), "canceled");
+        for (Order order : orders) {
+            if (order.getUvid() != 0)
+                order.setVoucher(vs.getVoucherUserByUvid(order.getUvid()));
+            boolean changed = os.isOrderChanged(order);
+            order.setChanged(changed);
+        }
         request.setAttribute("orders", orders);
-        request.setAttribute("deliveredOrders", deliveredOrders);
-        request.setAttribute("deliveringOrder", deliveringOrder);
-        request.setAttribute("canceledOrder", canceledOrder);
 
         // Vouchers
-        VoucherService vs = new VoucherService();
         request.setAttribute("vouchers", vs.getVoucherUsersByUid(user.getUid()));
 
         // Supports
