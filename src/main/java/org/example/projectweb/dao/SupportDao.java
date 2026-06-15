@@ -26,20 +26,19 @@ public class SupportDao extends BaseDao {
 
     public List<Support> getSupportskey() {
         return get().withHandle(h -> h.createQuery("""
-                select s.spid, s.uid, mess.message, s.topic, s.title, s.created_date as createdDate, s.status
+                select s.spid, s.uid, s.topic,s.title, s.created_date as createdDate,s.status
                 from support s
-                join support_message mess on s.spid=mess.spid
-                where topic = 'key'
-                group by s.spid""").mapToBean(Support.class).list());
+                where s.topic = 'key'
+                """).mapToBean(Support.class).list());
     }
 
     public List<Support> getSupportspkeyrocessing() {
         return get().withHandle(h -> h.createQuery("""
-                select s.spid, s.uid, mess.message, s.topic, s.title, s.created_date as createdDate, s.status
+                select s.spid,  s.uid, s.topic, s.title,s.created_date as createdDate, s.status
                 from support s
-                join support_message mess on s.spid=mess.spid
-                where status = 'processing' and topic = 'key'
-                group by s.spid""").mapToBean(Support.class).list());
+                where s.topic = 'key'
+                  and s.status = 'processing'
+                """).mapToBean(Support.class).list());
     }
 
     public void createSupport(int userId, String topic, String title, String message) {

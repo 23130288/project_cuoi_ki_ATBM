@@ -459,3 +459,34 @@ body {
     text-overflow: ellipsis;
 }
 
+.action-buttons {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.action-buttons button {
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-create {
+    background: #EDB310;
+}
+
+.btn-create:hover {
+    background: #800080;
+}
+
+.btn-reject {
+    background: #ff4c4c;
+}
+
+.btn-reject:hover {
+    background: #ff6666;
+}
