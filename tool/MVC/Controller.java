@@ -16,6 +16,14 @@ public class Controller {
 		this.view = view;
 	}
 
+	public void onCreatKey(String folder) throws Exception {
+		model.genKey();
+		if ("".equals(folder))
+			folder = "D:";
+		view.setPublicKey(model.getKey(folder, true));
+		view.setPrivateKey(model.getKey(folder, false));
+	}
+
 	public void onSubmitFile(String input, String key) throws Exception {
 		String re = "";
 //		if (!checkFile(key, re)) {
