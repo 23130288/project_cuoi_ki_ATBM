@@ -1,19 +1,14 @@
-package org.example.projectweb.controller;
+package org.example.projectweb.controller.order;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import org.example.projectweb.cart.Cart;
 import org.example.projectweb.model.Order;
 import org.example.projectweb.model.OrderDetailView;
-import org.example.projectweb.model.PublicKeyModel;
 import org.example.projectweb.model.User;
 import org.example.projectweb.service.OrderService;
-import org.example.projectweb.service.PublicKeyService;
-import org.example.projectweb.service.SignService;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @WebServlet(name = "ShowOrderController", value = "/show-order")
@@ -32,6 +27,7 @@ public class ShowOrderController extends HttpServlet {
 
         Order order = os.getOrderByOid(oid);
         List<OrderDetailView> orderDetails = os.getOrderDetailViewByOid(oid);
+        order.setChanged(os.isOrderChanged(order, orderDetails));
 
         request.setAttribute("user", user);
         request.setAttribute("order", order);

@@ -1,15 +1,18 @@
-package org.example.projectweb.controller.cart;
+package org.example.projectweb.controller.order;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import org.example.projectweb.cart.Cart;
+import org.example.projectweb.service.OrderService;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-@WebServlet(name = "DownloadFileCartContent", value = "/download_file_cart_content")
-public class DownloadFileCartContent extends HttpServlet {
+@WebServlet(name = "DownloadOrderContent", value = "/DownloadOrderContent")
+public class DownloadOrderContent extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -17,11 +20,11 @@ public class DownloadFileCartContent extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Cart c = (Cart) session.getAttribute("cart");
+        int oid = Integer.parseInt(request.getParameter("oid"));
+        String fileName = "Order#" + oid + ".txt";
 
-        String fileName = request.getParameter("fileName");
-        String content = c.getContents();
+        OrderService os = new OrderService();
+        String content = os.getOrderContents(oid);
 
         // download file
         response.setContentType("text/plain; charset=UTF-8");

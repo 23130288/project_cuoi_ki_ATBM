@@ -1,4 +1,4 @@
-package org.example.projectweb.controller;
+package org.example.projectweb.controller.order;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -9,10 +9,8 @@ import org.example.projectweb.model.VoucherUser;
 import org.example.projectweb.service.*;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 
 @WebServlet(name = "CheckOutController", value = "/checkout")
-@MultipartConfig
 public class CheckOutController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

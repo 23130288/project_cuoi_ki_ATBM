@@ -14,6 +14,8 @@ public class OrderService {
     private final OrderDao od = new OrderDao();
     private final VoucherDao vd = new VoucherDao();
 
+    private final SignService ss = new SignService();
+    private final PublicKeyService pks = new PublicKeyService();
     private final HashService hs = new HashService();
 
     public List<Order> getListOrderAdmin() {
@@ -63,13 +65,16 @@ public class OrderService {
         return od.getDiscount(oid);
     }
 
-    public double getFinalPrice(int oid) {
-        return od.getFinalPriceByOid(oid);
-    }
-
 
     public List<Order> getOrdersByUid(int uid) {
-        return od.getOrdersByUid(uid);
+        List<Order> res = od.getOrdersByUid(uid);
+        for (Order o : res) {
+            if (o.getUvid() != 0)
+                o.setVoucher(vd.getVoucherUserByUvid(o.getUvid()));
+            o.setChanged(isOrderChanged(o, null));
+        }
+
+        return res;
     }
 
     public List<Order> getOrdersByUidAndStatus(int uid, String status) {
@@ -82,6 +87,10 @@ public class OrderService {
         String content = getOrderContents(order);
         String hash = hs.hashMd5(content);
         od.insertHash(oid, hash);
+    }
+    public String getOrderContents(int oid) {
+        Order order = getOrderByOid(oid);
+        return getOrderContents(order);
     }
 
     public String getOrderContents(Order order) {
@@ -107,7 +116,32 @@ public class OrderService {
         return res.toString();
     }
 
-    public boolean isOrderChanged(Order order) {
-        return !order.getHash().equals(hs.hashMd5(getOrderContents(order)));
+    public boolean isOrderChanged(Order order, List<OrderDetailView> orderDetails) {
+        String hash;
+        if (orderDetails == null)
+            hash = hs.hashMd5(getOrderContents(order));
+        else hash = hs.hashMd5(getOrderContents(order, orderDetails));
+        if (!order.getHash().equals(hash))
+            return true;
+        if (!order.isSignStatus())
+            return false;
+        try {
+            return !ss.verifySign(hash, order.getSignature(), pks.getPublicKeyByPkId(order.getPkId()).getPublicKeyStr());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateOrder(Order order) {
+        od.updateFinalPrice(order.getOid());
+        od.insertHash(order.getOid(), getOrderContents(order));
+    }
+
+    public void updateSignature(int oid, String signature, int pkId) {
+        od.updateSignature(oid, signature, pkId);
+    }
+
+    public void updateOrderStatus(int oid, String status) {
+        od.updateOrderStatus(oid, status);
     }
 }
