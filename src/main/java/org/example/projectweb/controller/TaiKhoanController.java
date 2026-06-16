@@ -32,12 +32,6 @@ public class TaiKhoanController extends HttpServlet {
         OrderService os = new OrderService();
         VoucherService vs = new VoucherService();
         List<Order> orders = os.getOrdersByUid(user.getUid());
-        for (Order order : orders) {
-            if (order.getUvid() != 0)
-                order.setVoucher(vs.getVoucherUserByUvid(order.getUvid()));
-            boolean changed = os.isOrderChanged(order);
-            order.setChanged(changed);
-        }
         request.setAttribute("orders", orders);
 
         // Vouchers

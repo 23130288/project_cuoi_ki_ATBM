@@ -235,13 +235,15 @@ public class OrderDao extends BaseDao {
                 .mapToBean(Order.class).list());
     }
 
-    public void updateSignature(int oid, String signature, String publicKeyStr) {
+    public void updateSignature(int oid, String signature, int pkId) {
         get().useHandle(h -> h.createUpdate("""
-                update `order`
-                    set public_key = :publicKeyStr,
-                        signature = :signature
+                update order_signature
+                set signature = :signature,
+                    sign_status = 1,
+                    sign_time = NOW(),
+                    pk_id = :pkId
                 where oid = :oid
-                """).bind("oid", oid).bind("signature", signature).bind("publicKeyStr", publicKeyStr).execute());
+                """).bind("oid", oid).bind("signature", signature).bind("pkId", pkId).execute());
     }
 
     public void createOrderSignatureHolder(int oid) {
@@ -258,5 +260,39 @@ public class OrderDao extends BaseDao {
                 set hash = :hash
                 where oid = :oid
                 """).bind("oid", oid).bind("hash", hash).execute());
+    }
+
+    public void updateFinalPrice(int oid) {
+        get().useHandle(h ->
+                h.createUpdate("""
+                update `order` o
+                set o.final_price = (
+                    select sum(od.quantity * pv.price) -
+                    COALESCE(
+                        case
+                            when v.name = 'phan_tram'
+                                then sum(od.quantity * pv.price) * v.discount
+                            when v.name = 'giam_gia'
+                                then v.discount
+                            else 0
+                        end
+                    , 0)
+                    from order_detail od
+                    join product_variant pv on od.pvid = pv.pvid
+                    left join voucher_user vu on o.uvid = vu.uvid
+                    left join voucher v on vu.vid = v.vid
+                    where od.oid = o.oid
+                )
+                where o.oid = :oid
+                """).bind("oid", oid).execute()
+        );
+    }
+
+    public void updateOrderStatus(int oid, String status) {
+        get().useHandle(h -> h.createUpdate("""
+                update `order`
+                set status = :status
+                where oid = :oid
+                """).bind("oid", oid).bind("status", status).execute());
     }
 }

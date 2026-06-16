@@ -8,6 +8,7 @@
     <meta charset="UTF-8">
     <title>Hóa đơn</title>
     <link rel="stylesheet" href="ct_Order/ct_Order.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
 <body>
 <main>
@@ -15,7 +16,8 @@
         <h3 class="title">Đơn hàng #${order.oid}</h3>
         <p class="date">${order.createdDate}</p>
         <div class="customer-info">
-            <p class="customer-name">${user.name}</p>
+            <p class="customer-name">User: ${user.name}</p>
+            <p class="description">Description: ${order.description}</p>
         </div>
         <div class="product-info">
             <div class="product-header">
@@ -91,9 +93,95 @@
             </div>
         </div>
     </div>
+    <c:choose>
+        <%-- there are changes --%>
+        <c:when test="${order.changed}">
+            <c:choose>
+                <c:when test="${order.status == 'cancelled' || order.status == 'delivered'}">
+                    <div class="signed-message">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <p>
+                            Đơn hàng đã có thay đổi.<br>
+                            Nhưng đơn hàng đã được giao/hủy, xin lỗi vì không thể làm được gì thêm.
+                        </p>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="change-warning">
+                        <c:choose>
+                            <c:when test="${order.signStatus}">
+                                <h3>Đơn hàng có sự thay đổi sau khi ký</h3>
+                                <p>Vui lòng xem lại trước khi ký lại.</p>
+                            </c:when>
+                            <c:otherwise>
+                                <h3>Đơn hàng có sự thay đổi</h3>
+                                <p>Vui lòng xem lại trước khi ký.</p>
+                            </c:otherwise>
+                        </c:choose>
+                        <form action="support-order-changed" id="supportForm" method="post">
+                            <input type="hidden" name="oid" value="${order.oid}">
+                            <input type="hidden" name="uid" value="${order.uid}">
+                            <textarea rows=3 placeholder="Hãy mô tả vấn đề của bạn tại đây..." name="message"></textarea>
+                            <button type="submit" class="report-btn">Báo cáo thay đổi</button>
+                        </form>
+                        <div id="waitingMessage">
+                            <h3>Yêu cầu của bạn đã được gửi.</h3>
+                            <p>Vui lòng chờ admin hỗ trợ.</p>
+                        </div>
+                    </div>
+                </c:otherwise>
+            </c:choose>
+        </c:when>
+        <%-- nothing unusual --%>
+        <c:when test="${order.signStatus}">
+            <div class="signed-message">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Bạn đã ký đơn hàng này.</span>
+            </div>
+        </c:when>
+        <%-- not signed --%>
+        <c:otherwise>
+            <form id="form-verify" method="post" action="verify-order">
+                <button type="button" class="confirm-btn" id="confirmBtn">Ký đơn hàng</button>
+                <input type="hidden" name="oid" value="${order.oid}">
+                <div class="digital-sign-model" id="digitalSignModel">
+                    <div class="digital-sign-box">
+                        <h2>Ký số điện tử</h2>
+                        <div class="sign-info">
+                            <p>Thuật toán: MD5withRSA</p>
+                        </div>
+
+                        <div class="output-box">
+                            <h3>File:</h3>
+                            <div class="output-file">
+                                <span id="signedFileName">Order#${order.oid}.txt</span>
+                                <button type="submit" form="downloadForm" class="download-btn"><i
+                                        class="fa-solid fa-download"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="input-box">
+                            <h3>Signature:</h3>
+                            <input type="file" id="sigFile" name="sigFile" required>
+                        </div>
+
+                        <div class="button-group">
+                            <button type="button" class="cancel-btn" id="cancelBtn">Hủy</button>
+                            <button type="button" class="sign-btn" id="signBtn">Xác nhận ký điện tử</button>
+                        </div>
+                        <p class="error-verify" id="error-verify">Signature verification failed</p>
+                    </div>
+                </div>
+            </form>
+            <form id="downloadForm" action="DownloadOrderContent" method="post">
+                <input type="hidden" name="oid" value="${order.oid}">
+            </form>
+        </c:otherwise>
+    </c:choose>
     <form id="form-input-info" action="trangChu">
         <button type="submit">QUAY LẠI TRANG CHỦ</button>
     </form>
 </main>
+<script src="ct_Order/ct_Order.js"></script>
 </body>
 </html>

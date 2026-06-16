@@ -246,7 +246,7 @@
                                 </div>
                             </div>
                             <div class="container-buttons">
-                                <button type="submit" class="confirm-btn" id="confirmBtn">Thanh toán</button>
+                                <button type="submit" class="confirm-btn" id="confirmBtn">Tạo đơn hàng</button>
                             </div>
                         </c:otherwise>
                     </c:choose>

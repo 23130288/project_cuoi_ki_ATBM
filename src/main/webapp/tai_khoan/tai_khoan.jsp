@@ -89,6 +89,7 @@
                     <a href="#" class="tab-menu active" data-tab="all">Tất cả</a>
                     <a href="#" class="tab-menu" data-tab="delivered">Đã giao</a>
                     <a href="#" class="tab-menu" data-tab="shipping">Đang giao</a>
+                    <a href="#" class="tab-menu" data-tab="waiting">Đang chờ</a>
                     <a href="#" class="tab-menu" data-tab="cancelled">Hủy</a>
                 </div>
                 <div class="container-contents">
@@ -188,6 +189,49 @@
                         <div class="products">
                             <c:forEach var="order" items="${orders}">
                                 <c:if test="${order.status == 'delivering'}">
+                                    <div class="product">
+                                        <div class="product-title">
+                                            <div class="product-info">
+                                                <a href="show-order?oid=${order.oid}"><label>Đơn
+                                                    hàng ${order.oid}</label></a>
+                                            </div>
+                                        </div>
+                                        <div class="product-price"><fmt:formatNumber value="${order.finalPrice}"
+                                                                                     type="number"
+                                                                                     groupingUsed="true"/> đ
+                                        </div>
+                                        <div class="product-date">${order.createdDate}</div>
+                                        <div class="product-sign-status">
+                                            <c:choose>
+                                                <c:when test="${order.changed}">
+                                                    <i class="fa-solid fa-triangle-exclamation text-warning"></i>Đã thay đổi
+                                                </c:when>
+                                                <c:when test="${order.signStatus}">
+                                                    <i class="fa-solid fa-circle-check signed"></i>Đã ký
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <i class="fa-solid fa-circle-xmark unsigned"></i>Chưa ký
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </div>
+                                    </div>
+                                </c:if>
+                            </c:forEach>
+                        </div>
+                    </div>
+                    <!-- Waiting -->
+                    <div class="product-content waiting">
+                        <!--header-->
+                        <div class="product-header">
+                            <div class="product-header-title">Tiêu đề</div>
+                            <div class="product-header-price">Đơn giá</div>
+                            <div class="product-header-date">Ngày tạo</div>
+                            <div class="product-header-sign-status">Ký</div>
+                        </div>
+                        <!--content-->
+                        <div class="products">
+                            <c:forEach var="order" items="${orders}">
+                                <c:if test="${order.status == 'waiting'}">
                                     <div class="product">
                                         <div class="product-title">
                                             <div class="product-info">
