@@ -1,3 +1,15 @@
+const reportMissingBtn = document.getElementById("report-missing-btn");
+const reportMissing = document.getElementById("report-missing");
+const cancelReportMissing = document.getElementById("cancel-report-missing");
+
+if (reportMissingBtn && reportMissing && cancelReportMissing) {
+    reportMissingBtn.addEventListener("click", () => {
+        reportMissing.style.display = "flex";
+    });
+    cancelReportMissing.addEventListener("click", () => {
+        reportMissing.style.display = "none";
+    });
+}
 const supportForm = document.getElementById("supportForm");
 if (supportForm) {
     supportForm.addEventListener("submit", function (e) {
@@ -10,13 +22,12 @@ if (supportForm) {
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    supportForm.style.display = "none";
+                    reportMissing.style.display = "none";
                     document.getElementById("waitingMessage").style.display = "block";
                 }
             })
     });
 }
-
 
 // signature
 const confirmBtn = document.getElementById("confirmBtn");

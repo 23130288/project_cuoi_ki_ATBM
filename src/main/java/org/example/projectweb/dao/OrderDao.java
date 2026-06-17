@@ -130,7 +130,7 @@ public class OrderDao extends BaseDao {
     public Order getOrderByOid(int oid) {
         return get().withHandle(h -> h.createQuery("""
                         select o.oid, o.uid, o.uvid, o.description, o.created_date as createdDate, o.final_price as finalPrice, o.status,
-                                os.hash, os.signature, os.sign_status as signStatus, os.pk_id as pkId
+                                os.hash, os.signature, os.sign_status as signStatus, os.expired_date as expiredDate, os.pk_id as pkId
                         from `order` o join order_signature os on o.oid = os.oid
                         where o.oid = :oid
                         """).bind("oid", oid)
@@ -196,7 +196,7 @@ public class OrderDao extends BaseDao {
     public List<Order> getOrdersByUid(int uid) {
         return get().withHandle(h -> h.createQuery("""
                         select o.oid, o.uid, o.uvid, o.description, o.created_date as createdDate, sum(pv.price * od.quantity) as totalPrice, o.final_price as finalPrice, o.status,
-                                os.hash, os.signature, os.sign_status as signStatus, os.pk_id as pkId
+                                os.hash, os.signature, os.sign_status as signStatus, os.expired_date as expiredDate, os.pk_id as pkId
                         from `order` o
                         join order_detail od on o.oid = od.oid
                         left join order_signature os on o.oid = os.oid
@@ -248,8 +248,8 @@ public class OrderDao extends BaseDao {
 
     public void createOrderSignatureHolder(int oid) {
         get().withHandle(h -> h.createUpdate("""
-                        insert into order_signature (oid, sign_status)
-                        values (:oid, 0)
+                        insert into order_signature (oid, sign_status, expired_date)
+                        values (:oid, 0, DATE_ADD(NOW(), INTERVAL 2 DAY))
                         """)
                 .bind("oid", oid).execute());
     }

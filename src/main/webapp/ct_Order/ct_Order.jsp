@@ -94,53 +94,50 @@
         </div>
     </div>
     <c:choose>
-        <%-- there are changes --%>
-        <c:when test="${order.changed}">
-            <c:choose>
-                <c:when test="${order.status == 'cancelled' || order.status == 'delivered'}">
-                    <div class="signed-message">
-                        <i class="fa-solid fa-circle-check"></i>
-                        <p>
-                            Đơn hàng đã có thay đổi.<br>
-                            Nhưng đơn hàng đã được giao/hủy, xin lỗi vì không thể làm được gì thêm.
-                        </p>
-                    </div>
-                </c:when>
-                <c:otherwise>
-                    <div class="report-missing">
-                        <c:choose>
-                            <c:when test="${order.signStatus}">
-                                <h3>Đơn hàng có sự thay đổi sau khi ký</h3>
-                                <p>Vui lòng xem lại trước khi ký lại.</p>
-                            </c:when>
-                            <c:otherwise>
-                                <h3>Đơn hàng có sự thay đổi</h3>
-                                <p>Vui lòng xem lại trước khi ký.</p>
-                            </c:otherwise>
-                        </c:choose>
-                        <form action="support-order-changed" id="supportForm" method="post">
-                            <input type="hidden" name="oid" value="${order.oid}">
-                            <input type="hidden" name="uid" value="${order.uid}">
-                            <textarea rows=3 placeholder="Hãy mô tả vấn đề của bạn tại đây..." name="message"></textarea>
-                            <button type="submit" class="report-btn">Báo cáo thay đổi</button>
-                        </form>
-                        <div id="waitingMessage">
-                            <h3>Yêu cầu của bạn đã được gửi.</h3>
-                            <p>Vui lòng chờ admin hỗ trợ.</p>
-                        </div>
-                    </div>
-                </c:otherwise>
-            </c:choose>
+        <%-- changes and signed --%>
+        <c:when test="${order.changed && order.status != 'waiting'}">
+            <div class="signed-message changed">
+                <i class="fa-solid fa-circle-check"></i>
+                <p>Đơn hàng (có thay đổi) đã được đóng gói.</p>
+            </div>
         </c:when>
         <%-- nothing unusual --%>
-        <c:when test="${order.signStatus}">
+        <c:when test="${!order.changed && order.signStatus}">
             <div class="signed-message">
                 <i class="fa-solid fa-circle-check"></i>
                 <span>Bạn đã ký đơn hàng này.</span>
             </div>
         </c:when>
+        <%-- expired --%>
+        <c:when test="${order.expired && !order.signStatus}">
+            <div class="expired-message">
+                <i class="fa-solid fa-circle-xmark"></i>
+                <p>Đơn hàng đã quá hạn.</p>
+            </div>
+        </c:when>
         <%-- not signed --%>
         <c:otherwise>
+            <c:if test="${order.changed}">
+                <form action="support-order-changed" id="supportForm" method="post">
+                    <button type="button" id="report-missing-btn">Báo cáo thay đổi</button>
+                    <div class="report-missing" id="report-missing">
+                        <div class="report-missing-box">
+                            <h3>Đơn hàng có sự thay đổi</h3>
+                            <p>Vui lòng xem lại trước khi ký.</p>
+                            <input type="hidden" name="oid" value="${order.oid}">
+                            <input type="hidden" name="uid" value="${order.uid}">
+                            <textarea rows=3 placeholder="Hãy mô tả vấn đề của bạn tại đây..."
+                                      name="message"></textarea>
+                            <button type="button" class="cancel-btn" id="cancel-report-missing">Hủy</button>
+                            <button type="submit" class="report-btn">Báo cáo thay đổi</button>
+                        </div>
+                    </div>
+                    <div id="waitingMessage">
+                        <h3>Yêu cầu của bạn đã được gửi.</h3>
+                    </div>
+                    </div>
+                </form>
+            </c:if>
             <form id="form-verify" method="post" action="verify-order">
                 <button type="button" class="confirm-btn" id="confirmBtn">Ký đơn hàng</button>
                 <input type="hidden" name="oid" value="${order.oid}">
