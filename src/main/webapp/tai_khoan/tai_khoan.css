@@ -571,12 +571,21 @@ body {
     margin-left: 6px;
 }
 
-.signed {
+.product-sign-status .signed {
     color: #4CAF50;
 }
 
-.unsigned {
+.product-sign-status .unsigned {
     color: red;
+}
+
+.product-sign-status .text-warning,
+.product-sign-status .changed {
+    color: #ff9800;
+}
+
+.product-sign-status .expired {
+    color: #9e9e9e;
 }
 
 /* key */

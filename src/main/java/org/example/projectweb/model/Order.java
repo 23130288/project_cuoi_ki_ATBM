@@ -1,6 +1,8 @@
 package org.example.projectweb.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Order implements Serializable {
     private int oid;
@@ -14,8 +16,10 @@ public class Order implements Serializable {
     private String hash;
     private String signature;
     private boolean signStatus;
+    private String expiredDate;
     private int pkId;
     private boolean changed;
+    private boolean expired;
 
     private String customer;
     private double totalPrice;
@@ -93,6 +97,18 @@ public class Order implements Serializable {
         return signStatus;
     }
 
+    public String getExpiredDate() {
+        return expiredDate;
+    }
+
+    public boolean isExpired() {
+        if (expiredDate == null || expiredDate.isBlank()) {
+            return false;
+        }
+        LocalDateTime expire = LocalDateTime.parse(expiredDate, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        return expire.isBefore(LocalDateTime.now());
+    }
+
     /**
      * SETTERS
      */
@@ -158,5 +174,13 @@ public class Order implements Serializable {
 
     public void setVoucher(Voucher voucher) {
         this.voucher = voucher;
+    }
+
+    public void setExpiredDate(String expiredDate) {
+        this.expiredDate = expiredDate;
+    }
+
+    public void setExpired(boolean expired) {
+        this.expired = expired;
     }
 }

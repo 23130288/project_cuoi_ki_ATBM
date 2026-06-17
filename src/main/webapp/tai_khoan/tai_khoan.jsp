@@ -4,11 +4,10 @@
 <fmt:setLocale value="vi_VN"/>
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="tai_khoan/tai_khoan.css">
-
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="tai_khoan/tai_khoan.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
 <body>
@@ -180,13 +179,20 @@
                                     <div class="product-sign-status">
                                         <c:choose>
                                             <c:when test="${order.changed}">
-                                                <c:if test="${order.signStatus}">
-                                                    <i class="fa-solid fa-circle-check signed"></i>Đã ký<br>
-                                                </c:if>
-                                                <i class="fa-solid fa-triangle-exclamation text-warning"></i>Có thay đổi
+                                                <c:choose>
+                                                    <c:when test="${order.signStatus}">
+                                                        <i class="fa-solid fa-circle-check text-warning"></i>Đã ký (có thay đổi)
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <i class="fa-solid fa-triangle-exclamation text-warning"></i>Có thay đổi
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </c:when>
                                             <c:when test="${order.signStatus}">
                                                 <i class="fa-solid fa-circle-check signed"></i>Đã ký
+                                            </c:when>
+                                            <c:when test="${order.expired}">
+                                                <i class="fa-solid fa-circle-xmark expired"></i>Quá hạn
                                             </c:when>
                                             <c:otherwise>
                                                 <i class="fa-solid fa-circle-xmark unsigned"></i>Chưa ký
@@ -225,13 +231,20 @@
                                         <div class="product-sign-status">
                                             <c:choose>
                                                 <c:when test="${order.changed}">
-                                                    <c:if test="${order.signStatus}">
-                                                        <i class="fa-solid fa-circle-check signed"></i>Đã ký<br>
-                                                    </c:if>
-                                                    <i class="fa-solid fa-triangle-exclamation text-warning"></i>Có thay đổi
+                                                    <c:choose>
+                                                        <c:when test="${order.signStatus}">
+                                                            <i class="fa-solid fa-circle-check text-warning"></i>Đã ký (có thay đổi)
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <i class="fa-solid fa-triangle-exclamation text-warning"></i>Có thay đổi
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </c:when>
                                                 <c:when test="${order.signStatus}">
                                                     <i class="fa-solid fa-circle-check signed"></i>Đã ký
+                                                </c:when>
+                                                <c:when test="${order.expired}">
+                                                    <i class="fa-solid fa-circle-xmark expired"></i>Quá hạn
                                                 </c:when>
                                                 <c:otherwise>
                                                     <i class="fa-solid fa-circle-xmark unsigned"></i>Chưa ký
@@ -271,13 +284,20 @@
                                         <div class="product-sign-status">
                                             <c:choose>
                                                 <c:when test="${order.changed}">
-                                                    <c:if test="${order.signStatus}">
-                                                        <i class="fa-solid fa-circle-check signed"></i>Đã ký<br>
-                                                    </c:if>
-                                                    <i class="fa-solid fa-triangle-exclamation text-warning"></i>Có thay đổi
+                                                    <c:choose>
+                                                        <c:when test="${order.signStatus}">
+                                                            <i class="fa-solid fa-circle-check text-warning"></i>Đã ký (có thay đổi)
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <i class="fa-solid fa-triangle-exclamation text-warning"></i>Có thay đổi
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </c:when>
                                                 <c:when test="${order.signStatus}">
                                                     <i class="fa-solid fa-circle-check signed"></i>Đã ký
+                                                </c:when>
+                                                <c:when test="${order.expired}">
+                                                    <i class="fa-solid fa-circle-xmark expired"></i>Quá hạn
                                                 </c:when>
                                                 <c:otherwise>
                                                     <i class="fa-solid fa-circle-xmark unsigned"></i>Chưa ký
@@ -317,13 +337,20 @@
                                         <div class="product-sign-status">
                                             <c:choose>
                                                 <c:when test="${order.changed}">
-                                                    <c:if test="${order.signStatus}">
-                                                        <i class="fa-solid fa-circle-check signed"></i>Đã ký<br>
-                                                    </c:if>
-                                                    <i class="fa-solid fa-triangle-exclamation text-warning"></i>Có thay đổi
+                                                    <c:choose>
+                                                        <c:when test="${order.signStatus}">
+                                                            <i class="fa-solid fa-circle-check text-warning"></i>Đã ký (có thay đổi)
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <i class="fa-solid fa-triangle-exclamation text-warning"></i>Có thay đổi
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </c:when>
                                                 <c:when test="${order.signStatus}">
                                                     <i class="fa-solid fa-circle-check signed"></i>Đã ký
+                                                </c:when>
+                                                <c:when test="${order.expired}">
+                                                    <i class="fa-solid fa-circle-xmark expired"></i>Quá hạn
                                                 </c:when>
                                                 <c:otherwise>
                                                     <i class="fa-solid fa-circle-xmark unsigned"></i>Chưa ký
@@ -363,13 +390,20 @@
                                         <div class="product-sign-status">
                                             <c:choose>
                                                 <c:when test="${order.changed}">
-                                                    <c:if test="${order.signStatus}">
-                                                        <i class="fa-solid fa-circle-check signed"></i>Đã ký<br>
-                                                    </c:if>
-                                                    <i class="fa-solid fa-triangle-exclamation text-warning"></i>Có thay đổi
+                                                    <c:choose>
+                                                        <c:when test="${order.signStatus}">
+                                                            <i class="fa-solid fa-circle-check text-warning"></i>Đã ký (có thay đổi)
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <i class="fa-solid fa-triangle-exclamation text-warning"></i>Có thay đổi
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </c:when>
                                                 <c:when test="${order.signStatus}">
                                                     <i class="fa-solid fa-circle-check signed"></i>Đã ký
+                                                </c:when>
+                                                <c:when test="${order.expired}">
+                                                    <i class="fa-solid fa-circle-xmark expired"></i>Quá hạn
                                                 </c:when>
                                                 <c:otherwise>
                                                     <i class="fa-solid fa-circle-xmark unsigned"></i>Chưa ký

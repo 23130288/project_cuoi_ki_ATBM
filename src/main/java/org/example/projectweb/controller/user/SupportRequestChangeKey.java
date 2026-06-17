@@ -28,7 +28,6 @@ public class SupportRequestChangeKey extends HttpServlet {
         String title = "Request thay đổi khóa User#" + uid;
 
         PublicKeyService pks = new PublicKeyService();
-        UserService us = new UserService();
         pks.disableKeyByUid(uid);
 
         SupportService ss = new SupportService();
