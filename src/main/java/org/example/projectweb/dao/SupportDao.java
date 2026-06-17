@@ -28,7 +28,7 @@ public class SupportDao extends BaseDao {
         return get().withHandle(h -> h.createQuery("""
                 select s.spid, s.uid, s.topic,s.title, s.created_date as createdDate,s.status
                 from support s
-                where s.topic = 'key'
+                where s.topic = 'Khóa'
                 """).mapToBean(Support.class).list());
     }
 
@@ -36,7 +36,7 @@ public class SupportDao extends BaseDao {
         return get().withHandle(h -> h.createQuery("""
                 select s.spid,  s.uid, s.topic, s.title,s.created_date as createdDate, s.status
                 from support s
-                where s.topic = 'key'
+                where s.topic = 'Khóa'
                   and s.status = 'processing'
                 """).mapToBean(Support.class).list());
     }
@@ -61,11 +61,16 @@ public class SupportDao extends BaseDao {
                 .execute());
     }
 
-    public void SupportDone(int spid) {
+    public void SupportDone(int spid, int adminUid) {
         get().useHandle(h ->
                 h.createUpdate("""
-                                update support set status = 'done' where spid = :spid""")
+                    UPDATE support
+                    SET status = 'done',
+                        admin_uid = :adminUid
+                    WHERE spid = :spid
+                    """)
                         .bind("spid", spid)
+                        .bind("adminUid", adminUid)
                         .execute()
         );
     }

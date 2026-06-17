@@ -46,7 +46,6 @@ public class SupportService {
         // Tạo thông báo
         ns.createGlobalNotification(uid, "Admin đã trả lời bạn", message);
         spDao.createMessage(spid, aid, message);
-        spDao.SupportDone(spid);
+        spDao.SupportDone(spid, aid);
     }
-
 }
