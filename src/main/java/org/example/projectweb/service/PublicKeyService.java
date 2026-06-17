@@ -13,4 +13,12 @@ public class PublicKeyService {
     public PublicKeyModel getPublicKeyByPkId(int pkId) {
         return pkDao.getPublicKeyByPkId(pkId);
     }
+
+    public void disableKeyByUid(int uid) {
+        pkDao.disableKeyByUid(uid);
+    }
+
+    public void uploadKey(int uid, String key) {
+        pkDao.uploadKey(uid, key);
+    }
 }

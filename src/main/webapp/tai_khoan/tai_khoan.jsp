@@ -21,6 +21,7 @@
         </div>
         <div class="menu_item">
             <a class="item" data-target="user-info" href="#">Thông tin tài khoản</a>
+            <a class="item" data-target="key" href="#">Khóa</a>
             <a class="item" data-target="notification" href="#">Thông báo</a>
             <a class="item" data-target="order" href="#">Đơn hàng</a>
             <a class="item" data-target="voucher" href="#">Voucher</a>
@@ -41,8 +42,8 @@
                     </div>
 
                     <div class="in4_row">
-                        <label class="in4_label" for="email">Tên tài khoản</label>
-                        <input class="in4_input info2" type="text" id="email" name="name" value="${user.name}" readonly>
+                        <label class="in4_label" for="name">Tên tài khoản</label>
+                        <input class="in4_input info2" type="text" id="name" name="name" value="${user.name}" readonly>
                     </div>
 
                     <div class="in4_row">
@@ -64,6 +65,66 @@
                     <button type="button" class="cancel-btn" id="btn-cancel">Hủy</button>
                 </div>
             </form>
+        </div>
+        <%-- -===============================- KEY -===============================- --%>
+        <div class="information-container" id="key">
+            <h2>Khóa</h2>
+            <div class="container">
+                <div class="container-key">
+                    <label class="key-lbl">Khóa </label>
+                    <c:choose>
+                        <c:when test="${empty key}">
+                            <input class="key" type="text" id="current-key" value="..." readonly>
+                        </c:when>
+                        <c:otherwise>
+                            <input class="key" type="text" id="current-key" value="${key.publicKeyStr}" readonly>
+                        </c:otherwise>
+                    </c:choose>
+                </div>
+                <c:choose>
+                    <c:when test="${canUpKey}">
+                        <form action="change-key" id="upload-key-form" method="post" enctype="multipart/form-data">
+                            <div class="container-key">
+                                <input type="hidden" name="uid" value="${user.uid}">
+                                <label class="up-key">Upload khoá </label>
+                                <input type="file" id="new-key" name="new-key" required>
+                                <button type="submit" id="up-new-key">Upload</button>
+                            </div>
+                        </form>
+                        <div id="afterMessage">
+                            <h3>Upload khóa thành công</h3>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="container-key">
+                            <label class="report-missing-key">Báo mất khóa </label>
+                            <button type="button" class="show-report-missing" id="show-report-missing">Mất khóa</button>
+                            <div class="report-missing" id="report-missing">
+                                <div class="report-missing-box" id="report-missing">
+                                    <h2>Báo mất khóa</h2>
+                                    <form action="support-request-change-key" id="report-missing-key-form"
+                                          method="post">
+                                        <input type="hidden" name="uid" value="${user.uid}">
+                                        <textarea rows=3 placeholder="Hãy mô tả vấn đề của bạn tại đây..."
+                                                  name="message"></textarea>
+
+                                        <button type="button" class="close-report-missing" id="close-report-missing">
+                                            Hủy
+                                        </button>
+                                        <button type="submit" class="report-missing-key-btn"
+                                                id="report-missing-key-btn">Báo cáo
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="afterMessage">
+                            <h3>Yêu cầu của bạn đã được gửi.</h3>
+                            <p>Vui lòng chờ admin hỗ trợ.</p>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </div>
         </div>
         <%-- -===============================- NOTIFICATION -===============================- --%>
         <div class="information-container" id="notification">
@@ -119,7 +180,10 @@
                                     <div class="product-sign-status">
                                         <c:choose>
                                             <c:when test="${order.changed}">
-                                                <i class="fa-solid fa-triangle-exclamation text-warning"></i>Đã thay đổi
+                                                <c:if test="${order.signStatus}">
+                                                    <i class="fa-solid fa-circle-check signed"></i>Đã ký<br>
+                                                </c:if>
+                                                <i class="fa-solid fa-triangle-exclamation text-warning"></i>Có thay đổi
                                             </c:when>
                                             <c:when test="${order.signStatus}">
                                                 <i class="fa-solid fa-circle-check signed"></i>Đã ký
@@ -161,7 +225,10 @@
                                         <div class="product-sign-status">
                                             <c:choose>
                                                 <c:when test="${order.changed}">
-                                                    <i class="fa-solid fa-triangle-exclamation text-warning"></i>Bị thay đổi
+                                                    <c:if test="${order.signStatus}">
+                                                        <i class="fa-solid fa-circle-check signed"></i>Đã ký<br>
+                                                    </c:if>
+                                                    <i class="fa-solid fa-triangle-exclamation text-warning"></i>Có thay đổi
                                                 </c:when>
                                                 <c:when test="${order.signStatus}">
                                                     <i class="fa-solid fa-circle-check signed"></i>Đã ký
@@ -204,7 +271,10 @@
                                         <div class="product-sign-status">
                                             <c:choose>
                                                 <c:when test="${order.changed}">
-                                                    <i class="fa-solid fa-triangle-exclamation text-warning"></i>Đã thay đổi
+                                                    <c:if test="${order.signStatus}">
+                                                        <i class="fa-solid fa-circle-check signed"></i>Đã ký<br>
+                                                    </c:if>
+                                                    <i class="fa-solid fa-triangle-exclamation text-warning"></i>Có thay đổi
                                                 </c:when>
                                                 <c:when test="${order.signStatus}">
                                                     <i class="fa-solid fa-circle-check signed"></i>Đã ký
@@ -247,7 +317,10 @@
                                         <div class="product-sign-status">
                                             <c:choose>
                                                 <c:when test="${order.changed}">
-                                                    <i class="fa-solid fa-triangle-exclamation text-warning"></i>Đã thay đổi
+                                                    <c:if test="${order.signStatus}">
+                                                        <i class="fa-solid fa-circle-check signed"></i>Đã ký<br>
+                                                    </c:if>
+                                                    <i class="fa-solid fa-triangle-exclamation text-warning"></i>Có thay đổi
                                                 </c:when>
                                                 <c:when test="${order.signStatus}">
                                                     <i class="fa-solid fa-circle-check signed"></i>Đã ký
@@ -290,7 +363,10 @@
                                         <div class="product-sign-status">
                                             <c:choose>
                                                 <c:when test="${order.changed}">
-                                                    <i class="fa-solid fa-triangle-exclamation text-warning"></i>Đã thay đổi
+                                                    <c:if test="${order.signStatus}">
+                                                        <i class="fa-solid fa-circle-check signed"></i>Đã ký<br>
+                                                    </c:if>
+                                                    <i class="fa-solid fa-triangle-exclamation text-warning"></i>Có thay đổi
                                                 </c:when>
                                                 <c:when test="${order.signStatus}">
                                                     <i class="fa-solid fa-circle-check signed"></i>Đã ký

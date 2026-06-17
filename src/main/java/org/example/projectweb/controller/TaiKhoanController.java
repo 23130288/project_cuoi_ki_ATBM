@@ -24,6 +24,13 @@ public class TaiKhoanController extends HttpServlet {
 
         request.setAttribute("user", user);
 
+        // can Up key
+        request.setAttribute("canUpKey", new UserService().getCanUpKeyByUid(user.getUid()));
+
+        // Key
+        PublicKeyService pks = new PublicKeyService();
+        request.setAttribute("key", pks.getPublicKeyByUid(user.getUid()));
+
         // Notifications
         NotificationService ns = new NotificationService();
         request.setAttribute("notifications", ns.getNotificationsByUid(user.getUid()));
