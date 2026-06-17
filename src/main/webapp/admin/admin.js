@@ -1850,27 +1850,77 @@ function loadkeyList(filter) {
     fetch(`/projectWeb_war/admin/Keys?filter=${filter}`)
         .then(res => res.json())
         .then(list => {
+
             const container = document.getElementById("keyList");
-            container.innerHTML = ""; // xóa dữ liệu cũ
+            container.innerHTML = "";
 
             list.forEach(s => {
+
                 const div = document.createElement("div");
                 div.className = "notification_item";
                 div.dataset.spid = s.spid;
+                div.dataset.uid = s.uid;
 
                 div.innerHTML = `
-                   <div class="keyinfo">
-                       <div>
-                         <h4>${s.topic} | ${s.title}</h4>
-                         <p>Mã câu hỏi: ${s.spid} | Người gửi: ${s.uid} | Trạng thái: ${s.status}</p>
-                         <span>${s.createdDate}</span>
-                       </div>
-                
-                    <button class="btn-create">Xác nhận</button>
-                   </div>
+                    <div class="keyinfo">
+                        <div>
+                            <h4>${s.topic} | ${s.title}</h4>
+                            <p>
+                                Mã câu hỏi: ${s.spid} |
+                                Người gửi: ${s.uid} |
+                                Trạng thái: ${s.status}
+                            </p>
+                            <span>${s.createdDate}</span>
+                        </div>
+
+                        ${
+                    s.status === "done"
+                        ? '<span class="done-label">Đã xác nhận</span>'
+                        : '<button class="btn-submit">Xác nhận</button>'
+                }
+                    </div>
                 `;
 
+                const btn = div.querySelector(".btn-submit");
+
+                if (btn) {
+                    btn.addEventListener("click", function () {
+
+                        const uid = div.dataset.uid;
+                        const spid = div.dataset.spid;
+
+                        fetch("/projectWeb_war/admin/KeyStatus", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded"
+                            },
+                            body: `uid=${uid}&spid=${spid}`
+                        })
+                            .then(res => res.text())
+                            .then(data => {
+
+                                if (data === "success") {
+                                    alert("Đã xác nhận.");
+                                    loadkeyList(filter);
+                                } else {
+                                    alert("Có lỗi xảy ra.");
+                                }
+
+                            })
+                            .catch(err => {
+                                console.error(err);
+                                alert("Không thể kết nối đến máy chủ.");
+                            });
+
+                    });
+                }
+
                 container.appendChild(div);
+
             });
+
+        })
+        .catch(err => {
+            console.error(err);
         });
 }

@@ -485,7 +485,7 @@ body {
     text-overflow: ellipsis;
 }
 
-.btn-create {
+.btn-submit {
     border: none;
     padding: 8px 15px;
     border-radius: 5px;
@@ -494,8 +494,17 @@ body {
     cursor: pointer;
     transition: 0.2s;
     background: #EDB310;
+    margin-left: auto;
 }
 
-.btn-create:hover {
+.btn-submit:hover {
     background: #800080;
+}
+
+.done-label {
+    display: inline-block;
+    padding: 8px 16px;
+    color: #28a745;
+    font-weight: 600;
+    margin-left: auto;
 }
