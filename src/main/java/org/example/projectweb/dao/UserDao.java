@@ -22,8 +22,8 @@ public class UserDao extends BaseDao {
     public void addUser(String email, String pass, String name) {
         get().useHandle(h ->
                 h.createUpdate("""
-                                INSERT INTO user (name, email, password, avatar, role, status)
-                                VALUES (:name, :email, :password, 'images/userAvatar/default_user.jpg', :role, :status)
+                                INSERT INTO user (name, email, password, avatar, role, status, can_up_key)
+                                VALUES (:name, :email, :password, 'images/userAvatar/default_user.jpg', :role, :status, 1)
                                 """)
                         .bind("name", name).bind("email", email).bind("password", pass).bind("role", "user").bind("status", true).execute()
         );
@@ -81,5 +81,19 @@ public class UserDao extends BaseDao {
                         where uid = :uid
                         """).bind("name", name).bind("phone", phone).bind("address", address).bind("uid", uid)
                 .execute());
+    }
+
+    public boolean getCanUpKeyByUid(int uid) {
+        return get().withHandle(h -> h.createQuery("""
+                select can_up_key from user where uid = :uid
+                """).bind("uid", uid).mapTo(Boolean.class).one());
+    }
+
+    public void changeCanUpKey(int uid, int status) {
+        get().useHandle(h -> h.createUpdate("""
+                update user 
+                set can_up_key = :status
+                where uid = :uid
+                """).bind("uid", uid).bind("status", status).execute());
     }
 }

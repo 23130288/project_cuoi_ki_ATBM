@@ -107,7 +107,7 @@
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <div class="change-warning">
+                    <div class="report-missing">
                         <c:choose>
                             <c:when test="${order.signStatus}">
                                 <h3>Đơn hàng có sự thay đổi sau khi ký</h3>

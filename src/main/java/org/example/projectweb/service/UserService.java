@@ -31,4 +31,12 @@ public class UserService {
     public void changeUserInfo(int uid, String name, String phone, String address) {
         userDao.changeUserInfo(uid, name, phone, address);
     }
+
+    public boolean getCanUpKeyByUid(int uid) {
+        return userDao.getCanUpKeyByUid(uid);
+    }
+
+    public void changeCanUpKey(int uid, int status) {
+        userDao.changeCanUpKey(uid, status);
+    }
 }

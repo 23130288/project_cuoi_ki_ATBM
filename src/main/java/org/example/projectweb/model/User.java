@@ -14,11 +14,12 @@ public class User implements Serializable {
     private String role;
     private String phone;
     private boolean status;
+    private boolean canUpKey;
 
     public User() {
     }
 
-    public User(int uid, String name, String email, String password, String address, String bdate, String avatar, String role, String phone, boolean status) {
+    public User(int uid, String name, String email, String password, String address, String bdate, String avatar, String role, String phone, boolean status, boolean canUpKey) {
         this.uid = uid;
         this.name = name;
         this.email = email;
@@ -29,6 +30,7 @@ public class User implements Serializable {
         this.role = role;
         this.phone = phone;
         this.status = status;
+        this.canUpKey = canUpKey;
     }
 
     // ===== getter / setter =====
@@ -110,5 +112,13 @@ public class User implements Serializable {
 
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public boolean isCanUpKey() {
+        return canUpKey;
+    }
+
+    public void setCanUpKey(boolean canUpKey) {
+        this.canUpKey = canUpKey;
     }
 }

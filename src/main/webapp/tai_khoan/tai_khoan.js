@@ -228,3 +228,74 @@ const sdtInput = document.getElementById("sdt");
 sdtInput.addEventListener("input", function () {
     this.value = this.value.replace(/[^0-9]/g, "");
 });
+
+// key
+const showBtn = document.getElementById("show-report-missing");
+const reportMissing = document.getElementById("report-missing");
+const closeBtn = document.getElementById("close-report-missing");
+
+if (showBtn && reportMissing && closeBtn) {
+    showBtn.addEventListener("click", () => {
+        reportMissing.style.display = "flex";
+    });
+    closeBtn.addEventListener("click", () => {
+        reportMissing.style.display = "none";
+    });
+}
+
+const supportForm = document.getElementById("report-missing-key-form");
+if (supportForm) {
+    supportForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        fetch("support-request-change-key", {
+            method: "POST",
+            body: formData
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    reportMissing.style.display = "none";
+                    document.getElementById("current-key").value = "..."
+                    document.getElementById("afterMessage").style.display = "block";
+                    document.getElementById("show-report-missing").style.display = "none";
+                }
+            })
+    });
+}
+
+const keyForm = document.getElementById("upload-key-form");
+if (keyForm) {
+    keyForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        fetch("change-key", {
+            method: "POST",
+            body: formData
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    keyForm.style.display = "none";
+                    const currentKey = document.getElementById("current-key");
+                    if (currentKey) {
+                        currentKey.value = data.newKey;
+                    }
+                    document.getElementById("afterMessage").style.display = "block";
+                } else {
+                    showToast("Upload thất bại!", "error");
+                }
+            })
+            .catch(() => {
+                showToast("Có lỗi xảy ra!", "error");
+            });
+    });
+}
+
+function showToast(message, type) {
+    const toast = document.createElement("div");
+    toast.className = "toast " + type;
+    toast.innerText = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
