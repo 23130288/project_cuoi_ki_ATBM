@@ -1859,16 +1859,15 @@ function loadkeyList(filter) {
                 div.dataset.spid = s.spid;
 
                 div.innerHTML = `
-                <div class="info">
-                    <h4>${s.topic} | ${s.title}</h4>
-                    <p>Mã câu hỏi: ${s.spid} | Người gửi: ${s.uid} | Trạng thái: ${s.status}</p>
-                    <span>${s.createdDate}</span>
+                   <div class="keyinfo">
+                       <div>
+                         <h4>${s.topic} | ${s.title}</h4>
+                         <p>Mã câu hỏi: ${s.spid} | Người gửi: ${s.uid} | Trạng thái: ${s.status}</p>
+                         <span>${s.createdDate}</span>
+                       </div>
                 
-                    <div class="action-buttons">
-                        <button class="btn-create">Tạo khóa</button>
-                        <button class="btn-reject">Từ chối</button>
-                    </div>
-                </div>
+                    <button class="btn-create">Xác nhận</button>
+                   </div>
                 `;
 
                 container.appendChild(div);

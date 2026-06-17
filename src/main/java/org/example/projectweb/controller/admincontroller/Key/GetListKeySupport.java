@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet(value = "/admin/Keys")
-public class GetListKey extends HttpServlet {
+public class GetListKeySupport extends HttpServlet {
 
     final SupportService sups = new SupportService();
 
@@ -45,30 +45,7 @@ public class GetListKey extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
-        //check thẩm quyền
-        HttpSession session = request.getSession();
-        User check = (User) session.getAttribute("user");
-        session.setAttribute("user", check);
-        if (check == null) {
-            request.getRequestDispatcher("/dang_nhap").forward(request, response);
-            return;
-        }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        if (!"admin".equalsIgnoreCase(check.getRole())) {
-            request.getRequestDispatcher("/tham_quyen").forward(request, response);
-            return;
-        }
-
-//        int spid = Integer.parseInt(request.getParameter("spid"));
-//        int uid = Integer.parseInt(request.getParameter("uid"));
-//        String message = request.getParameter("message");
-//        String uidStr = String.valueOf(uid);
-//
-//        sups.createreply(spid, check.getUid(), uidStr, message);
-//
-//        response.setContentType("application/json;charset=UTF-8");
-//        response.getWriter().write("{\"success\":true}");
     }
 }
