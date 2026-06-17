@@ -77,6 +77,13 @@ public class OrderService {
         return res;
     }
 
+    public Order adminVerifyOrder(Order o) {
+        if (o.getUvid() != 0)
+            o.setVoucher(vd.getVoucherUserByUvid(o.getUvid()));
+        o.setChanged(isOrderChanged(o, null));
+        return o;
+    }
+
     public List<Order> getOrdersByUidAndStatus(int uid, String status) {
         return od.getOrdersByUidAndStatus(uid, status);
     }
@@ -88,6 +95,7 @@ public class OrderService {
         String hash = hs.hashMd5(content);
         od.insertHash(oid, hash);
     }
+
     public String getOrderContents(int oid) {
         Order order = getOrderByOid(oid);
         return getOrderContents(order);
