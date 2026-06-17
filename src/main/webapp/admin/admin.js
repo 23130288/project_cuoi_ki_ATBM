@@ -76,7 +76,7 @@
             <h2>Quản lý đơn hàng</h2>
             <div class="Menu-bar">
                 <div class="search-bar">
-                    <input type="text" name="query" id="searchOrderInput" placeholder="Mã đơn hàng..."/>
+                    <input type="text" name="query" id="searchOrderInput" placeholder="Tên Khách hàng..."/>
                     <button class="btn-search" onclick="handleOrderSearch()"><i class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
             </div>
@@ -1653,6 +1653,7 @@ function printOrderTable(orders) {
             <th>Tổng tiền</th>
             <th>Ngày tạo đơn</th>
             <th>Trạng thái</th>
+            <th>Chữ ký</th>
             <th>Thao tác</th>
         </tr>
     `;
@@ -1664,12 +1665,32 @@ function printOrderTable(orders) {
             <td>${formatVND(o.totalPrice)}</td>
             <td>${o.createdDate}</td>
             <td>${o.status}</td>
+            <td>${getSignStatusHTML(o)}</td>
             <td>
                 <button onclick="viewOrder(${o.oid},'${o.customer}',${o.totalPrice},'${o.createdDate}','${o.status}')">Xem</button>
             </td>
 `;
         table.appendChild(row);
     });
+}
+function getSignStatusHTML(o) {
+    if (o.changed) {
+        if (o.signStatus) {
+            return `<i class="fa-solid fa-circle-check text-warning"></i> Đã ký (có thay đổi)`;
+        } else {
+            return `<i class="fa-solid fa-triangle-exclamation text-warning"></i> Có thay đổi`;
+        }
+    }
+
+    if (o.signStatus) {
+        return `<i class="fa-solid fa-circle-check signed"></i> Đã ký`;
+    }
+
+    if (o.expired) {
+        return `<i class="fa-solid fa-circle-xmark expired"></i> Quá hạn`;
+    }
+
+    return `<i class="fa-solid fa-circle-xmark unsigned"></i> Chưa ký`;
 }
 
 function viewOrder(oid, customer, totalPrice, createdDate, status) {

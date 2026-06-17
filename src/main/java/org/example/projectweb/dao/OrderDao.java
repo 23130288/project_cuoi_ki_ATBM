@@ -11,11 +11,19 @@ import java.util.List;
 public class OrderDao extends BaseDao {
 
     public List<Order> getListOrderAdmin() {
-        return get().withHandle(h -> h.createQuery("SELECT o.oid,u.name AS customer,SUM(od.quantity*pv.price) AS totalPrice,o.created_date AS createdDate,o.status " +
-                        "FROM `order` o JOIN user u ON o.uid=u.uid " +
-                        "JOIN order_detail od ON o.oid=od.oid JOIN product_variant pv ON od.pvid=pv.pvid " +
-                        "GROUP BY o.oid,u.name,o.created_date,o.status ORDER BY o.created_date DESC")
-                .mapToBean(Order.class).list());
+        return get().withHandle(h -> h.createQuery("""
+                        SELECT o.oid, u.name AS customer,SUM(od.quantity * pv.price) AS totalPrice,o.created_date AS createdDate,o.status,
+                            os.hash,os.signature,os.sign_status AS signStatus,os.expired_date AS expiredDate, os.pk_id AS pkId
+                        FROM `order` o
+                        JOIN user u ON o.uid = u.uid
+                        JOIN order_detail od ON o.oid = od.oid
+                        JOIN product_variant pv ON od.pvid = pv.pvid
+                        LEFT JOIN order_signature os ON o.oid = os.oid
+                        GROUP BY o.oid,u.name,o.created_date, o.status,os.hash,os.signature,os.sign_status,os.expired_date,os.pk_id
+                        ORDER BY o.created_date DESC
+                        """)
+                .mapToBean(Order.class)
+                .list());
     }
 
     public int countAllOrders() {
@@ -77,13 +85,21 @@ public class OrderDao extends BaseDao {
     }
 
     public List<Order> getListOrderByCostomerAdmin(String name) {
-        return get().withHandle(h -> h.createQuery("SELECT o.oid,u.name AS customer,SUM(od.quantity*pv.price) AS totalPrice,o.created_date AS createdDate,o.status " +
-                        "FROM `order` o JOIN user u ON o.uid=u.uid " +
-                        "JOIN order_detail od ON o.oid=od.oid JOIN product_variant pv ON od.pvid=pv.pvid " +
-                        "Where LOWER(u.name) LIKE LOWER(:name) " +
-                        "GROUP BY o.oid,u.name,o.created_date,o.status ORDER BY o.created_date DESC")
+        return get().withHandle(h -> h.createQuery("""
+                        SELECT o.oid, u.name AS customer,SUM(od.quantity * pv.price) AS totalPrice, o.created_date AS createdDate,
+                            o.status, os.hash, os.signature,os.sign_status AS signStatus, os.expired_date AS expiredDate,os.pk_id AS pkId
+                        FROM `order` o
+                        JOIN user u ON o.uid = u.uid
+                        JOIN order_detail od ON o.oid = od.oid
+                        JOIN product_variant pv ON od.pvid = pv.pvid
+                        LEFT JOIN order_signature os ON o.oid = os.oid
+                        WHERE LOWER(u.name) LIKE LOWER(:name)
+                        GROUP BY o.oid,u.name,o.created_date,o.status,os.hash,os.signature,os.sign_status,os.expired_date,os.pk_id
+                        ORDER BY o.created_date DESC
+                        """)
                 .bind("name", "%" + name + "%")
-                .mapToBean(Order.class).list());
+                .mapToBean(Order.class)
+                .list());
     }
 
     public List<OrderDetail> getOrderDetailsByOid(int oid) {
@@ -265,26 +281,26 @@ public class OrderDao extends BaseDao {
     public void updateFinalPrice(int oid) {
         get().useHandle(h ->
                 h.createUpdate("""
-                update `order` o
-                set o.final_price = (
-                    select sum(od.quantity * pv.price) -
-                    COALESCE(
-                        case
-                            when v.name = 'phan_tram'
-                                then sum(od.quantity * pv.price) * v.discount
-                            when v.name = 'giam_gia'
-                                then v.discount
-                            else 0
-                        end
-                    , 0)
-                    from order_detail od
-                    join product_variant pv on od.pvid = pv.pvid
-                    left join voucher_user vu on o.uvid = vu.uvid
-                    left join voucher v on vu.vid = v.vid
-                    where od.oid = o.oid
-                )
-                where o.oid = :oid
-                """).bind("oid", oid).execute()
+                        update `order` o
+                        set o.final_price = (
+                            select sum(od.quantity * pv.price) -
+                            COALESCE(
+                                case
+                                    when v.name = 'phan_tram'
+                                        then sum(od.quantity * pv.price) * v.discount
+                                    when v.name = 'giam_gia'
+                                        then v.discount
+                                    else 0
+                                end
+                            , 0)
+                            from order_detail od
+                            join product_variant pv on od.pvid = pv.pvid
+                            left join voucher_user vu on o.uvid = vu.uvid
+                            left join voucher v on vu.vid = v.vid
+                            where od.oid = o.oid
+                        )
+                        where o.oid = :oid
+                        """).bind("oid", oid).execute()
         );
     }
 

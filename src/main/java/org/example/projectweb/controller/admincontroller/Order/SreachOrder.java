@@ -12,6 +12,7 @@ import org.example.projectweb.model.User;
 import org.example.projectweb.service.OrderService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "SreachOrder", value = "/admin/Order_Sreach")
@@ -40,7 +41,14 @@ public class SreachOrder extends HttpServlet {
         OrderService os = new OrderService();
         List<Order> orders = os.orderSearch(Keyword);
 
-        String json = new Gson().toJson(orders);
+        List<Order> ordersVerifyed = new ArrayList<>();
+
+        for (Order order : orders) {
+            os.adminVerifyOrder(order);
+            ordersVerifyed.add(order);
+        }
+
+        String json = new Gson().toJson(ordersVerifyed);
         response.getWriter().write(json);
     }
 

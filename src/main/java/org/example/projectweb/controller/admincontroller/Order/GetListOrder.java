@@ -11,6 +11,7 @@ import org.example.projectweb.model.Order;
 import org.example.projectweb.model.User;
 import org.example.projectweb.service.OrderService;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "GetListOrder", value = "/admin/Order_load")
@@ -38,8 +39,14 @@ public class GetListOrder extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
 
         List<Order> orders = os.getListOrderAdmin();
+        List<Order> ordersVerifyed = new ArrayList<>();
 
-        String json = new Gson().toJson(orders);
+        for (Order order : orders) {
+            os.adminVerifyOrder(order);
+            ordersVerifyed.add(order);
+        }
+
+        String json = new Gson().toJson(ordersVerifyed);
         response.getWriter().write(json);
     }
 
