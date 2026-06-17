@@ -234,6 +234,32 @@ body {
     border: 2px solid #EDB310;
 }
 
+.keyinfo {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.keyinfo h4 {
+    margin: 0;
+    color: green;
+    font-size: 16px;
+}
+
+.keyinfo p {
+    margin: 0 10px;
+    font-size: 14px;
+}
+
+.keyinfo span {
+    font-size: 12px;
+    color: #999;
+}
+
+.btn-create {
+    margin-left: auto;
+}
+
 .info h4 {
     margin: 0;
     color: green;
@@ -459,13 +485,7 @@ body {
     text-overflow: ellipsis;
 }
 
-.action-buttons {
-    margin-top: 10px;
-    display: flex;
-    gap: 10px;
-}
-
-.action-buttons button {
+.btn-create {
     border: none;
     padding: 8px 15px;
     border-radius: 5px;
@@ -473,20 +493,9 @@ body {
     font-weight: bold;
     cursor: pointer;
     transition: 0.2s;
-}
-
-.btn-create {
     background: #EDB310;
 }
 
 .btn-create:hover {
     background: #800080;
-}
-
-.btn-reject {
-    background: #ff4c4c;
-}
-
-.btn-reject:hover {
-    background: #ff6666;
 }
