@@ -69,6 +69,16 @@
         <div class="information-container" id="key">
             <h2>Khóa</h2>
             <div class="container">
+                <div class="generate-key">
+                    <label>Tạo khóa</label>
+
+                    <form action="DownloadKeyTool" method="post">
+                        <button type="submit" class="download-tool-btn">
+                            <i class="fa-solid fa-key"></i>
+                            Tải Tool
+                        </button>
+                    </form>
+                </div>
                 <div class="container-key">
                     <label class="key-lbl">Khóa </label>
                     <c:choose>
