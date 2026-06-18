@@ -7,6 +7,7 @@ import org.example.projectweb.model.Order;
 import org.example.projectweb.model.OrderDetailView;
 import org.example.projectweb.model.User;
 import org.example.projectweb.service.OrderService;
+import org.example.projectweb.service.PublicKeyService;
 
 import java.io.*;
 import java.util.List;
@@ -21,7 +22,6 @@ public class ShowOrderController extends HttpServlet {
             response.sendRedirect("dang_nhap");
             return;
         }
-
         int oid = Integer.parseInt(request.getParameter("oid"));
         OrderService os = new OrderService();
 
@@ -29,9 +29,12 @@ public class ShowOrderController extends HttpServlet {
         List<OrderDetailView> orderDetails = os.getOrderDetailViewByOid(oid);
         order.setChanged(os.isOrderChanged(order, orderDetails));
 
+        PublicKeyService pks = new PublicKeyService();
+
         request.setAttribute("user", user);
         request.setAttribute("order", order);
         request.setAttribute("orderDetails", orderDetails);
+        request.setAttribute("key", pks.getPublicKeyByUid(user.getUid()));
 
         request.getRequestDispatcher("ct_Order/ct_Order.jsp").forward(request, response);
     }

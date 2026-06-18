@@ -415,6 +415,7 @@ main .product-item .product-item-quantity {
     color: #4CAF50;
     font-size: 24px;
 }
+
 .signed-message.changed i {
     color: #ff9800;
     font-size: 24px;
@@ -428,4 +429,12 @@ main .product-item .product-item-quantity {
 .expired-message i {
     color: #5e5e5e;
     font-size: 24px;
+}
+
+.expired-message i.noKey {
+    color: #ff0000;
+}
+
+.expired-date {
+    margin-top: 20px;
 }
