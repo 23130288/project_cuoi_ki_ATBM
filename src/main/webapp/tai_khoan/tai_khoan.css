@@ -717,3 +717,41 @@ body {
     color: #21704d;
     margin-bottom: 8px;
 }
+/* ================= Generate key ================= */
+.generate-key {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.generate-key label {
+    width: 200px;
+    padding: 10px;
+    text-align: right;
+    font-weight: bold;
+    color: #333;
+}
+
+.generate-key form {
+    flex: 1;
+}
+
+.download-tool-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #EDB310;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all .25s ease;
+}
+
+.download-tool-btn:hover {
+    background: #ffcf40;
+    color: black;
+}
