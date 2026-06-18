@@ -115,6 +115,13 @@
                 <p>Đơn hàng đã quá hạn.</p>
             </div>
         </c:when>
+        <%-- no key --%>
+        <c:when test="${empty key}">
+            <div class="expired-message">
+                <i class="fa-solid fa-circle-xmark noKey"></i>
+                <p>Xin lỗi, bạn không có khóa để ký đơn hàng.</p>
+            </div>
+        </c:when>
         <%-- not signed --%>
         <c:otherwise>
             <c:if test="${order.changed}">
@@ -170,6 +177,7 @@
                     </div>
                 </div>
             </form>
+            <label class="expired-date">Hạn: ${order.expiredDate}</label>
             <form id="downloadForm" action="DownloadOrderContent" method="post">
                 <input type="hidden" name="oid" value="${order.oid}">
             </form>
